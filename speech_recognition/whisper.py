@@ -11,7 +11,7 @@ import torch
 import numpy as np
 
 @click.command()
-@click.option("--model", default="base", help="Model to use", type=click.Choice(["tiny","base", "small","medium","large"]))
+@click.option("--model", default="tiny", help="Model to use", type=click.Choice(["tiny","base", "small","medium","large"]))
 @click.option("--device", default=("cuda" if torch.cuda.is_available() else "cpu"), help="Device to use", type=click.Choice(["cpu","cuda"]))
 @click.option("--english", default=False, help="Whether to use English model", is_flag=True)
 @click.option("--verbose", default=False, help="Whether to print verbose output", is_flag=True)

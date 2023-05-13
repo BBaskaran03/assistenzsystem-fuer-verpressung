@@ -13,7 +13,7 @@ def main():
     while(True):
         print("Say something!")
         speech_output = recognize_speech(recognizer, microphone)
-
+        
         if speech_output["error"]:
             print(f"Error: {speech_output['error']}")
         else:
