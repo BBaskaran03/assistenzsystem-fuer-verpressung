@@ -1,15 +1,26 @@
 import ast
+import enum
 import json
 import math
 import requests.auth
 import requests
 import time
-
+import logging
 
 # Address used to organize ET elements
 namespace = '{http://www.w3.org/1999/xhtml}'
 
 logger = logging.getLogger(__name__)
+
+
+class ControllerStates(enum.Enum):
+    init = "init"
+    motoroff = "motoroff"
+    motoron = "motoron"
+    guardstop = "guardstop"
+    emergencystop = "emergencystop"
+    emergencystopreset = "emergencystopreset"
+    sysfail = "sysfail"
 
 
 class APIResponse:
@@ -103,15 +114,58 @@ class RobotWebServices:
         return response
 
 
-    def api_get(self, resource) -> json:
-        response = self._api_get(resource)
-        response_json = json.loads(response.text)
-
-        return response_json
+    def get_system(self):
+        self._api_get("/rw/system?json=1")
 
 
-    def api_post(self, resource, value) -> json:
-        response = self._api_post(resource, value)
-        response_json = json.loads(response.text)
+    def request_mastership(self):
+        self._api_post("/rw/mastership?action=request")
 
-        return response_json
+
+    def release_mastership(self):
+        self._api_post("/rw/mastership?action=release")
+
+
+    def get_controller_state(self) -> ControllerStates:
+        """
+        Get the controller state.
+        RAPID can only be executed and the robot can only be moved in the `motoron` state.
+
+        :returns: The controller state
+        :rtype: ControllerStates
+        """
+
+        response = self._api_get("rw/panel/ctrlstate")
+        state = response.json["_embedded"]["_state"][0]['ctrlstate']
+        state = ControllerStates[state]
+
+        return state
+
+
+    def set_controller_state(self, ctrl_state) -> APIResponse:
+        payload = {"ctrl-state": ctrl_state}
+
+        response = self._api_post("rw/panel/ctrlstate?action=setctrlstate", payload)
+
+        print(response)
+
+        if response.status_code != 204:
+            raise Exception("Could not change controller state")
+
+        return response
+
+
+    def motors_on(self) -> None:
+        """Turns the robot's motors on.
+        Operation mode has to be AUTO.
+        """
+
+        self.set_controller_state(ControllerStates.motoron.value)
+
+
+    def motors_off(self):
+        """Turns the robot's motors off.
+        """
+
+        payload = {'ctrl-state': ControllerStates.motoroff}
+        self._api_post("/rw/panel/ctrlstate?action=setctrlstate", payload)
