@@ -28,3 +28,7 @@ Zurzeit gibt das program nur an, dass es bemerkt hat dass der "State" sich am we
 ## Datum
 
 Stand: 11.05.2023 - 0:50
+
+## Special Thanks
+
+whisper_mic : @mallorbc https://github.com/mallorbc/whisper_mic/blob/main/whisper_mic 
