@@ -1,0 +1,5 @@
+# Development
+/.secrets/
+
+# Python
+__pycache__/
