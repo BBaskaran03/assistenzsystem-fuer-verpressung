@@ -1,4 +1,6 @@
-gTTS==2.3.2
+docopt==0.6.2
+gtts==2.3.2
+pip-chill==1.0.3
 pygame==2.4.0
-SpeechRecognition==3.10.0
-PyAudio
+whisper-mic==0.0.1
+yarg==0.1.9
