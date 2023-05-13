@@ -115,5 +115,3 @@ class RobotWebServices:
         response_json = json.loads(response.text)
 
         return response_json
-
-        return response_json_pretty
