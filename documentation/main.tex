@@ -1,5 +1,10 @@
 \documentclass{article}
 
+\AddToHook{cmd/section/before}{\clearpage}
+
+\usepackage[german]{babel}
+\usepackage{subfiles}
+
 \title{
     Menschenzentrierte Robotik \\
     Assistenzsystem für Verpressung}
@@ -16,11 +21,21 @@
 \begin{document}
 
 \maketitle
+\tableofcontents
 
 \section{Sicherheitskonzept}
+\subfile{sections/1-sicherheitskonzept}
+
 \section{Software Architektur}
+\subfile{sections/2-software-architektur}
+
 \section{Sprachsteuerung}
+\subfile{sections/3-sprachsteuerung}
+
 \section{Greifen}
+\subfile{sections/4-greifen}
+
 \section{Bewegung}
+\subfile{sections/5-bewegung}
 
 \end{document}
