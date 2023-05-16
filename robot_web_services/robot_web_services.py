@@ -60,6 +60,10 @@ class RobotWebServices:
     Source: <https://github.com/mhiversflaten/ABB-Robot-Machine-Vision.git>
     """
 
+    headers = {
+        "Content-Type": "application/x-www-form-urlencoded;v=2.0"
+    }
+
     def __init__(self, base_url: str, username: str, password: str):
         self.base_url = base_url
         self.username = username
@@ -78,9 +82,10 @@ class RobotWebServices:
         url = f"{url}&json=1" if "?" in url else f"{url}?json=1"
 
         response = self.session.get(
-            url,
-            auth=self.session.auth,
-            cookies=self.session.cookies
+            url=url,
+            headers=self.headers,
+            cookies=self.session.cookies,
+            auth=self.session.auth
         )
 
         response = APIResponse(response)
@@ -92,17 +97,18 @@ class RobotWebServices:
         return response
 
 
-    def _api_post(self, resource, value = None) -> APIResponse:
+    def _api_post(self, resource, payload = None, headers = None) -> APIResponse:
         url = f"{self.base_url}/{resource}"
         url = f"{url}&json=1" if "?" in url else f"{url}?json=1"
 
-        payload = {"value": value}
+        headers = headers or self.headers
 
         repsonse = self.session.post(
-            url,
+            url=url,
             data=payload,
-            auth=self.session.auth,
-            cookies=self.session.cookies
+            headers=headers,
+            cookies=self.session.cookies,
+            auth=self.session.auth
         )
 
         response = APIResponse(repsonse)
@@ -112,6 +118,54 @@ class RobotWebServices:
         logger.debug(response.json)
 
         return response
+
+
+    def task_1(self):
+        self._api_post(
+            resource="/users?action=set-locale",
+            payload="type=local"
+        )
+
+
+    def task_2(self):
+        headers = {
+            "Accept": "application/json",
+            "Content-Type": "application/x-www-form-urlencoded;v=2.0"
+        }
+
+        self._api_post(
+            resource="/users/rmmp",
+            payload="privilege=modify",
+            headers=headers
+        )
+
+
+    def task_3(self):
+        headers = {
+            "Accept": "application/json",
+            "Content-Type": "application/x-www-form-urlencoded;v=2.0"
+        }
+
+        self._api_post(
+            resource="/rw/mastership?action=request",
+            headers=headers
+        )
+
+
+    def task_4(self):
+        headers = {
+            "Accept": "application/json",
+            "Content-Type": "application/x-www-form-urlencoded;v=2.0"
+        }
+
+        payload = "axis1=9000&axis2=0&axis3=0&axis4=0&axis5=0&axis6=0&ccount=0&inc-mode=Small"
+
+        self._api_post(
+            resource="/rw/mastership?action=request",
+            payload=payload,
+            headers=headers
+        )
+    
 
 
     def get_system(self):

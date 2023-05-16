@@ -26,40 +26,49 @@ def main() -> int:
         config["username"] = lines[0].strip()
         config["password"] = lines[1].strip()
 
-    irb14000 = robot_web_services.RobotWebServices(
+    robot = robot_web_services.RobotWebServices(
         base_url=config["url_base"],
         username=config["username"],
         password=config["password"],
     )
 
-    # irb14000.get_system()
 
-    irb14000.request_mastership()
+    robot.task_1()
+    import time
+    time.sleep(5)
+    robot.task_2()
+    robot.task_3()
+    robot.task_4()
 
-    print(irb14000._api_post(
-        "/rw/motionsystem?action=jog",
-        value="axis1=900&axis2=0&axis3=0&axis4=0&axis5=0&axis6=0&ccount=0&inc-mode=Large"
-    ))
 
-    # # print(irb14000.get_controller_state())
-    # # irb14000.motors_off()
-    # # print(irb14000.get_controller_state())
+    # robot.get_system()
+
+    # robot.request_mastership()
+
+    # print(robot._api_post(
+    #     "/rw/motionsystem?action=jog",
+    #     value="axis1=900&axis2=0&axis3=0&axis4=0&axis5=0&axis6=0&ccount=0&inc-mode=Large"
+    # ))
+
+    # # print(robot.get_controller_state())
+    # # robot.motors_off()
+    # # print(robot.get_controller_state())
 
     # print(f"\n{'-' * 100}\n")
 
-    # # print(irb14000.get_controller_state())
-    # irb14000.motors_on()
-    # print(irb14000.get_controller_state())
+    # # print(robot.get_controller_state())
+    # robot.motors_on()
+    # print(robot.get_controller_state())
 
-    # irb14000.release_mastership()
+    # robot.release_mastership()
 
-    # print(irb14000._api_get("/rw/motionsystem/mechunits"))
-    # print(irb14000.api_get_pretty("/rw/motionsystem/mechunits/ROB_R"))
-    # print(irb14000.api_get_pretty("/rw/motionsystem/mechunits/ROB_R/axes"))
-    # print(irb14000.api_get_pretty("/rw/motionsystem/mechunits/ROB_R/axes/1"))
-    # print(irb14000.api_get_pretty("/rw/motionsystem/mechunits/ROB_R/axes/1?resource=axis-pose"))
+    # print(robot._api_get("/rw/motionsystem/mechunits"))
+    # print(robot.api_get_pretty("/rw/motionsystem/mechunits/ROB_R"))
+    # print(robot.api_get_pretty("/rw/motionsystem/mechunits/ROB_R/axes"))
+    # print(robot.api_get_pretty("/rw/motionsystem/mechunits/ROB_R/axes/1"))
+    # print(robot._api_get("/rw/motionsystem/mechunits/ROB_R/axes/1?resource=axis-pose"))
 
-    # print(irb14000.api_post_pretty(
+    # print(robot.api_post_pretty(
     #     "/rw/motionsystem/mechunits/ROB_R/axes/1?resource=axis-pose",
     #     "axis-pose",
     #     "x=0&y=0&z=0&q1=2&q2=0&q3=0&q4=0"
