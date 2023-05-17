@@ -1,14 +1,12 @@
-\documentclass{article}
+\documentclass{book}
 
-\AddToHook{cmd/section/before}{\clearpage}
-
-\usepackage[german]{babel}
-\usepackage[a4paper, total={6in, 8in}]{geometry}
-\usepackage{subfiles}
+\usepackage[ngerman]{babel}
+\usepackage[hidelinks]{hyperref}
 
 \title{
     Menschenzentrierte Robotik \\
-    Assistenzsystem für Verpressung}
+    Assistenzsystem für Verpressung
+}
 \author{
     Banujan Baskaran \and
     Esat Sefa Bayhan \and
@@ -20,26 +18,20 @@
 }
 
 \begin{document}
+    \maketitle
+    
+    \tableofcontents
 
-\maketitle
-\tableofcontents
+    \input{sections/sicherheitskonzept}
 
-\section{Sicherheitskonzept}
-\subfile{sections/1-sicherheitskonzept}
+    \input{sections/software-architektur}
+    
+    \input{sections/sprachsteuerung}
 
-\section{Software Architektur}
-\subfile{sections/2-software-architektur}
+    \input{sections/greifen}
 
-\section{Sprachsteuerung}
-\subfile{sections/3-sprachsteuerung}
+    \input{sections/bewegung}
 
-\section{Greifen}
-\subfile{sections/4-greifen}
-
-\section{Bewegung}
-\subfile{sections/5-bewegung}
-
-\section{3D-Druck}
-\subfile{sections/6-3d-druck}
+    \input{sections/3d-druck}
 
 \end{document}
