@@ -6,7 +6,7 @@ from keyword_search import search_for_keywords
 def main():
     recognizer = sr.Recognizer()
     microphone = sr.Microphone()
-
+    filecounter = 0
     with microphone as source:
         recognizer.adjust_for_ambient_noise(source)
 
@@ -20,7 +20,11 @@ def main():
             print(f"Transcription: {speech_output['transcription']}")
 
             keyword_output, keyword, prompt = search_for_keywords(speech_output['transcription'])
-
+        
+            if keyword_output == 'yumi':
+                print(f"Keyowrd: \"{keyword}\" detected")
+            if keyword_output == 'bad':
+                print(f"Keyword: \"{keyword}\" detected")
             if keyword_output == 'pause':
                 print(f"Keyword: \"{keyword}\" detected")
             elif keyword_output == 'stop':
@@ -33,6 +37,7 @@ def main():
 
             if prompt!=None:
                 speak(prompt, 'de')
+            
 
 if __name__ == "__main__":
     main()

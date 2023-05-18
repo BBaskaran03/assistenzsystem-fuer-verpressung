@@ -1,4 +1,14 @@
-gTTS==2.3.2
+# Standard requirement
+gtts==2.3.2
 pygame==2.4.0
+PyAudio==0.2.13
+
+# SpeechRecognition
 SpeechRecognition==3.10.0
-PyAudio
+# Offline mode
+pocketsphinx==5.0.0    
+
+# WhisperMic
+docopt==0.6.2
+whisper-mic==0.0.1
+yarg==0.1.9

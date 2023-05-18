@@ -12,7 +12,7 @@ def recognize_speech(recognizer, microphone):
     }
 
     try:
-        response["transcription"] = recognizer.recognize_sphinx(audio, language="de-DE")
+        response["transcription"] = recognizer.recognize_google(audio, language="de-DE")
     except sr.RequestError:
         response["success"] = False
         response["error"] = "API unavailable"

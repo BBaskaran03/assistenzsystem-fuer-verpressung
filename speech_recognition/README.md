@@ -52,6 +52,10 @@ Zum Testen der Speech to Text Funktionen wurde ein Satz verwendet, das schwer au
 - recognize_sphinx (offline)
   - hat keine deutsche library
 
+## Probleme
+
+Wenn Pause gesagt wird, wird da es ein string ist, auch aus erkannt
+
 ## Special Acknowledgements
 
 whisper_mic : @mallorbc https://github.com/mallorbc/whisper_mic/blob/main/whisper_mic 
