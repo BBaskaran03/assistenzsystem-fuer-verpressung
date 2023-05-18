@@ -1,0 +1,75 @@
+\chapter{Sprachsteuerung}
+
+Einführung Sprachsteuerung
+Wofür
+Weshalb
+Warum
+Sinn und Zweck für Kathrin
+Psychologie
+
+\section{Anforderungen}
+
+Bei der Entwicklung einer Sprachsteuerung gibt es eine Vielzahl von Anforderungen, die berücksichtigt werden müssen. Eine dieser Anforderungen ist die Offline-Fähigkeit, die besonders wichtig ist, wenn keine zuverlässige Internetverbindung vorhanden ist. Dies ist bei uns der Fall, denn die Sprachsteuerung wird in einer Werkstatt mit potentiellen vielen Störfaktoren verwendet. In diesem Fall muss die Sprachsteuerung in der Lage sein, ohne Verbindung zum Internet zu funktionieren.
+
+Eine weitere wichtige Anforderung an eine Sprachsteuerung ist eine hohe Genauigkeit. Dies bedeutet, dass die Sprachsteuerung in der Lage sein muss, Befehle von Kathrin mit hoher Präzision zu erkennen und umzusetzen. Ein weiterer wichtiger Faktor ist die Generalisierung, da die Sprachsteuerung in verschiedenen Umgebungen eingesetzt wird, wie z.B. in einer Werkstatt mit lauten Werkzeugen und vielen Personen. Es ist daher wichtig, dass die Sprachsteuerung in der Lage ist, die Stimme von Kathrin in verschiedenen Umgebungen zu erkennen.
+
+Ein weiterer wichtiger Faktor ist, dass die Sprachsteuerung kostenlos sein sollte, da die Verfügbarkeit von Mitteln zur Finanzierung des Projekts eventuell begrenzt ist. Darüber hinaus muss die Sprachsteuerung effizient sein, da die eingesetzte Hardware-Plattform unbekannt ist, deren Leistung unterschiedlich sein kann. Die Befehle, die von Kathrin gegeben werden, sind kritisch und müssen mit niedriger Latenz erkannt werden.
+
+Schließlich ist es auch wichtig, dass die Sprachsteuerung in Python entwickelt wird, da dies die bevorzugte Sprache im Team ist. Die Sprachsteuerung wird in einem großen Software-Projekt eingesetzt und von verschiedenen Komponenten verwendet. Entsprechend ist die Integration und Interaktion wichtige Aspekte die berücksichtigt werden müssen.
+
+Insgesamt müssen die Anforderungen der Sprachsteuerung sorgfältig abgewogen und umgesetzt werden, um sicherzustellen, dass die Sprachsteuerung den Bedürfnissen von Kathrin und den Anforderungen der Umgebung entspricht.
+
+\section{Recherche: Mögliche Technologien}
+
+\begin{itemize}
+    \item Künstliche Neuronale Netze (Wieso, Weshalb, Warum)
+    \begin{itemize}
+        \item Speech To Text
+        \item Hot Word recognition
+    \end{itemize}
+    \item SpeechRecognition
+    \item OpenWhisper
+    \item Custom Model
+    \item MyCroft Precise (Aktuell)
+    \item Snowboy
+    \item Picovoice Porcupine
+\end{itemize}
+
+\subsection{Rhasspy Raven}
+
+\begin{itemize}
+    \item Keine Nutzung von neuronalen Netzen
+    \item Sehr effizient
+    \item Nutzung von Audio Algorithmen
+    \item Sehr schnell
+    \item Umfangreiche leicht zu bedienende API
+    \item Schlechte Generalisierung
+    \item Aufnahme von Person die mehrmals die Befehle sagt
+    \item Es wird nach ähnlichkeiten gesucht
+    \item Da die Stimme von Kathrin unbekannt können wir entsprechend keine Ähnlichkeiten suchen
+\end{itemize}
+
+\section{Probleme von Online-Lösungen}
+
+Eine der potentiellen Fehlerquellen bei einer sprachgesteuerten Anwendung ist die Verwendung einer Online-Lösung. Eine Online-Lösung erfordert eine stabile Internetverbindung, was jedoch nicht immer gewährleistet werden kann. Schwache Internetverbindungen oder Internetabbrüche können dazu führen, dass die Anwendung nicht mehr ordnungsgemäß funktioniert oder sogar vollständig ausfällt.
+
+Darüber hinaus ist die Anwendung auch von der Erreichbarkeit des Servers oder der API abhängig. Falls der Server oder die API nicht erreichbar sind, kann die Anwendung nicht mehr auf die benötigten Ressourcen zugreifen, was zu Fehlfunktionen oder einem vollständigen Ausfall der Anwendung führen kann. Diese Abhängigkeit kann zu einem kritischen Problem werden und die Arbeit von Kathrin massiv behindern.
+
+Ein weiterer wichtiger Aspekt ist die des Datenschutzes. Bei der Nutzung von Drittanbieter-Online-Diensten kann die Sicherheit der Aufnahmen der Spracheingabe nicht mehr gewährleistet werden. Schließlich ist es wichtig zu beachten, dass Kathrin möglicherweise nicht in einem isolierten Arbeitsbereich arbeitet. Es besteht die Möglichkeit, dass unfreiwillige Aufnahmen von Personen in der Nähe aufgezeichnet und an den Online-Dienst gesendet werden. Dies kann ein schwerwiegendes Problem sein und die Vertraulichkeit von Gesprächen und möglicherweise auch von personenbezogenen Daten beeinträchtigen.
+
+\section{Ansatz: Speech to Text}
+
+\begin{itemize}
+    \item Leistunghungrig
+    \item Hohe false negative rate (zumindest offline Modelle)
+\end{itemize}
+
+\section{Ansatz: Hot word recognition}
+
+\begin{itemize}
+    \item Passende Bibliothek muss noch gefunden werden
+    \item potentiell Effizienter
+    \item Läuft eher offline
+\end{itemize}
+
+\section{Gewählte Lösung: XYZ}
