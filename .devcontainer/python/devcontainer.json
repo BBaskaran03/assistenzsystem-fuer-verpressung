@@ -1,0 +1,42 @@
+{
+	"name": "python",
+	"build": {
+		"dockerfile": "Dockerfile",
+		"context": "."
+	},
+	"remoteUser": "vscode",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"DavidAnson.vscode-markdownlint",
+				"eamodio.gitlens",
+				"foxundermoon.shell-format",
+				"Gruntfuggly.todo-tree",
+				"lextudio.restructuredtext-pack",
+				"ms-python.python",
+				"ms-python.vscode-pylance",
+				"ms-toolsai.jupyter-renderers",
+				"ms-toolsai.jupyter",
+				"ms-vsliveshare.vsliveshare",
+				"njpwerner.autodocstring",
+				"VisualStudioExptTeam.vscodeintellicode-completions",
+				"VisualStudioExptTeam.vscodeintellicode"
+			],
+			"settings": {
+				"autoDocstring.docstringFormat": "sphinx",
+				"python.terminal.activateEnvironment": true,
+				"python.terminal.activateEnvInCurrentTerminal": true,
+				"python.defaultInterpreterPath": "/opt/venv/bin/python",
+				"python.languageServer": "Pylance",
+				"python.linting.enabled": true,
+				"python.linting.pylintEnabled": true,
+				"terminal.integrated.defaultProfile.linux": "bash",
+				"terminal.integrated.profiles.linux": {
+					"bash": {
+						"path": "/bin/bash"
+					}
+				}
+			}
+		}
+	}
+}
