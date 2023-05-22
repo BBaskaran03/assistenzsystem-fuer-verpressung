@@ -161,7 +161,7 @@ class RobotWebServices:
         payload = "axis1=9000&axis2=0&axis3=0&axis4=0&axis5=0&axis6=0&ccount=0&inc-mode=Small"
 
         self._api_post(
-            resource="/rw/mastership?action=request",
+            resource="/rw/motionsystem?action=jog",
             payload=payload,
             headers=headers
         )
