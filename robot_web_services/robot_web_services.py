@@ -167,6 +167,137 @@ class RobotWebServices:
         )
     
 
+    def arm_left_rotation_get(self):
+        position = self._api_get(resource="/rw/motionsystem/mechunits/ROB_L/jointtarget")
+
+        axis = {}
+
+        axis["1"] = position.json["_embedded"]["_state"][0]["rax_1"]
+        axis["2"] = position.json["_embedded"]["_state"][0]["rax_2"]
+        axis["3"] = position.json["_embedded"]["_state"][0]["rax_3"]
+        axis["4"] = position.json["_embedded"]["_state"][0]["rax_4"]
+        axis["5"] = position.json["_embedded"]["_state"][0]["rax_5"]
+        axis["6"] = position.json["_embedded"]["_state"][0]["rax_6"]
+    
+        return axis
+ 
+    def arm_left_jog(self, axis1, axis2, axis3, axis4, axis5, axis6, ccount=0, inc_mode="Small"):
+        self._api_post("/rw/motionsystem/ROB_L")
+
+        headers = {
+            "Accept": "application/json",
+            "Content-Type": "application/x-www-form-urlencoded;v=2.0"
+        }
+
+        payload = f"axis1={axis1}&axis2={axis2}&axis3={axis3}&axis4={axis4}&axis5={axis5}&axis6={axis6}&ccount={ccount}&inc-mode={inc_mode}"
+
+        self._api_post(
+            resource="/rw/motionsystem?action=jog",
+            payload=payload,
+            headers=headers
+        )
+
+
+    def arm_left_rotate_to(self, axis1, axis2, axis3, axis4, axis5, axis6):
+        done = False
+
+        while not done:
+            time.sleep(1)
+            axis = self.arm_left_rotation_get()
+            
+            if (
+                int(float(axis["1"])) == axis1 and
+                int(float(axis["2"])) == axis2 and
+                int(float(axis["3"])) == axis3 and
+                int(float(axis["4"])) == axis4 and
+                int(float(axis["5"])) == axis5 and
+                int(float(axis["6"])) == axis6
+                ): break
+
+            if (int(float(axis["1"])) < axis1): self.arm_left_jog(+1, 0, 0, 0, 0, 0, 0, "Large")
+            if (int(float(axis["1"])) > axis1): self.arm_left_jog(-1, 0, 0, 0, 0, 0, 0, "Large")
+            
+            if (int(float(axis["2"])) < axis2): self.arm_left_jog(0, +1, 0, 0, 0, 0, 0, "Large")
+            if (int(float(axis["2"])) > axis2): self.arm_left_jog(0, -1, 0, 0, 0, 0, 0, "Large")
+            
+            if (int(float(axis["3"])) < axis3): self.arm_left_jog(0, 0, +1, 0, 0, 0, 0, "Large")
+            if (int(float(axis["3"])) > axis3): self.arm_left_jog(0, 0, -1, 0, 0, 0, 0, "Large")
+            
+            if (int(float(axis["4"])) < axis4): self.arm_left_jog(0, 0, 0, +1, 0, 0, 0, "Large")
+            if (int(float(axis["4"])) > axis4): self.arm_left_jog(0, 0, 0, -1, 0, 0, 0, "Large")
+            
+            if (int(float(axis["5"])) < axis5): self.arm_left_jog(0, 0, 0, 0, +1, 0, 0, "Large")
+            if (int(float(axis["5"])) > axis5): self.arm_left_jog(0, 0, 0, 0, -1, 0, 0, "Large")
+            
+            if (int(float(axis["6"])) < axis6): self.arm_left_jog(0, 0, 0, 0, 0, +1, 0, "Large")
+            if (int(float(axis["6"])) > axis6): self.arm_left_jog(0, 0, 0, 0, 0, -1, 0, "Large")
+
+
+    def arm_right_rotation_get(self):
+        position = self._api_get(resource="/rw/motionsystem/mechunits/ROB_R/jointtarget")
+
+        axis = {}
+
+        axis["1"] = position.json["_embedded"]["_state"][0]["rax_1"]
+        axis["2"] = position.json["_embedded"]["_state"][0]["rax_2"]
+        axis["3"] = position.json["_embedded"]["_state"][0]["rax_3"]
+        axis["4"] = position.json["_embedded"]["_state"][0]["rax_4"]
+        axis["5"] = position.json["_embedded"]["_state"][0]["rax_5"]
+        axis["6"] = position.json["_embedded"]["_state"][0]["rax_6"]
+    
+        return axis
+    
+    def arm_right_jog(self, axis1, axis2, axis3, axis4, axis5, axis6, ccount=0, inc_mode="Small"):
+        self._api_post("/rw/motionsystem/ROB_R")
+    
+        headers = {
+            "Accept": "application/json",
+            "Content-Type": "application/x-www-form-urlencoded;v=2.0"
+        }
+
+        payload = f"axis1={axis1}&axis2={axis2}&axis3={axis3}&axis4={axis4}&axis5={axis5}&axis6={axis6}&ccount={ccount}&inc-mode={inc_mode}"
+
+        self._api_post(
+            resource="/rw/motionsystem?action=jog",
+            payload=payload,
+            headers=headers
+        )
+    
+
+    def arm_right_rotate_to(self, axis1, axis2, axis3, axis4, axis5, axis6):
+        done = False
+
+        while not done:
+            time.sleep(1)
+            axis = self.arm_right_rotation_get()
+            
+            if (
+                int(float(axis["1"])) == axis1 and
+                int(float(axis["2"])) == axis2 and
+                int(float(axis["3"])) == axis3 and
+                int(float(axis["4"])) == axis4 and
+                int(float(axis["5"])) == axis5 and
+                int(float(axis["6"])) == axis6
+                ): break
+
+            if (int(float(axis["1"])) < axis1): self.arm_right_jog(+1, 0, 0, 0, 0, 0, 0, "Large")
+            if (int(float(axis["1"])) > axis1): self.arm_right_jog(-1, 0, 0, 0, 0, 0, 0, "Large")
+            
+            if (int(float(axis["2"])) < axis2): self.arm_right_jog(0, +1, 0, 0, 0, 0, 0, "Large")
+            if (int(float(axis["2"])) > axis2): self.arm_right_jog(0, -1, 0, 0, 0, 0, 0, "Large")
+            
+            if (int(float(axis["3"])) < axis3): self.arm_right_jog(0, 0, +1, 0, 0, 0, 0, "Large")
+            if (int(float(axis["3"])) > axis3): self.arm_right_jog(0, 0, -1, 0, 0, 0, 0, "Large")
+            
+            if (int(float(axis["4"])) < axis4): self.arm_right_jog(0, 0, 0, +1, 0, 0, 0, "Large")
+            if (int(float(axis["4"])) > axis4): self.arm_right_jog(0, 0, 0, -1, 0, 0, 0, "Large")
+            
+            if (int(float(axis["5"])) < axis5): self.arm_right_jog(0, 0, 0, 0, +1, 0, 0, "Large")
+            if (int(float(axis["5"])) > axis5): self.arm_right_jog(0, 0, 0, 0, -1, 0, 0, "Large")
+            
+            if (int(float(axis["6"])) < axis6): self.arm_right_jog(0, 0, 0, 0, 0, +1, 0, "Large")
+            if (int(float(axis["6"])) > axis6): self.arm_right_jog(0, 0, 0, 0, 0, -1, 0, "Large")
+
 
     def get_system(self):
         self._api_get("/rw/system?json=1")
