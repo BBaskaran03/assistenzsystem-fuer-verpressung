@@ -1,0 +1,29 @@
+{
+	"name": "documentation",
+	"build": {
+		"dockerfile": "Dockerfile",
+		"context": "."
+	},
+	"remoteUser": "vscode",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+			"eamodio.gitlens",
+			"foxundermoon.shell-format",
+			"Gruntfuggly.todo-tree",
+			"James-Yu.latex-workshop",
+			"mathematic.vscode-latex",
+			"ms-vscode.makefile-tools",
+			"ms-vsliveshare.vsliveshare"
+			],
+			"settings": {
+				"terminal.integrated.defaultProfile.linux": "bash",
+				"terminal.integrated.profiles.linux": {
+					"bash": {
+						"path": "/bin/bash"
+					}
+				}
+			}
+		}
+	}
+}
