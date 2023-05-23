@@ -24,6 +24,23 @@ def run_task_1(config):
     robot.arm_right.rotation_set(*position_home)
 
 
+def run_task_2(config):
+    robot = robot_web_services.Robot(
+        base_url=config["url_base"],
+        username=config["username"],
+        password=config["password"],
+        model = config["model"]
+    )
+
+    robot.ready_robot()
+
+    robtarget = [[-9.578368507,-182.609892723,198.627808149],[0.066010726,-0.842420918,-0.111214912,-0.523068661],[0,0,0,4],[-135,9E+09,9E+09,9E+09,9E+09,9E+09]]
+    position_target = robot_web_services.robtarget_to_position_target(robtarget)
+    payload = robot_web_services.position_target_to_payload(position_target)
+
+    robot._api_post("/rw/motionsystem?action=positiontarget", payload)
+
+
 def run_task(config):
     return run_task_1(config)
 
