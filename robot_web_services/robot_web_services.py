@@ -65,15 +65,9 @@ class Robot:
 
     def __init__(self, base_url: str, username: str, password: str):
         self.base_url = base_url
-        self.username = username
-        self.password = password
 
         self.session = requests.Session()
-        self._authenticate()
-
-
-    def _authenticate(self):
-        self.session.auth = requests.auth.HTTPDigestAuth(self.username, self.password)
+        self.session.auth = requests.auth.HTTPDigestAuth(username, password)
 
 
     def _api_get(self, resource) -> APIResponse:
