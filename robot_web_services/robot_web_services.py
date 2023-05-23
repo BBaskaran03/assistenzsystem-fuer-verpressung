@@ -137,52 +137,6 @@ class RobotWebServices:
             payload="privilege=modify",
             headers=headers
         )
-
-    def task_1(self):
-        self._api_post(
-            resource="/users?action=set-locale",
-            payload="type=local"
-        )
-
-
-    def task_2(self):
-        headers = {
-            "Accept": "application/json",
-            "Content-Type": "application/x-www-form-urlencoded;v=2.0"
-        }
-
-        self._api_post(
-            resource="/users/rmmp",
-            payload="privilege=modify",
-            headers=headers
-        )
-
-
-    def task_3(self):
-        headers = {
-            "Accept": "application/json",
-            "Content-Type": "application/x-www-form-urlencoded;v=2.0"
-        }
-
-        self._api_post(
-            resource="/rw/mastership?action=request",
-            headers=headers
-        )
-
-
-    def task_4(self):
-        headers = {
-            "Accept": "application/json",
-            "Content-Type": "application/x-www-form-urlencoded;v=2.0"
-        }
-
-        payload = "axis1=9000&axis2=0&axis3=0&axis4=0&axis5=0&axis6=0&ccount=0&inc-mode=Small"
-
-        self._api_post(
-            resource="/rw/motionsystem?action=jog",
-            payload=payload,
-            headers=headers
-        )
     
 
     def arm_left_rotation_get(self):
@@ -383,7 +337,7 @@ class RobotWebServices:
 
 
     def ready_robot(self):
-        self.task_1()
+        self.login()
         time.sleep(5)
-        self.task_2()
-        self.task_3()
+        self.rmmp()
+        self.request_mastership()
