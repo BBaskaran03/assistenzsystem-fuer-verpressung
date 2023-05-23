@@ -138,6 +138,77 @@ class RobotWebServices:
             headers=headers
         )
     
+    def get_system(self):
+        self._api_get("/rw/system?json=1")
+
+
+    def request_mastership(self):
+        headers = {
+            "Accept": "application/json",
+            "Content-Type": "application/x-www-form-urlencoded;v=2.0"
+        }
+
+        self._api_post(
+            resource="/rw/mastership?action=request",
+            headers=headers
+        )
+
+
+    def release_mastership(self):
+        self._api_post("/rw/mastership?action=release")
+
+
+    def ready_robot(self):
+        self.login()
+        time.sleep(5)
+        self.rmmp()
+        self.request_mastership()
+
+
+    def get_controller_state(self) -> ControllerStates:
+        """
+        Get the controller state.
+        RAPID can only be executed and the robot can only be moved in the `motoron` state.
+
+        :returns: The controller state
+        :rtype: ControllerStates
+        """
+
+        response = self._api_get("rw/panel/ctrlstate")
+        state = response.json["_embedded"]["_state"][0]['ctrlstate']
+        state = ControllerStates[state]
+
+        return state
+
+
+    def set_controller_state(self, ctrl_state) -> APIResponse:
+        payload = {"ctrl-state": ctrl_state}
+
+        response = self._api_post("rw/panel/ctrlstate?action=setctrlstate", payload)
+
+        print(response)
+
+        if response.status_code != 204:
+            raise Exception("Could not change controller state")
+
+        return response
+
+
+    def motors_on(self) -> None:
+        """Turns the robot's motors on.
+        Operation mode has to be AUTO.
+        """
+
+        self.set_controller_state(ControllerStates.motoron.value)
+
+
+    def motors_off(self):
+        """Turns the robot's motors off.
+        """
+
+        payload = {'ctrl-state': ControllerStates.motoroff}
+        self._api_post("/rw/panel/ctrlstate?action=setctrlstate", payload)
+
 
     def arm_left_rotation_get(self):
         position = self._api_get(resource="/rw/motionsystem/mechunits/ROB_L/jointtarget")
@@ -269,75 +340,3 @@ class RobotWebServices:
             
             if (int(float(axis["6"])) < axis6): self.arm_right_jog(0, 0, 0, 0, 0, +1, 0, "Large")
             if (int(float(axis["6"])) > axis6): self.arm_right_jog(0, 0, 0, 0, 0, -1, 0, "Large")
-
-
-    def get_system(self):
-        self._api_get("/rw/system?json=1")
-
-
-    def request_mastership(self):
-        headers = {
-            "Accept": "application/json",
-            "Content-Type": "application/x-www-form-urlencoded;v=2.0"
-        }
-
-        self._api_post(
-            resource="/rw/mastership?action=request",
-            headers=headers
-        )
-
-
-    def release_mastership(self):
-        self._api_post("/rw/mastership?action=release")
-
-
-    def get_controller_state(self) -> ControllerStates:
-        """
-        Get the controller state.
-        RAPID can only be executed and the robot can only be moved in the `motoron` state.
-
-        :returns: The controller state
-        :rtype: ControllerStates
-        """
-
-        response = self._api_get("rw/panel/ctrlstate")
-        state = response.json["_embedded"]["_state"][0]['ctrlstate']
-        state = ControllerStates[state]
-
-        return state
-
-
-    def set_controller_state(self, ctrl_state) -> APIResponse:
-        payload = {"ctrl-state": ctrl_state}
-
-        response = self._api_post("rw/panel/ctrlstate?action=setctrlstate", payload)
-
-        print(response)
-
-        if response.status_code != 204:
-            raise Exception("Could not change controller state")
-
-        return response
-
-
-    def motors_on(self) -> None:
-        """Turns the robot's motors on.
-        Operation mode has to be AUTO.
-        """
-
-        self.set_controller_state(ControllerStates.motoron.value)
-
-
-    def motors_off(self):
-        """Turns the robot's motors off.
-        """
-
-        payload = {'ctrl-state': ControllerStates.motoroff}
-        self._api_post("/rw/panel/ctrlstate?action=setctrlstate", payload)
-
-
-    def ready_robot(self):
-        self.login()
-        time.sleep(5)
-        self.rmmp()
-        self.request_mastership()
