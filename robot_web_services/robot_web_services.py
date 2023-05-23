@@ -61,6 +61,17 @@ def position_target_to_payload(position_target):
     return payload
 
 
+def jointtarget_to_array(jointtarget):
+    axis1=jointtarget[0][(1-1)]
+    axis2=jointtarget[0][(2-1)]
+    axis3=jointtarget[0][(3-1)]
+    axis4=jointtarget[0][(4-1)]
+    axis5=jointtarget[0][(5-1)]
+    axis6=jointtarget[0][(6-1)]
+
+    return [axis1, axis2, axis3, axis4, axis5, axis6]
+
+
 class ControllerStates(enum.Enum):
     init = "init"
     motoroff = "motoroff"
