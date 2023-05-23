@@ -308,35 +308,20 @@ class RobotWebServices:
     
 
     def arm_right_rotate_to(self, axis1, axis2, axis3, axis4, axis5, axis6):
-        done = False
+        string_to_int = lambda value: int(float(value))
+        
+        axis_target = [axis1, axis2, axis3, axis4, axis5, axis6]
+        axis_target = [string_to_int(value) for value in axis_target]
 
-        while not done:
+        evaluate = lambda target, value : (+1) if (value < target) else (-1) if (value > target) else (0)
+
+        while True:
+            axis_current = self.arm_right_rotation_get()
+            axis_current = [string_to_int(value) for value in axis_current]
+            
+            if (axis_target == axis_current): break
+
+            movement = [evaluate(target, value) for target, value in zip(axis_target, axis_current)]
+            self.arm_right_jog(*movement, 0, "Large")
+            
             time.sleep(1)
-            axis = self.arm_right_rotation_get()
-            
-            if (
-                int(float(axis["1"])) == axis1 and
-                int(float(axis["2"])) == axis2 and
-                int(float(axis["3"])) == axis3 and
-                int(float(axis["4"])) == axis4 and
-                int(float(axis["5"])) == axis5 and
-                int(float(axis["6"])) == axis6
-                ): break
-
-            if (int(float(axis["1"])) < axis1): self.arm_right_jog(+1, 0, 0, 0, 0, 0, 0, "Large")
-            if (int(float(axis["1"])) > axis1): self.arm_right_jog(-1, 0, 0, 0, 0, 0, 0, "Large")
-            
-            if (int(float(axis["2"])) < axis2): self.arm_right_jog(0, +1, 0, 0, 0, 0, 0, "Large")
-            if (int(float(axis["2"])) > axis2): self.arm_right_jog(0, -1, 0, 0, 0, 0, 0, "Large")
-            
-            if (int(float(axis["3"])) < axis3): self.arm_right_jog(0, 0, +1, 0, 0, 0, 0, "Large")
-            if (int(float(axis["3"])) > axis3): self.arm_right_jog(0, 0, -1, 0, 0, 0, 0, "Large")
-            
-            if (int(float(axis["4"])) < axis4): self.arm_right_jog(0, 0, 0, +1, 0, 0, 0, "Large")
-            if (int(float(axis["4"])) > axis4): self.arm_right_jog(0, 0, 0, -1, 0, 0, 0, "Large")
-            
-            if (int(float(axis["5"])) < axis5): self.arm_right_jog(0, 0, 0, 0, +1, 0, 0, "Large")
-            if (int(float(axis["5"])) > axis5): self.arm_right_jog(0, 0, 0, 0, -1, 0, 0, "Large")
-            
-            if (int(float(axis["6"])) < axis6): self.arm_right_jog(0, 0, 0, 0, 0, +1, 0, "Large")
-            if (int(float(axis["6"])) > axis6): self.arm_right_jog(0, 0, 0, 0, 0, -1, 0, "Large")
