@@ -124,7 +124,7 @@ class RobotArm():
         payload = f"axis1={axis1}&axis2={axis2}&axis3={axis3}&axis4={axis4}&axis5={axis5}&axis6={axis6}"
         payload = f"{payload}&ccount={ccount}&inc-mode={inc_mode}"
 
-        self._robot._api_post(resource="/rw/motionsystem?action=jog", payload=payload,)
+        self._robot._api_post(resource="/rw/motionsystem?action=jog", payload=payload)
 
 
     def rotation_set(self, axis1, axis2, axis3, axis4, axis5, axis6):        
