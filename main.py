@@ -8,7 +8,7 @@ import robot_web_services.robot_web_services as robot_web_services
 import speech_recognition
 
 
-def process(config):
+def run_task_1(config):
     robot = robot_web_services.Robot(
         base_url=config["url_base"],
         username=config["username"],
@@ -22,6 +22,10 @@ def process(config):
 
     # robot.arm_left.rotation_set(*position_home)
     robot.arm_right.rotation_set(*position_home)
+
+
+def run_task(config):
+    return run_task_1(config)
 
 
 def main() -> int:
@@ -42,7 +46,7 @@ def main() -> int:
     config["url_base"] = "http://localhost:80"
     config["model"] = "IRB14000"
 
-    process(config)
+    run_task(config)
 
     return 0
 
