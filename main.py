@@ -37,6 +37,14 @@ def run_task_3(robot):
     robot._api_post(f"/rw/motionsystem?action=set", "ROB_1_L")
 
 
+def run_task_4(robot):
+    jointtarget = [[60.66,-92.386666667,-17.68,-11.6,-0.613333333,45.8],[-119.073333333,9E+09,9E+09,9E+09,9E+09,9E+09]]
+    position_custom = robot_web_services.jointtarget_to_array(jointtarget)
+
+    # robot.arm_left.rotation_set(*position_custom)
+    robot.arm_right.rotation_set(*position_custom)
+
+
 def run_task(config):
     robot = robot_web_services.Robot(
         base_url=config["url_base"],
