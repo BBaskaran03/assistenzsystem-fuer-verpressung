@@ -38,6 +38,9 @@ def main() -> int:
     robot.task_2()
     robot.task_3()
 
+    # position_1 = [91, 5, -5, 5, -5, 10]
+    # robot.arm_right_rotate_to(*position_1)
+
     # robot.arm_right_rotate_to(axis1=90,axis2=0,axis3=0,axis4=0,axis5=0,axis6=0)
     robot.arm_right_rotate_to(axis1=91,axis2=5,axis3=-5,axis4=5,axis5=-5,axis6=10)
 

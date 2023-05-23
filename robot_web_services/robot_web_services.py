@@ -120,6 +120,24 @@ class RobotWebServices:
         return response
 
 
+    def login(self):
+        self._api_post(
+            resource="/users?action=set-locale",
+            payload="type=local"
+        )
+
+    def rmmp(self):
+        headers = {
+            "Accept": "application/json",
+            "Content-Type": "application/x-www-form-urlencoded;v=2.0"
+        }
+
+        self._api_post(
+            resource="/users/rmmp",
+            payload="privilege=modify",
+            headers=headers
+        )
+
     def task_1(self):
         self._api_post(
             resource="/users?action=set-locale",
@@ -304,7 +322,15 @@ class RobotWebServices:
 
 
     def request_mastership(self):
-        self._api_post("/rw/mastership?action=request")
+        headers = {
+            "Accept": "application/json",
+            "Content-Type": "application/x-www-form-urlencoded;v=2.0"
+        }
+
+        self._api_post(
+            resource="/rw/mastership?action=request",
+            headers=headers
+        )
 
 
     def release_mastership(self):
@@ -354,3 +380,10 @@ class RobotWebServices:
 
         payload = {'ctrl-state': ControllerStates.motoroff}
         self._api_post("/rw/panel/ctrlstate?action=setctrlstate", payload)
+
+
+    def ready_robot(self):
+        self.task_1()
+        time.sleep(5)
+        self.task_2()
+        self.task_3()
