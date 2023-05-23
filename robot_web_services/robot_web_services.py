@@ -210,118 +210,45 @@ class Robot:
         self._api_post("/rw/panel/ctrlstate?action=setctrlstate", payload)
 
 
-    def arm_left_rotation_get(self):
-        position = self._api_get(resource="/rw/motionsystem/mechunits/ROB_L/jointtarget")
-
-        axis = {}
-
-        axis["1"] = position.json["_embedded"]["_state"][0]["rax_1"]
-        axis["2"] = position.json["_embedded"]["_state"][0]["rax_2"]
-        axis["3"] = position.json["_embedded"]["_state"][0]["rax_3"]
-        axis["4"] = position.json["_embedded"]["_state"][0]["rax_4"]
-        axis["5"] = position.json["_embedded"]["_state"][0]["rax_5"]
-        axis["6"] = position.json["_embedded"]["_state"][0]["rax_6"]
-    
-        return axis
- 
-    def arm_left_jog(self, axis1, axis2, axis3, axis4, axis5, axis6, ccount=0, inc_mode="Small"):
-        self._api_post("/rw/motionsystem/ROB_L")
-
-        headers = {
-            "Accept": "application/json",
-            "Content-Type": "application/x-www-form-urlencoded;v=2.0"
-        }
-
-        payload = f"axis1={axis1}&axis2={axis2}&axis3={axis3}&axis4={axis4}&axis5={axis5}&axis6={axis6}&ccount={ccount}&inc-mode={inc_mode}"
-
-        self._api_post(
-            resource="/rw/motionsystem?action=jog",
-            payload=payload,
-            headers=headers
-        )
+class RobotArm():
+    def __init__(self, robot: Robot, mechunit: str) -> None:
+        self._robot = robot
+        self._mechunit = mechunit
 
 
-    def arm_left_rotate_to(self, axis1, axis2, axis3, axis4, axis5, axis6):
-        done = False
+    def rotation_get(self):
+        response = self._robot._api_get(f"/rw/motionsystem/mechunits/{self._mechunit}/jointtarget")
 
-        while not done:
-            time.sleep(1)
-            axis = self.arm_left_rotation_get()
-            
-            if (
-                int(float(axis["1"])) == axis1 and
-                int(float(axis["2"])) == axis2 and
-                int(float(axis["3"])) == axis3 and
-                int(float(axis["4"])) == axis4 and
-                int(float(axis["5"])) == axis5 and
-                int(float(axis["6"])) == axis6
-                ): break
-
-            if (int(float(axis["1"])) < axis1): self.arm_left_jog(+1, 0, 0, 0, 0, 0, 0, "Large")
-            if (int(float(axis["1"])) > axis1): self.arm_left_jog(-1, 0, 0, 0, 0, 0, 0, "Large")
-            
-            if (int(float(axis["2"])) < axis2): self.arm_left_jog(0, +1, 0, 0, 0, 0, 0, "Large")
-            if (int(float(axis["2"])) > axis2): self.arm_left_jog(0, -1, 0, 0, 0, 0, 0, "Large")
-            
-            if (int(float(axis["3"])) < axis3): self.arm_left_jog(0, 0, +1, 0, 0, 0, 0, "Large")
-            if (int(float(axis["3"])) > axis3): self.arm_left_jog(0, 0, -1, 0, 0, 0, 0, "Large")
-            
-            if (int(float(axis["4"])) < axis4): self.arm_left_jog(0, 0, 0, +1, 0, 0, 0, "Large")
-            if (int(float(axis["4"])) > axis4): self.arm_left_jog(0, 0, 0, -1, 0, 0, 0, "Large")
-            
-            if (int(float(axis["5"])) < axis5): self.arm_left_jog(0, 0, 0, 0, +1, 0, 0, "Large")
-            if (int(float(axis["5"])) > axis5): self.arm_left_jog(0, 0, 0, 0, -1, 0, 0, "Large")
-            
-            if (int(float(axis["6"])) < axis6): self.arm_left_jog(0, 0, 0, 0, 0, +1, 0, "Large")
-            if (int(float(axis["6"])) > axis6): self.arm_left_jog(0, 0, 0, 0, 0, -1, 0, "Large")
-
-
-    def arm_right_rotation_get(self):
-        position = self._api_get(resource="/rw/motionsystem/mechunits/ROB_R/jointtarget")
-
-        axis = {}
-
-        axis["1"] = position.json["_embedded"]["_state"][0]["rax_1"]
-        axis["2"] = position.json["_embedded"]["_state"][0]["rax_2"]
-        axis["3"] = position.json["_embedded"]["_state"][0]["rax_3"]
-        axis["4"] = position.json["_embedded"]["_state"][0]["rax_4"]
-        axis["5"] = position.json["_embedded"]["_state"][0]["rax_5"]
-        axis["6"] = position.json["_embedded"]["_state"][0]["rax_6"]
-    
-        return axis
-    
-    def arm_right_jog(self, axis1, axis2, axis3, axis4, axis5, axis6, ccount=0, inc_mode="Small"):
-        self._api_post("/rw/motionsystem/ROB_R")
-    
-        headers = {
-            "Accept": "application/json",
-            "Content-Type": "application/x-www-form-urlencoded;v=2.0"
-        }
-
-        payload = f"axis1={axis1}&axis2={axis2}&axis3={axis3}&axis4={axis4}&axis5={axis5}&axis6={axis6}&ccount={ccount}&inc-mode={inc_mode}"
-
-        self._api_post(
-            resource="/rw/motionsystem?action=jog",
-            payload=payload,
-            headers=headers
-        )
-    
-
-    def arm_right_rotate_to(self, axis1, axis2, axis3, axis4, axis5, axis6):
-        string_to_int = lambda value: int(float(value))
+        axis_get_value = lambda response, axis : response.json["_embedded"]["_state"][0][f"rax_{axis}"]
         
+        axis_values = [axis_get_value(response, axis) for axis in range(1, (6 + 1))]
+        axis_values = [float(value) for value in axis_values]
+
+        return axis_values
+
+    
+    def _arm_job(self, axis1, axis2, axis3, axis4, axis5, axis6, ccount=0, inc_mode="Small"):
+        self._robot._api_post(f"/rw/motionsystem/{self._mechunit}")
+
+        payload = f"axis1={axis1}&axis2={axis2}&axis3={axis3}&axis4={axis4}&axis5={axis5}&axis6={axis6}"
+        payload = f"{payload}&ccount={ccount}&inc-mode={inc_mode}"
+
+        self._robot._api_post(resource="/rw/motionsystem?action=jog", payload=payload,)
+
+
+    def rotation_set(self, axis1, axis2, axis3, axis4, axis5, axis6):        
         axis_target = [axis1, axis2, axis3, axis4, axis5, axis6]
-        axis_target = [string_to_int(value) for value in axis_target]
+        axis_target = [int(value) for value in axis_target]
 
         evaluate = lambda target, value : (+1) if (value < target) else (-1) if (value > target) else (0)
 
         while True:
-            axis_current = self.arm_right_rotation_get()
-            axis_current = [string_to_int(value) for value in axis_current]
+            axis_current = self.rotation_get()
+            axis_current = [int(value) for value in axis_current]
             
             if (axis_target == axis_current): break
 
             movement = [evaluate(target, value) for target, value in zip(axis_target, axis_current)]
-            self.arm_right_jog(*movement, 0, "Large")
+            self._arm_job(*movement, 0, "Large")
             
             time.sleep(1)

@@ -17,8 +17,10 @@ def process(config):
 
     robot.ready_robot()
 
+    arm_right = robot_web_services.RobotArm(robot, "ROB_R")
+
     position_1 = [91, 5, -5, 5, -5, 10]
-    robot.arm_right_rotate_to(*position_1)
+    arm_right.rotation_set(*position_1)
 
 
 def main() -> int:
