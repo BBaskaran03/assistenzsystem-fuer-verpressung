@@ -53,7 +53,7 @@ class APIResponse:
         return json.dumps(self._json, indent=4)
 
 
-class RobotWebServices:
+class Robot:
     """
     Python Interface for ABB RobotWebServices (REST-API)\n
     Modified version of from GitHub project <mhiversflaten/ABB-Robot-Machine-Vision>\n

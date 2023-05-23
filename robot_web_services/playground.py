@@ -27,7 +27,7 @@ def main() -> int:
         config["username"] = lines[0].strip()
         config["password"] = lines[1].strip()
 
-    robot = robot_web_services.RobotWebServices(
+    robot = robot_web_services.Robot(
         base_url=config["url_base"],
         username=config["username"],
         password=config["password"],

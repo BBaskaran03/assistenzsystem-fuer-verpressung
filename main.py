@@ -9,7 +9,7 @@ import speech_recognition
 
 
 def process(config):
-    robot = robot_web_services.RobotWebServices(
+    robot = robot_web_services.Robot(
         base_url=config["url_base"],
         username=config["username"],
         password=config["password"],
