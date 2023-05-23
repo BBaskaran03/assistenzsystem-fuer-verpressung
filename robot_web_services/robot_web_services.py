@@ -11,6 +11,56 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+def robtarget_to_position_target(robtarget) -> dict():
+    position_target = {}
+
+    position_target["pos-x"]=robtarget[0][(1-1)]
+    position_target["pos-y"]=robtarget[0][(2-1)]
+    position_target["pos-z"]=robtarget[0][(3-1)]
+    position_target["orient-q1"]=robtarget[1][(1-1)]
+    position_target["orient-q2"]=robtarget[1][(2-1)]
+    position_target["orient-q3"]=robtarget[1][(3-1)]
+    position_target["orient-q4"]=robtarget[1][(4-1)]
+    position_target["config-j1"]=robtarget[2][(1-1)]
+    position_target["config-j4"]=robtarget[2][(2-1)]
+    position_target["config-j6"]=robtarget[2][(3-1)]
+    position_target["config-jx"]=robtarget[2][(4-1)]
+    position_target["extjoint-1"]=robtarget[3][(1-1)]
+    position_target["extjoint-2"]=robtarget[3][(2-1)]
+    position_target["extjoint-3"]=robtarget[3][(3-1)]
+    position_target["extjoint-4"]=robtarget[3][(4-1)]
+    position_target["extjoint-5"]=robtarget[3][(5-1)]
+    position_target["extjoint-6"]=robtarget[3][(6-1)]
+
+    return position_target
+
+
+def position_target_to_payload(position_target):
+    payload = ""
+
+    payload = f'{payload}pos-x={position_target["pos-x"]}&'
+    payload = f'{payload}pos-y={position_target["pos-y"]}&'
+    payload = f'{payload}pos-z={position_target["pos-z"]}&'
+    payload = f'{payload}orient-q1={position_target["orient-q1"]}&'
+    payload = f'{payload}orient-q2={position_target["orient-q2"]}&'
+    payload = f'{payload}orient-q3={position_target["orient-q3"]}&'
+    payload = f'{payload}orient-q4={position_target["orient-q4"]}&'
+    payload = f'{payload}config-j1={position_target["config-j1"]}&'
+    payload = f'{payload}config-j4={position_target["config-j4"]}&'
+    payload = f'{payload}config-j6={position_target["config-j6"]}&'
+    payload = f'{payload}config-jx={position_target["config-jx"]}&'
+    payload = f'{payload}extjoint-1={position_target["extjoint-1"]}&'
+    payload = f'{payload}extjoint-2={position_target["extjoint-2"]}&'
+    payload = f'{payload}extjoint-3={position_target["extjoint-3"]}&'
+    payload = f'{payload}extjoint-4={position_target["extjoint-4"]}&'
+    payload = f'{payload}extjoint-5={position_target["extjoint-5"]}&'
+    payload = f'{payload}extjoint-6={position_target["extjoint-6"]}&'
+
+    payload = payload[:-1]
+
+    return payload
+
+
 class ControllerStates(enum.Enum):
     init = "init"
     motoroff = "motoroff"
