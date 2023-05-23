@@ -8,32 +8,14 @@ import robot_web_services.robot_web_services as robot_web_services
 import speech_recognition
 
 
-def run_task_1(config):
-    robot = robot_web_services.Robot(
-        base_url=config["url_base"],
-        username=config["username"],
-        password=config["password"],
-        model = config["model"]
-    )
-
-    robot.ready_robot()
-
+def run_task_1(robot):
     position_home = [0, -130, 30, 0, 40, 0]
 
     # robot.arm_left.rotation_set(*position_home)
     robot.arm_right.rotation_set(*position_home)
 
 
-def run_task_2(config):
-    robot = robot_web_services.Robot(
-        base_url=config["url_base"],
-        username=config["username"],
-        password=config["password"],
-        model = config["model"]
-    )
-
-    robot.ready_robot()
-
+def run_task_2(robot):
     robtarget = [[-9.578368507,-182.609892723,198.627808149],[0.066010726,-0.842420918,-0.111214912,-0.523068661],[0,0,0,4],[-135,9E+09,9E+09,9E+09,9E+09,9E+09]]
     position_target = robot_web_services.robtarget_to_position_target(robtarget)
     payload = robot_web_services.position_target_to_payload(position_target)
@@ -41,16 +23,7 @@ def run_task_2(config):
     robot._api_post("/rw/motionsystem?action=positiontarget", payload)
 
 
-def run_task_3(config):
-    robot = robot_web_services.Robot(
-        base_url=config["url_base"],
-        username=config["username"],
-        password=config["password"],
-        model = config["model"]
-    )
-
-    robot.ready_robot()
-
+def run_task_3(robot):
     robot._api_post(f"/rw/motionsystem/ROB_1?action=set")
     robot._api_post(f"/rw/motionsystem?action=set", "ROB_1")
     robot._api_post(f"/rw/motionsystem?action=ROB_1")
@@ -65,7 +38,16 @@ def run_task_3(config):
 
 
 def run_task(config):
-    return run_task_1(config)
+    robot = robot_web_services.Robot(
+        base_url=config["url_base"],
+        username=config["username"],
+        password=config["password"],
+        model = config["model"]
+    )
+
+    robot.ready_robot()
+
+    return run_task_1(robot)
 
 
 def main() -> int:
