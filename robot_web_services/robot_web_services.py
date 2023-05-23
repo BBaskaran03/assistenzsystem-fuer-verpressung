@@ -7,8 +7,6 @@ import requests
 import time
 import logging
 
-# Address used to organize ET elements
-namespace = '{http://www.w3.org/1999/xhtml}'
 
 logger = logging.getLogger(__name__)
 
@@ -61,6 +59,7 @@ class Robot:
     """
 
     headers = {
+        "Accept": "application/json",
         "Content-Type": "application/x-www-form-urlencoded;v=2.0"
     }
 
@@ -97,16 +96,14 @@ class Robot:
         return response
 
 
-    def _api_post(self, resource, payload = None, headers = None) -> APIResponse:
+    def _api_post(self, resource, payload = None) -> APIResponse:
         url = f"{self.base_url}/{resource}"
         url = f"{url}&json=1" if "?" in url else f"{url}?json=1"
-
-        headers = headers or self.headers
 
         repsonse = self.session.post(
             url=url,
             data=payload,
-            headers=headers,
+            headers=self.headers,
             cookies=self.session.cookies,
             auth=self.session.auth
         )
@@ -121,37 +118,18 @@ class Robot:
 
 
     def login(self):
-        self._api_post(
-            resource="/users?action=set-locale",
-            payload="type=local"
-        )
+        self._api_post(resource="/users?action=set-locale", payload="type=local")
 
     def rmmp(self):
-        headers = {
-            "Accept": "application/json",
-            "Content-Type": "application/x-www-form-urlencoded;v=2.0"
-        }
+        self._api_post(resource="/users/rmmp",payload="privilege=modify")
 
-        self._api_post(
-            resource="/users/rmmp",
-            payload="privilege=modify",
-            headers=headers
-        )
-    
+
     def get_system(self):
         self._api_get("/rw/system?json=1")
 
 
     def request_mastership(self):
-        headers = {
-            "Accept": "application/json",
-            "Content-Type": "application/x-www-form-urlencoded;v=2.0"
-        }
-
-        self._api_post(
-            resource="/rw/mastership?action=request",
-            headers=headers
-        )
+        self._api_post(resource="/rw/mastership?action=request")
 
 
     def release_mastership(self):
