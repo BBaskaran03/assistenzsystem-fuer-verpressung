@@ -41,6 +41,29 @@ def run_task_2(config):
     robot._api_post("/rw/motionsystem?action=positiontarget", payload)
 
 
+def run_task_3(config):
+    robot = robot_web_services.Robot(
+        base_url=config["url_base"],
+        username=config["username"],
+        password=config["password"],
+        model = config["model"]
+    )
+
+    robot.ready_robot()
+
+    robot._api_post(f"/rw/motionsystem/ROB_1?action=set")
+    robot._api_post(f"/rw/motionsystem?action=set", "ROB_1")
+    robot._api_post(f"/rw/motionsystem?action=ROB_1")
+    robot._api_post(f"/rw/motionsystem?action=ROB_1", "ROB_1")
+    robot._api_post(f"/rw/motionsystem?action=ROB_1", "mechunit=ROB_1")
+
+    robot._api_post(f"/rw/motionsystem/ROB_L?action=set")
+
+    robot._api_post(f"/rw/motionsystem/ROB_1_L")
+    robot._api_post(f"/rw/motionsystem/ROB_L?action=ROB_1")
+    robot._api_post(f"/rw/motionsystem?action=set", "ROB_1_L")
+
+
 def run_task(config):
     return run_task_1(config)
 
