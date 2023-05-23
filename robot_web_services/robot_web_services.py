@@ -51,6 +51,50 @@ class APIResponse:
         return json.dumps(self._json, indent=4)
 
 
+class RobotArm():
+    def __init__(self, robot, mechunit: str) -> None:
+        self._robot = robot
+        self._mechunit = mechunit
+
+
+    def rotation_get(self):
+        response = self._robot._api_get(f"/rw/motionsystem/mechunits/{self._mechunit}/jointtarget")
+
+        axis_get_value = lambda response, axis : response.json["_embedded"]["_state"][0][f"rax_{axis}"]
+        
+        axis_values = [axis_get_value(response, axis) for axis in range(1, (6 + 1))]
+        axis_values = [float(value) for value in axis_values]
+
+        return axis_values
+
+    
+    def _arm_job(self, axis1, axis2, axis3, axis4, axis5, axis6, ccount=0, inc_mode="Small"):
+        self._robot._api_post(f"/rw/motionsystem/{self._mechunit}")
+
+        payload = f"axis1={axis1}&axis2={axis2}&axis3={axis3}&axis4={axis4}&axis5={axis5}&axis6={axis6}"
+        payload = f"{payload}&ccount={ccount}&inc-mode={inc_mode}"
+
+        self._robot._api_post(resource="/rw/motionsystem?action=jog", payload=payload,)
+
+
+    def rotation_set(self, axis1, axis2, axis3, axis4, axis5, axis6):        
+        axis_target = [axis1, axis2, axis3, axis4, axis5, axis6]
+        axis_target = [int(value) for value in axis_target]
+
+        evaluate = lambda target, value : (+1) if (value < target) else (-1) if (value > target) else (0)
+
+        while True:
+            axis_current = self.rotation_get()
+            axis_current = [int(value) for value in axis_current]
+            
+            if (axis_target == axis_current): break
+
+            movement = [evaluate(target, value) for target, value in zip(axis_target, axis_current)]
+            self._arm_job(*movement, 0, "Large")
+            
+            time.sleep(1)
+
+
 class Robot:
     """
     Python Interface for ABB RobotWebServices (REST-API)\n
@@ -63,11 +107,24 @@ class Robot:
         "Content-Type": "application/x-www-form-urlencoded;v=2.0"
     }
 
-    def __init__(self, base_url: str, username: str, password: str):
+
+    def __init__(self, base_url: str, username: str, password: str, model: str):
         self.base_url = base_url
+
+        self.model = model
+        self._adapt_to_model()
 
         self.session = requests.Session()
         self.session.auth = requests.auth.HTTPDigestAuth(username, password)
+
+
+    def _adapt_to_model(self):
+        if self.model == "IRB14000":
+            self.arm_left = RobotArm(self, "ROB_L")
+            self.arm_right = RobotArm(self, "ROB_R")
+            return
+        
+        raise Exception("Unknown model")
 
 
     def _api_get(self, resource) -> APIResponse:
@@ -132,7 +189,9 @@ class Robot:
 
     def ready_robot(self):
         self.login()
+
         time.sleep(5)
+
         self.rmmp()
         self.request_mastership()
 
@@ -180,47 +239,3 @@ class Robot:
 
         payload = {'ctrl-state': ControllerStates.motoroff}
         self._api_post("/rw/panel/ctrlstate?action=setctrlstate", payload)
-
-
-class RobotArm():
-    def __init__(self, robot: Robot, mechunit: str) -> None:
-        self._robot = robot
-        self._mechunit = mechunit
-
-
-    def rotation_get(self):
-        response = self._robot._api_get(f"/rw/motionsystem/mechunits/{self._mechunit}/jointtarget")
-
-        axis_get_value = lambda response, axis : response.json["_embedded"]["_state"][0][f"rax_{axis}"]
-        
-        axis_values = [axis_get_value(response, axis) for axis in range(1, (6 + 1))]
-        axis_values = [float(value) for value in axis_values]
-
-        return axis_values
-
-    
-    def _arm_job(self, axis1, axis2, axis3, axis4, axis5, axis6, ccount=0, inc_mode="Small"):
-        self._robot._api_post(f"/rw/motionsystem/{self._mechunit}")
-
-        payload = f"axis1={axis1}&axis2={axis2}&axis3={axis3}&axis4={axis4}&axis5={axis5}&axis6={axis6}"
-        payload = f"{payload}&ccount={ccount}&inc-mode={inc_mode}"
-
-        self._robot._api_post(resource="/rw/motionsystem?action=jog", payload=payload,)
-
-
-    def rotation_set(self, axis1, axis2, axis3, axis4, axis5, axis6):        
-        axis_target = [axis1, axis2, axis3, axis4, axis5, axis6]
-        axis_target = [int(value) for value in axis_target]
-
-        evaluate = lambda target, value : (+1) if (value < target) else (-1) if (value > target) else (0)
-
-        while True:
-            axis_current = self.rotation_get()
-            axis_current = [int(value) for value in axis_current]
-            
-            if (axis_target == axis_current): break
-
-            movement = [evaluate(target, value) for target, value in zip(axis_target, axis_current)]
-            self._arm_job(*movement, 0, "Large")
-            
-            time.sleep(1)

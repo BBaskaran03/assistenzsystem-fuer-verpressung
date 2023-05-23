@@ -13,14 +13,15 @@ def process(config):
         base_url=config["url_base"],
         username=config["username"],
         password=config["password"],
+        model = config["model"]
     )
 
     robot.ready_robot()
 
-    arm_right = robot_web_services.RobotArm(robot, "ROB_R")
+    position_home = [0, -130, 30, 0, 40, 0]
 
-    position_1 = [91, 5, -5, 5, -5, 10]
-    arm_right.rotation_set(*position_1)
+    # robot.arm_left.rotation_set(*position_home)
+    robot.arm_right.rotation_set(*position_home)
 
 
 def main() -> int:
@@ -37,7 +38,9 @@ def main() -> int:
         lines = file.readlines()
         config["username"] = lines[0].strip()
         config["password"] = lines[1].strip()
+
     config["url_base"] = "http://localhost:80"
+    config["model"] = "IRB14000"
 
     process(config)
 
