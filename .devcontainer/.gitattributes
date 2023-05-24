@@ -1,2 +1,2 @@
 # Force "LF" line endings
-* text=auto eol=lf
+/*/setup text=auto eol=lf
