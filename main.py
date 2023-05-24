@@ -24,17 +24,28 @@ def run_task_2(robot):
 
 
 def run_task_3(robot):
+    # Mechunits: (ROB_1, ROB_2) / (ROB_L, ROB_R)
+
+    # Resource not found code
     robot._api_post(f"/rw/motionsystem/ROB_1?action=set")
+
+    # Invalid action parameter value
     robot._api_post(f"/rw/motionsystem?action=set", "ROB_1")
+
+    # Data parameter(s) is(are) required
     robot._api_post(f"/rw/motionsystem?action=ROB_1")
-    robot._api_post(f"/rw/motionsystem?action=ROB_1", "ROB_1")
-    robot._api_post(f"/rw/motionsystem?action=ROB_1", "mechunit=ROB_1")
 
-    robot._api_post(f"/rw/motionsystem/ROB_L?action=set")
+    # robot._api_post(f"/rw/motionsystem/ROB_1?action=set")
+    # robot._api_post(f"/rw/motionsystem?action=set", "ROB_1")
+    # robot._api_post(f"/rw/motionsystem?action=ROB_1")
+    # robot._api_post(f"/rw/motionsystem?action=ROB_1", "ROB_1")
+    # robot._api_post(f"/rw/motionsystem?action=ROB_1", "mechunit=ROB_1")
 
-    robot._api_post(f"/rw/motionsystem/ROB_1_L")
-    robot._api_post(f"/rw/motionsystem/ROB_L?action=ROB_1")
-    robot._api_post(f"/rw/motionsystem?action=set", "ROB_1_L")
+    # robot._api_post(f"/rw/motionsystem/ROB_L?action=set")
+
+    # robot._api_post(f"/rw/motionsystem/ROB_1_L")
+    # robot._api_post(f"/rw/motionsystem/ROB_L?action=ROB_1")
+    # robot._api_post(f"/rw/motionsystem?action=set", "ROB_1_L")
 
 
 def run_task_4(robot):
@@ -55,7 +66,7 @@ def run_task(config):
 
     robot.ready_robot()
 
-    return run_task_1(robot)
+    return run_task_3(robot)
 
 
 def main() -> int:

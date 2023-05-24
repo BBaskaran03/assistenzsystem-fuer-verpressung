@@ -130,7 +130,7 @@ class RobotArm():
 
     
     def _arm_job(self, axis1, axis2, axis3, axis4, axis5, axis6, ccount=0, inc_mode="Small"):
-        self._robot._api_post(f"/rw/motionsystem/{self._mechunit}")
+        self._robot._api_post(f"/rw/motionsystem/{self._mechunit}") # TODO: Fix this
 
         payload = f"axis1={axis1}&axis2={axis2}&axis3={axis3}&axis4={axis4}&axis5={axis5}&axis6={axis6}"
         payload = f"{payload}&ccount={ccount}&inc-mode={inc_mode}"
