@@ -1,9 +1,10 @@
 {
 	"name": "python",
-	"build": {
-		"dockerfile": "Dockerfile",
-		"context": "."
-	},
+	"image": "gitlab.ruhr-uni-bochum.de/menschenzentrierte-robotik/assistenzsystem-fuer-verpressung/devcontainer/python:latest",
+	// "build": {
+	// 	"dockerfile": "Dockerfile",
+	// 	"context": "."
+	// },
 	"remoteUser": "vscode",
 	"customizations": {
 		"vscode": {
