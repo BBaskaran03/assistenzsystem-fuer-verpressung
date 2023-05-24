@@ -17,7 +17,7 @@ Das Programm besitzt zurzeit 3 verschiedene "States"
 
 Diese States werden in einer while(true) Schleife, durch mithören des Mikrophons und Selektion einzelner Schlüsselwörter, selected.
 
-Schlüsselwörter für die jeweiligen "States" sind
+Schlüsselwörter für die jeweiligen "States" sind unter anderem
 
 1. "anstrengend", "pause"
 2. "aufhören", "ich kann nicht mehr", "keine lust"
@@ -55,6 +55,8 @@ Zum Testen der Speech to Text Funktionen wurde ein Satz verwendet, das schwer au
 ## Probleme
 
 Wenn Pause gesagt wird, wird da es ein string ist, auch aus erkannt
+
+Dies wurde gelöst indem wir die sätze in einzelne worte gesplittet haben und je nach keywordliste, falls es sätze drin gibt oder nicht, dementsprechend eine iteration in jener gesplitteter variante des Inputs durchgeführt haben
 
 ## Special Acknowledgements
 

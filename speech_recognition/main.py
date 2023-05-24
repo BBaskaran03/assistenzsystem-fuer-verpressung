@@ -2,11 +2,11 @@ import speech_recognition as sr
 from recognize_speech import recognize_speech
 from text_to_speech import speak
 from keyword_search import search_for_keywords
+import re
 
 def main():
     recognizer = sr.Recognizer()
     microphone = sr.Microphone()
-    filecounter = 0
     with microphone as source:
         recognizer.adjust_for_ambient_noise(source)
 

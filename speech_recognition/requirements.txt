@@ -8,7 +8,7 @@ SpeechRecognition==3.10.0
 # Offline mode
 pocketsphinx==5.0.0    
 
-# WhisperMic
-docopt==0.6.2
-whisper-mic==0.0.1
-yarg==0.1.9
+# # WhisperMic
+# docopt==0.6.2
+# whisper-mic==0.0.1
+# yarg==0.1.9
