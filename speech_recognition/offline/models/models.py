@@ -14,6 +14,3 @@ KEY_WORDS = [
     "YUMI_STOP",
     "YUMI_WEITER"
 ]
-
-print(YUMI_STOP)
-print(YUMI_WEITER)
