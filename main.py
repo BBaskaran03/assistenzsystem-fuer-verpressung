@@ -4,23 +4,13 @@ import threading
 import sys
 
 import robot_web_services
+from robot_web_services.positions import Position
+from robot_web_services.positions import Positions
 import speech_recognition
 import visual_detection
 
 
-position_home = None
-
-position_box_rubber = None
-position_box_metal = None
-
-position_tool_rubber = None
-position_tool_metal = None
-position_tool_lever = None
-
-position_tool_lever_up = None
-position_tool_lever_down = None
-
-position_box_finished = None
+positions = None
 
 
 def job_grab_and_place_rubber(robot, speech, visual):
@@ -31,14 +21,15 @@ def job_grab_and_place_rubber(robot, speech, visual):
 
     speech.print("Ich greife jetzt das Gummiteil")
     
-    robot.arm_left.move_to(position_box_rubber)
+    robot.arm_left.move_to(positions["box_rubber"])
+
     position_rubber = visual.get_rubber()
     robot.arm_left.grab(position_rubber)
 
-    robot.arm_left.move_to(position_tool_rubber)
+    robot.arm_left.move_to(positions["tool_rubber"])
     robot.arm_left.drop()
 
-    robot.arm_left.move_to(position_home)
+    robot.arm_left.move_to(positions["home"])
 
     pass
 
@@ -50,14 +41,15 @@ def job_grab_and_place_metal(robot, speech, visual):
 
     speech.print("Ich greife jetzt das Metallteil")
     
-    robot.arm_left.move_to(position_box_metal)
+    robot.arm_left.move_to(positions["box_metal"])
+
     position_metal = visual.get_rubber()
     robot.arm_left.grab(position_metal)
 
-    robot.arm_left.move_to(position_tool_metal)
+    robot.arm_left.move_to(positions["tool_metal"])
     robot.arm_left.drop()
 
-    robot.arm_left.move_to(position_home)
+    robot.arm_left.move_to(positions["home"])
 
     pass
 
@@ -69,13 +61,13 @@ def job_move_tool_lever(robot, speech, visual):
 
     speech.print("Ich lege jetzt den Hebel um")
 
-    robot.arm_right.move_to(position_tool_lever)
+    robot.arm_right.move_to(positions["tool_lever"])
 
-    robot.arm_right.move_to(position_tool_lever_down)
-    robot.arm_right.move_to(position_tool_lever_up)
-    robot.arm_right.move_to(position_tool_lever_down)
+    robot.arm_right.move_to(positions["tool_lever_down"])
+    robot.arm_right.move_to(positions["tool_lever_up"])
+    robot.arm_right.move_to(positions["tool_lever_down"])
 
-    robot.arm_right.move_to(position_home)
+    robot.arm_right.move_to(positions["home"])
 
     pass
 
@@ -85,22 +77,20 @@ def job_grab_and_place_finished_product(robot, speech, visual):
     # - Yumi bewegt Arm-2 zurück in die Startposition
 
     speech.print("Ich greife jetzt das fertige Bauteil")
-    robot.arm_right.move_to(position_tool_metal)
-    robot.arm_right.grab(position_tool_metal)
+    robot.arm_right.move_to(positions["tool_metal"])
+    robot.arm_right.grab(positions["tool_metal"])
 
     speech.print("Ich lege jetzt das fertige Bauteil in die Box")
-    robot.arm_right.move_to(position_box_finished)
+    robot.arm_right.move_to(positions["box_finished"])
     robot.arm_right.drop()
 
-    robot.arm_right.move_to(position_home)
+    robot.arm_right.move_to(positions["home"])
 
     pass
 
 
 def job(robot, speech, visual) -> int:
     print("Hello, World!")
-
-    running = True
 
     # Master, Tread Sprachsteuerung, Thread Bewegung
     # -> Master ist 3 Wörter Erkennung, kann Thread Bewegung stoppen/pausieren/weiterführen
@@ -110,6 +100,8 @@ def job(robot, speech, visual) -> int:
     thread.daemon = True
     thread.start()
 
+    running = True
+
     while running:
         job_grab_and_place_rubber()
         job_grab_and_place_metal()
@@ -118,7 +110,14 @@ def job(robot, speech, visual) -> int:
 
 
 def main() -> int:
-    running = True
+    global positions
+    positions_file = "./positions.json"
+
+    print("Hello, World!")
+
+    positions = Positions.from_file(positions_file)
+    positions["root"] = Position.from_worldpoint(0, 0, 0)
+    positions.to_file(positions_file)
 
     robot = robot_web_services.Robot()
     speech = speech_recognition.Speech()
