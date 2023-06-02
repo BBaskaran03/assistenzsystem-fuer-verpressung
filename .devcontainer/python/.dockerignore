@@ -1,0 +1,6 @@
+# Devcontainer configuration
+/devcontainer.json
+/Dockerfile
+
+# Ignore files
+/.dockerignore
