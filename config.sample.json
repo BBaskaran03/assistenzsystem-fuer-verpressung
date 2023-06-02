@@ -2,6 +2,7 @@
     "Robot Web Services": {
         "hostname": "http://localhost:80",
         "username": "",
-        "password": ""
+        "password": "",
+        "model": "IRB14000"
     }
 }
