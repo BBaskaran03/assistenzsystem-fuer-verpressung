@@ -1,5 +1,6 @@
 import os
 import pathlib
+import threading
 import sys
 
 import robot_web_services
@@ -100,6 +101,14 @@ def job(robot, speech, visual) -> int:
     print("Hello, World!")
 
     running = True
+
+    # Master, Tread Sprachsteuerung, Thread Bewegung
+    # -> Master ist 3 Wörter Erkennung, kann Thread Bewegung stoppen/pausieren/weiterführen
+    # -> Status Flags für Objekt-Im-Greifer, wichtig für reset
+
+    thread = threading.Thread(target=speech.listen)
+    thread.daemon = True
+    thread.start()
 
     while running:
         job_grab_and_place_rubber()
