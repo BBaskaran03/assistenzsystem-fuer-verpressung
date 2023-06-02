@@ -1,0 +1,11 @@
+# voice_control
+-r "./requirements.voice_control.txt"
+
+# chat
+-r "./chat/requirements.txt"
+
+# offline
+-r "./offline/requirements.txt"
+
+# online
+-r "./online/requirements.txt"

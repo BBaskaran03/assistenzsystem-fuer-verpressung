@@ -1,0 +1,6 @@
+bash-completion
+git
+git-lfs
+man
+portaudio19-dev
+sudo

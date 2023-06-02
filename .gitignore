@@ -3,7 +3,7 @@
 /config.json
 
 # Virtual Environment
-/venv/
+/.venv/
 
 # Python
 __pycache__/
