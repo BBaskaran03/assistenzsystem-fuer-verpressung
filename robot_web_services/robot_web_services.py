@@ -254,9 +254,10 @@ def main() -> int:
         config = json.load(config_file)
 
     robot = RobotWebServices(
-        base_url=config["Robot Web Services"]["hostname"],
+        hostname=config["Robot Web Services"]["hostname"],
         username=config["Robot Web Services"]["username"],
         password=config["Robot Web Services"]["password"],
+        model=config["Robot Web Services"]["model"]
     )
 
     position_home = [0, -130, 30, 0, 40, 0]
