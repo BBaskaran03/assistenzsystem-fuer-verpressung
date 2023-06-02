@@ -1,1 +1,0 @@
-curl --digest -u 'Default User:robotics' -X 'GET' 'http://localhost/'
