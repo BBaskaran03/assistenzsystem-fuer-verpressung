@@ -1,9 +1,12 @@
+import sys
+import pathlib
 import ast
 import json
 import math
 import requests.auth
 import requests
 import time
+import logging
 
 
 # Address used to organize ET elements
@@ -115,3 +118,35 @@ class RobotWebServices:
         response_json = json.loads(response.text)
 
         return response_json
+
+
+def main() -> int:
+    print("Hello, World")
+
+    config_file = pathlib.Path("./config.json")
+
+    if config_file.exists() == False:
+        logger.critical("Config file is missing")
+        raise Exception("Configuration file not found")
+
+    with open(config_file, "r", encoding="utf-8") as config_file:
+        logger.log("Loading config from file")
+        config = json.load(config_file)
+
+    logger.debug("Creating instance of RobotWebServices")
+    robot = RobotWebServices(
+        base_url=config["Robot Web Services"]["hostname"],
+        username=config["Robot Web Services"]["username"],
+        password=config["Robot Web Services"]["password"],
+    )
+
+    position_home = [0, -130, 30, 0, 40, 0]
+
+    # robot.arm_left.rotation_set(*position_home)
+    robot.arm_right.rotation_set(*position_home)
+
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
