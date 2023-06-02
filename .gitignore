@@ -1,3 +1,7 @@
+# Assistenzsystem für Verpressung
+/logs/
+/config.json
+
 # Virtual Environment
 /venv/
 
