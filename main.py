@@ -203,7 +203,8 @@ def main() -> int:
     logger.debug("Creating instace of VoiceControl")
     voice_control = VoiceControl()
 
-    return execute()
+    # TODO: Implement this
+    # return execute()
 
 
 if __name__ == "__main__":
