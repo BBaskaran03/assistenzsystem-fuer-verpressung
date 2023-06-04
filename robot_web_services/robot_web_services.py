@@ -10,8 +10,8 @@ import time
 import requests
 import requests.auth
 
-from positions import Position
-from positions import Positions
+from robot_web_services.positions import Position
+from robot_web_services.positions import Positions
 
 
 logger = logging.getLogger(__name__)
