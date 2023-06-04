@@ -377,7 +377,7 @@ def main() -> int:
         raise Exception("Configuration file not found")
 
     with open(config_file, "r", encoding="utf-8") as config_file:
-        logger.log("Loading config from file")
+        logger.debug("Loading config from file")
         config = json.load(config_file)
 
     robot = RobotWebServices(
