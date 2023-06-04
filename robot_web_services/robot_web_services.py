@@ -226,7 +226,7 @@ class RobotWebServices:
         if response.status_code == 503: pass
 
     def _api_get(self, resource) -> APIResponse:
-        url = f"{self.hostname}/{resource}"
+        url = f"{self.hostname}{resource}"
         url = f"{url}&json=1" if "?" in url else f"{url}?json=1"
 
         response = self.session.get(
@@ -242,7 +242,7 @@ class RobotWebServices:
         return response
 
     def _api_post(self, resource, payload=None) -> APIResponse:
-        url = f"{self.hostname}/{resource}"
+        url = f"{self.hostname}{resource}"
         url = f"{url}&json=1" if "?" in url else f"{url}?json=1"
 
         response = self.session.post(
