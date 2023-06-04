@@ -402,7 +402,22 @@ def main() -> int:
         # robot.arm_left.rotation_set(*list(positions["home"].rotation.to_array()))
         robot.arm_right.rotation_set(*list(positions["home"].rotation.to_array()))
 
-    task_1()
+    def task_2():
+        robot.rapid_start()
+
+        left_ready = robot.arm_left.rapid_variable_get("ready")
+        print(left_ready)
+        left_target = robot.arm_left.rapid_variable_get("target")
+        print(left_target)
+
+        right_ready = robot.arm_right.rapid_variable_get("ready")
+        print(right_ready)
+        right_target = robot.arm_right.rapid_variable_get("target")
+        print(right_target)
+
+        robot.rapid_stop()
+
+    task_2()
 
     return 0
 
