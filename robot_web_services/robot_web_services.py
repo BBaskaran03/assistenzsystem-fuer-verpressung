@@ -39,31 +39,121 @@ class APIException(RWSException):
 
 class APIResponse:
     def __init__(self, response: requests.Response):
-        self._status_code = response.status_code
-        self._text = response.text
-        self._json = self._maybe_json(response)
+        self._response = response
 
-    def _maybe_json(self, response: requests.Response) -> json:
+    def _maybe_json(self) -> json:
         try:
-            return json.loads(response.text)
+            return json.loads(self._response.text)
         except json.decoder.JSONDecodeError:
             return None
 
     @property
     def status_code(self) -> int:
-        return self._status_code
+        return self._response.status_code
 
     @property
     def text(self) -> str:
-        return self._text
+        return self._response.text
 
     @property
     def json(self) -> json:
-        return self._json
+        return self._maybe_json()
 
     def __repr__(self) -> str:
-        return json.dumps(self._json, indent=4)
+        return json.dumps(self.json, indent=4)
 
+    def _handle_response(self):
+        # (200) HTTP_OK => Standard response for successful HTTP requests.
+        if self.status_code == 200:
+            pass
+
+        # (201) CREATED => The request has been fulfilled, and a new resource is created
+        if self.status_code == 201:
+            pass
+
+        # (202) ACCEPTED => The request has been accepted for processing, but the processing has not been completed
+        if self.status_code == 202:
+            pass
+
+        # (204) NO_CONTENT => The request has been successfully processed, but is not returning any content
+        if self.status_code == 204:
+            pass
+
+        # (301) MOVED_PERMANENTLY => The requested page has moved to a new URL
+        if self.status_code == 301:
+            pass
+
+        # (304) NOT_MODIFIED => Indicates the requested page has not been modified since last requested
+        if self.status_code == 304:
+            pass
+
+        # (400) BAD_REQUEST => The request cannot be fulfilled due to bad syntax
+        if self.status_code == 400:
+            raise APIException(
+                f"[ERROR] {self.status_code} | {self.text}", self._response
+            )
+
+        # (401) UNAUTHORIZED => The request was a legal request, but the server is refusing to respond to it. For use when authentication is possible but has failed or not yet been provided
+        if self.status_code == 401:
+            raise APIException(
+                f"[ERROR] {self.status_code} | {self.text}", self._response
+            )
+
+        # (403) FORBIDDEN => The request was a legal request, but the server is refusing to respond to it
+        if self.status_code == 403:
+            raise APIException(
+                f"[ERROR] {self.status_code} | {self.text}", self._response
+            )
+
+        # (404) NOT_FOUND => The requested page could not be found but may be available again in the future
+        if self.status_code == 404:
+            raise APIException(
+                f"[ERROR] {self.status_code} | {self.text}", self._response
+            )
+
+        # (405) METHOD_NOT_ALLOWED => A request was made of a page using a request method not supported by that page
+        if self.status_code == 405:
+            raise APIException(
+                f"[ERROR] {self.status_code} | {self.text}", self._response
+            )
+
+        # (406) NOT_ACCEPTABLE => The server can only generate a response that is not accepted by the client
+        if self.status_code == 406:
+            raise APIException(
+                f"[ERROR] {self.status_code} | {self.text}", self._response
+            )
+
+        # (409) CONFLICT => The request could not be completed due to a conflict with the current state of the target resource
+        if self.status_code == 409:
+            raise APIException(
+                f"[ERROR] {self.status_code} | {self.text}", self._response
+            )
+
+        # (410) GONE => The requested page is no longer available
+        if self.status_code == 410:
+            raise APIException(
+                f"[ERROR] {self.status_code} | {self.text}", self._response
+            )
+
+        # (415) UNSUPPORTED_MEDIA => The server will not accept the request, because the media type is not supported
+        if self.status_code == 415:
+            raise APIException(
+                f"[ERROR] {self.status_code} | {self.text}", self._response
+            )
+
+        # (500) INTERNAL_SERVER_ERROR => A generic error message, given when no more specific message is suitable
+        if self.status_code == 500:
+            raise APIException(
+                f"[ERROR] {self.status_code} | {self.text}", self._response
+            )
+
+        # (501) NOT_IMPLEMENTED => The server either does not recognize the request method, or it lacks the ability to fulfill the request
+        if self.status_code == 501:
+            pass
+
+        # (503) SERVICE_UNAVAILABLE => The server is currently unavailable (overloaded or down)
+        if self.status_code == 503:
+            pass
 
 class RobotArm:
     def __init__(self, robot, mechunit: str) -> None:
@@ -187,99 +277,6 @@ class RobotWebServices:
             return
 
         raise RWSException("Unknown model")
-
-    def _handle_response(self, resource, response):
-        # (200) HTTP_OK => Standard response for successful HTTP requests.
-        if response.status_code == 200:
-            pass
-
-        # (201) CREATED => The request has been fulfilled, and a new resource is created
-        if response.status_code == 201:
-            pass
-
-        # (202) ACCEPTED => The request has been accepted for processing, but the processing has not been completed
-        if response.status_code == 202:
-            pass
-
-        # (204) NO_CONTENT => The request has been successfully processed, but is not returning any content
-        if response.status_code == 204:
-            pass
-
-        # (301) MOVED_PERMANENTLY => The requested page has moved to a new URL
-        if response.status_code == 301:
-            pass
-
-        # (304) NOT_MODIFIED => Indicates the requested page has not been modified since last requested
-        if response.status_code == 304:
-            pass
-
-        # (400) BAD_REQUEST => The request cannot be fulfilled due to bad syntax
-        if response.status_code == 400:
-            raise APIException(
-                f"[ERROR] {response.status_code} | {response.text}", response
-            )
-
-        # (401) UNAUTHORIZED => The request was a legal request, but the server is refusing to respond to it. For use when authentication is possible but has failed or not yet been provided
-        if response.status_code == 401:
-            raise APIException(
-                f"[ERROR] {response.status_code} | {response.text}", response
-            )
-
-        # (403) FORBIDDEN => The request was a legal request, but the server is refusing to respond to it
-        if response.status_code == 403:
-            raise APIException(
-                f"[ERROR] {response.status_code} | {response.text}", response
-            )
-
-        # (404) NOT_FOUND => The requested page could not be found but may be available again in the future
-        if response.status_code == 404:
-            raise APIException(
-                f"[ERROR] {response.status_code} | {response.text}", response
-            )
-
-        # (405) METHOD_NOT_ALLOWED => A request was made of a page using a request method not supported by that page
-        if response.status_code == 405:
-            raise APIException(
-                f"[ERROR] {response.status_code} | {response.text}", response
-            )
-
-        # (406) NOT_ACCEPTABLE => The server can only generate a response that is not accepted by the client
-        if response.status_code == 406:
-            raise APIException(
-                f"[ERROR] {response.status_code} | {response.text}", response
-            )
-
-        # (409) CONFLICT => The request could not be completed due to a conflict with the current state of the target resource
-        if response.status_code == 409:
-            raise APIException(
-                f"[ERROR] {response.status_code} | {response.text}", response
-            )
-
-        # (410) GONE => The requested page is no longer available
-        if response.status_code == 410:
-            raise APIException(
-                f"[ERROR] {response.status_code} | {response.text}", response
-            )
-
-        # (415) UNSUPPORTED_MEDIA => The server will not accept the request, because the media type is not supported
-        if response.status_code == 415:
-            raise APIException(
-                f"[ERROR] {response.status_code} | {response.text}", response
-            )
-
-        # (500) INTERNAL_SERVER_ERROR => A generic error message, given when no more specific message is suitable
-        if response.status_code == 500:
-            raise APIException(
-                f"[ERROR] {response.status_code} | {response.text}", response
-            )
-
-        # (501) NOT_IMPLEMENTED => The server either does not recognize the request method, or it lacks the ability to fulfill the request
-        if response.status_code == 501:
-            pass
-
-        # (503) SERVICE_UNAVAILABLE => The server is currently unavailable (overloaded or down)
-        if response.status_code == 503:
-            pass
 
     def _api_get(self, resource) -> APIResponse:
         url = f"{self.hostname}{resource}"
