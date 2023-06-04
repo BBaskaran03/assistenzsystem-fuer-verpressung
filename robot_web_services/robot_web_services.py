@@ -94,7 +94,7 @@ class RobotArm:
 
         self._robot._api_post(resource="/rw/motionsystem?action=jog", payload=payload)
 
-    def rotation_set(self, axis1, axis2, axis3, axis4, axis5, axis6):
+    def _rotation_set(self, axis1, axis2, axis3, axis4, axis5, axis6):
         axis_target = [axis1, axis2, axis3, axis4, axis5, axis6]
         axis_target = [int(value) for value in axis_target]
 
@@ -122,6 +122,9 @@ class RobotArm:
             self._arm_jog(*movement, 0, "Large")
 
             time.sleep(1)
+
+    def rotate_to(self, axis1, axis2, axis3, axis4, axis5, axis6):
+        return self._rotation_set(axis1, axis2, axis3, axis4, axis5, axis6)
 
     def rapid_variable_get(self, variable):
         """Gets the raw value of any RAPID variable."""
@@ -399,8 +402,8 @@ def main() -> int:
 
     def task_1():
         robot.ready_robot()
-        # robot.arm_left.rotation_set(*list(positions["home"].rotation.to_array()))
-        robot.arm_right.rotation_set(*list(positions["home"].rotation.to_array()))
+        # robot.arm_left.rotate_to(*list(positions["home"].rotation.to_array()))
+        robot.arm_right.rotate_to(*list(positions["home"].rotation.to_array()))
 
     def task_2():
         robot.rapid_start()
