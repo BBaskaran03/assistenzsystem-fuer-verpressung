@@ -23,6 +23,16 @@ class ControllerStates(enum.Enum):
     sysfail = "sysfail"
 
 
+class RWSException(Exception):
+    pass
+
+
+class APIException(RWSException):
+    def __init__(self, message, response):
+        super().__init__(message)
+        self.response = response
+
+
 class APIResponse:
     def __init__(self, response: requests.Response):
         self._status_code = response.status_code
@@ -135,7 +145,62 @@ class RobotWebServices:
             self.arm_right = RobotArm(self, "ROB_R")
             return
 
-        raise Exception("Unknown model")
+        raise RWSException("Unknown model")
+
+    def _handle_response(self, resource, response):
+        # (200) HTTP_OK => Standard response for successful HTTP requests.
+        if response.status_code == 200: pass
+
+        # (201) CREATED => The request has been fulfilled, and a new resource is created
+        if response.status_code == 201: pass
+
+        # (202) ACCEPTED => The request has been accepted for processing, but the processing has not been completed
+        if response.status_code == 202: pass
+
+        # (204) NO_CONTENT => The request has been successfully processed, but is not returning any content
+        if response.status_code == 204: pass
+
+        # (301) MOVED_PERMANENTLY => The requested page has moved to a new URL
+        if response.status_code == 301: pass
+
+        # (304) NOT_MODIFIED => Indicates the requested page has not been modified since last requested
+        if response.status_code == 304: pass
+
+        # (400) BAD_REQUEST => The request cannot be fulfilled due to bad syntax
+        if response.status_code == 400: raise APIException(f"[ERROR] {response.status_code} | {response.text}", response)
+
+        # (401) UNAUTHORIZED => The request was a legal request, but the server is refusing to respond to it. For use when authentication is possible but has failed or not yet been provided
+        if response.status_code == 401: raise APIException(f"[ERROR] {response.status_code} | {response.text}", response)
+
+        # (403) FORBIDDEN => The request was a legal request, but the server is refusing to respond to it
+        if response.status_code == 403: raise APIException(f"[ERROR] {response.status_code} | {response.text}", response)
+
+        # (404) NOT_FOUND => The requested page could not be found but may be available again in the future
+        if response.status_code == 404: raise APIException(f"[ERROR] {response.status_code} | {response.text}", response)
+
+        # (405) METHOD_NOT_ALLOWED => A request was made of a page using a request method not supported by that page
+        if response.status_code == 405: raise APIException(f"[ERROR] {response.status_code} | {response.text}", response)
+
+        # (406) NOT_ACCEPTABLE => The server can only generate a response that is not accepted by the client
+        if response.status_code == 406: raise APIException(f"[ERROR] {response.status_code} | {response.text}", response)
+
+        # (409) CONFLICT => The request could not be completed due to a conflict with the current state of the target resource
+        if response.status_code == 409: raise APIException(f"[ERROR] {response.status_code} | {response.text}", response)
+
+        # (410) GONE => The requested page is no longer available
+        if response.status_code == 410: raise APIException(f"[ERROR] {response.status_code} | {response.text}", response)
+
+        # (415) UNSUPPORTED_MEDIA => The server will not accept the request, because the media type is not supported
+        if response.status_code == 415: raise APIException(f"[ERROR] {response.status_code} | {response.text}", response)
+
+        # (500) INTERNAL_SERVER_ERROR => A generic error message, given when no more specific message is suitable
+        if response.status_code == 500: raise APIException(f"[ERROR] {response.status_code} | {response.text}", response)
+
+        # (501) NOT_IMPLEMENTED => The server either does not recognize the request method, or it lacks the ability to fulfill the request
+        if response.status_code == 501: pass
+
+        # (503) SERVICE_UNAVAILABLE => The server is currently unavailable (overloaded or down)
+        if response.status_code == 503: pass
 
     def _api_get(self, resource) -> APIResponse:
         url = f"{self.hostname}/{resource}"
@@ -149,10 +214,7 @@ class RobotWebServices:
         )
 
         response = APIResponse(response)
-
-        logger.debug(response.status_code)
-        logger.debug(response.text)
-        logger.debug(response.json)
+        self._handle_response(resource, response)
 
         return response
 
@@ -160,7 +222,7 @@ class RobotWebServices:
         url = f"{self.hostname}/{resource}"
         url = f"{url}&json=1" if "?" in url else f"{url}?json=1"
 
-        repsonse = self.session.post(
+        response = self.session.post(
             url=url,
             data=payload,
             headers=self.headers,
@@ -168,11 +230,8 @@ class RobotWebServices:
             auth=self.session.auth,
         )
 
-        response = APIResponse(repsonse)
-
-        logger.debug(response.status_code)
-        logger.debug(response.text)
-        logger.debug(response.json)
+        response = APIResponse(response)
+        self._handle_response(resource, response)
 
         return response
 
@@ -222,7 +281,7 @@ class RobotWebServices:
         print(response)
 
         if response.status_code != 204:
-            raise Exception("Could not change controller state")
+            raise APIException("Could not change controller state", response)
 
         return response
 
