@@ -417,7 +417,42 @@ def main() -> int:
 
         robot.rapid_stop()
 
-    task_2()
+    def task_3():
+        def convert_position(position: Position) -> str:
+            conversion = position.to_array()
+            conversion[3][1::] = ["9E+09", "9E+09", "9E+09", "9E+09", "9E+09"]
+            conversion = str(conversion).replace(" ", "")
+            conversion = str(conversion).replace("'", "")
+
+            return conversion
+
+        def move_arm(robot: RobotWebServices, arm: RobotArm, target: Position):
+            robot.rapid_start()
+
+            target = convert_position(target)
+            arm.rapid_variable_set("target", target)
+            print(f"Moving to target <{target}>")
+            arm.rapid_variable_set("ready", "TRUE")
+            time.sleep(5)
+
+            print("Stopping movement")
+            arm.rapid_variable_set("ready", "FALSE")
+            robot.rapid_stop()
+            time.sleep(3)
+
+        arm_left_position_1 = Position.from_robtarget([[50,210.610123632,180.627879465],[0.066010741,0.842421005,-0.11121506,0.523068488],[0,0,0,4],[141.502558998,9E+09,9E+09,9E+09,9E+09,9E+09]])
+        arm_left_position_2 = Position.from_robtarget([[60,210.610123632,180.627879465],[0.066010741,0.842421005,-0.11121506,0.523068488],[0,0,0,4],[141.502558998,9E+09,9E+09,9E+09,9E+09,9E+09]])
+
+        arm_right_position_1 = Position.from_robtarget([[-9.578368507,-182.609892723,198.627808149],[0.066010726,-0.842420918,-0.111214912,-0.523068661],[0,0,0,4],[-135,9E+09,9E+09,9E+09,9E+09,9E+09]])
+        arm_right_position_2 = Position.from_robtarget([[-19.578368507,-182.609892723,198.627808149],[0.066010726,-0.842420918,-0.111214912,-0.523068661],[0,0,0,4],[-135,9E+09,9E+09,9E+09,9E+09,9E+09]])
+
+        move_arm(robot, robot.arm_left, arm_left_position_1)
+        move_arm(robot, robot.arm_left, arm_left_position_2)
+
+        move_arm(robot, robot.arm_right, arm_right_position_1)
+        move_arm(robot, robot.arm_right, arm_right_position_2)
+
+    task_3()
 
     return 0
 
