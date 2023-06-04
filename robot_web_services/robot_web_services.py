@@ -38,10 +38,11 @@ class APIException(RWSException):
 
 
 class APIResponse:
-    def __init__(self, response: requests.Response):
+    def __init__(self, resource: str, response: requests.Response):
+        self._resource = resource
         self._response = response
 
-    def _maybe_json(self) -> json:
+    def _maybe_json(self) -> dict:
         try:
             return json.loads(self._response.text)
         except json.decoder.JSONDecodeError:
@@ -70,7 +71,7 @@ class APIResponse:
             return
 
         if self.status_code in status_bad:
-            message = f"[ERROR] {self.status_code} | {self.text}"
+            message = f"[ERROR] {self.status_code} | {self._resource} | {self.text}"
             raise APIException(message, self._response)
 
 class RobotArm:
@@ -207,10 +208,7 @@ class RobotWebServices:
             auth=self.session.auth,
         )
 
-        response = APIResponse(response)
-        self._handle_response(resource, response)
-
-        return response
+        return APIResponse(resource, response)
 
     def _api_post(self, resource, payload=None) -> APIResponse:
         url = f"{self.hostname}{resource}"
@@ -224,10 +222,7 @@ class RobotWebServices:
             auth=self.session.auth,
         )
 
-        response = APIResponse(response)
-        self._handle_response(resource, response)
-
-        return response
+        return APIResponse(resource, response)
 
     def login(self):
         self._api_post(resource="/users?action=set-locale", payload="type=local")
