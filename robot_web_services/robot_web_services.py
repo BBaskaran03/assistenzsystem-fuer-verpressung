@@ -99,7 +99,7 @@ class RobotArm:
     def _arm_jog(
         self, axis1, axis2, axis3, axis4, axis5, axis6, ccount=0, inc_mode="Small"
     ):
-        self._api_post(f"/rw/motionsystem/{self._mechunit}") # TODO: Fix this
+        self._api_post(f"/rw/motionsystem/{self._mechunit}")  # TODO: Fix this
 
         payload = f"axis1={axis1}&axis2={axis2}&axis3={axis3}&axis4={axis4}&axis5={axis5}&axis6={axis6}"
         payload = f"{payload}&ccount={ccount}&inc-mode={inc_mode}"
@@ -190,58 +190,96 @@ class RobotWebServices:
 
     def _handle_response(self, resource, response):
         # (200) HTTP_OK => Standard response for successful HTTP requests.
-        if response.status_code == 200: pass
+        if response.status_code == 200:
+            pass
 
         # (201) CREATED => The request has been fulfilled, and a new resource is created
-        if response.status_code == 201: pass
+        if response.status_code == 201:
+            pass
 
         # (202) ACCEPTED => The request has been accepted for processing, but the processing has not been completed
-        if response.status_code == 202: pass
+        if response.status_code == 202:
+            pass
 
         # (204) NO_CONTENT => The request has been successfully processed, but is not returning any content
-        if response.status_code == 204: pass
+        if response.status_code == 204:
+            pass
 
         # (301) MOVED_PERMANENTLY => The requested page has moved to a new URL
-        if response.status_code == 301: pass
+        if response.status_code == 301:
+            pass
 
         # (304) NOT_MODIFIED => Indicates the requested page has not been modified since last requested
-        if response.status_code == 304: pass
+        if response.status_code == 304:
+            pass
 
         # (400) BAD_REQUEST => The request cannot be fulfilled due to bad syntax
-        if response.status_code == 400: raise APIException(f"[ERROR] {response.status_code} | {response.text}", response)
+        if response.status_code == 400:
+            raise APIException(
+                f"[ERROR] {response.status_code} | {response.text}", response
+            )
 
         # (401) UNAUTHORIZED => The request was a legal request, but the server is refusing to respond to it. For use when authentication is possible but has failed or not yet been provided
-        if response.status_code == 401: raise APIException(f"[ERROR] {response.status_code} | {response.text}", response)
+        if response.status_code == 401:
+            raise APIException(
+                f"[ERROR] {response.status_code} | {response.text}", response
+            )
 
         # (403) FORBIDDEN => The request was a legal request, but the server is refusing to respond to it
-        if response.status_code == 403: raise APIException(f"[ERROR] {response.status_code} | {response.text}", response)
+        if response.status_code == 403:
+            raise APIException(
+                f"[ERROR] {response.status_code} | {response.text}", response
+            )
 
         # (404) NOT_FOUND => The requested page could not be found but may be available again in the future
-        if response.status_code == 404: raise APIException(f"[ERROR] {response.status_code} | {response.text}", response)
+        if response.status_code == 404:
+            raise APIException(
+                f"[ERROR] {response.status_code} | {response.text}", response
+            )
 
         # (405) METHOD_NOT_ALLOWED => A request was made of a page using a request method not supported by that page
-        if response.status_code == 405: raise APIException(f"[ERROR] {response.status_code} | {response.text}", response)
+        if response.status_code == 405:
+            raise APIException(
+                f"[ERROR] {response.status_code} | {response.text}", response
+            )
 
         # (406) NOT_ACCEPTABLE => The server can only generate a response that is not accepted by the client
-        if response.status_code == 406: raise APIException(f"[ERROR] {response.status_code} | {response.text}", response)
+        if response.status_code == 406:
+            raise APIException(
+                f"[ERROR] {response.status_code} | {response.text}", response
+            )
 
         # (409) CONFLICT => The request could not be completed due to a conflict with the current state of the target resource
-        if response.status_code == 409: raise APIException(f"[ERROR] {response.status_code} | {response.text}", response)
+        if response.status_code == 409:
+            raise APIException(
+                f"[ERROR] {response.status_code} | {response.text}", response
+            )
 
         # (410) GONE => The requested page is no longer available
-        if response.status_code == 410: raise APIException(f"[ERROR] {response.status_code} | {response.text}", response)
+        if response.status_code == 410:
+            raise APIException(
+                f"[ERROR] {response.status_code} | {response.text}", response
+            )
 
         # (415) UNSUPPORTED_MEDIA => The server will not accept the request, because the media type is not supported
-        if response.status_code == 415: raise APIException(f"[ERROR] {response.status_code} | {response.text}", response)
+        if response.status_code == 415:
+            raise APIException(
+                f"[ERROR] {response.status_code} | {response.text}", response
+            )
 
         # (500) INTERNAL_SERVER_ERROR => A generic error message, given when no more specific message is suitable
-        if response.status_code == 500: raise APIException(f"[ERROR] {response.status_code} | {response.text}", response)
+        if response.status_code == 500:
+            raise APIException(
+                f"[ERROR] {response.status_code} | {response.text}", response
+            )
 
         # (501) NOT_IMPLEMENTED => The server either does not recognize the request method, or it lacks the ability to fulfill the request
-        if response.status_code == 501: pass
+        if response.status_code == 501:
+            pass
 
         # (503) SERVICE_UNAVAILABLE => The server is currently unavailable (overloaded or down)
-        if response.status_code == 503: pass
+        if response.status_code == 503:
+            pass
 
     def _api_get(self, resource) -> APIResponse:
         url = f"{self.hostname}{resource}"
@@ -402,13 +440,13 @@ def main() -> int:
         hostname=config["Robot Web Services"]["hostname"],
         username=config["Robot Web Services"]["username"],
         password=config["Robot Web Services"]["password"],
-        model=config["Robot Web Services"]["model"]
+        model=config["Robot Web Services"]["model"],
     )
 
     # region positions
     positions = Positions()
 
-    positions["home"] =  Position.from_rotation([0, -130, 30, 0, 40, 0])
+    positions["home"] = Position.from_rotation([0, -130, 30, 0, 40, 0])
     # endregion positions
 
     def task_1():
@@ -454,11 +492,39 @@ def main() -> int:
             robot.rapid_stop()
             time.sleep(3)
 
-        arm_left_position_1 = Position.from_robtarget([[50,210.610123632,180.627879465],[0.066010741,0.842421005,-0.11121506,0.523068488],[0,0,0,4],[141.502558998,9E+09,9E+09,9E+09,9E+09,9E+09]])
-        arm_left_position_2 = Position.from_robtarget([[60,210.610123632,180.627879465],[0.066010741,0.842421005,-0.11121506,0.523068488],[0,0,0,4],[141.502558998,9E+09,9E+09,9E+09,9E+09,9E+09]])
+        arm_left_position_1 = Position.from_robtarget(
+            [
+                [50, 210.610123632, 180.627879465],
+                [0.066010741, 0.842421005, -0.11121506, 0.523068488],
+                [0, 0, 0, 4],
+                [141.502558998, 9e09, 9e09, 9e09, 9e09, 9e09],
+            ]
+        )
+        arm_left_position_2 = Position.from_robtarget(
+            [
+                [60, 210.610123632, 180.627879465],
+                [0.066010741, 0.842421005, -0.11121506, 0.523068488],
+                [0, 0, 0, 4],
+                [141.502558998, 9e09, 9e09, 9e09, 9e09, 9e09],
+            ]
+        )
 
-        arm_right_position_1 = Position.from_robtarget([[-9.578368507,-182.609892723,198.627808149],[0.066010726,-0.842420918,-0.111214912,-0.523068661],[0,0,0,4],[-135,9E+09,9E+09,9E+09,9E+09,9E+09]])
-        arm_right_position_2 = Position.from_robtarget([[-19.578368507,-182.609892723,198.627808149],[0.066010726,-0.842420918,-0.111214912,-0.523068661],[0,0,0,4],[-135,9E+09,9E+09,9E+09,9E+09,9E+09]])
+        arm_right_position_1 = Position.from_robtarget(
+            [
+                [-9.578368507, -182.609892723, 198.627808149],
+                [0.066010726, -0.842420918, -0.111214912, -0.523068661],
+                [0, 0, 0, 4],
+                [-135, 9e09, 9e09, 9e09, 9e09, 9e09],
+            ]
+        )
+        arm_right_position_2 = Position.from_robtarget(
+            [
+                [-19.578368507, -182.609892723, 198.627808149],
+                [0.066010726, -0.842420918, -0.111214912, -0.523068661],
+                [0, 0, 0, 4],
+                [-135, 9e09, 9e09, 9e09, 9e09, 9e09],
+            ]
+        )
 
         move_arm(robot, robot.arm_left, arm_left_position_1)
         move_arm(robot, robot.arm_left, arm_left_position_2)
