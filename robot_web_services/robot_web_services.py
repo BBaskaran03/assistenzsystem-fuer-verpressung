@@ -112,13 +112,12 @@ class RobotArm:
 
         logger.info("Moving to rotation <{axis_target}>")
 
-        evaluate = (
-            lambda target, value: (+1)
-            if (value < target)
-            else (-1)
-            if (value > target)
-            else (0)
-        )
+        def evaluate(target, value):
+            if value < target:
+                return +1
+            if value > target:
+                return -1
+            return 0
 
         while True:
             axis_current = [int(value) for value in self.rotation]
