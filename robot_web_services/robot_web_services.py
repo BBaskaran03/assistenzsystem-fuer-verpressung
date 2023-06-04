@@ -119,6 +119,27 @@ class RobotArm:
 
             time.sleep(1)
 
+    def rapid_variable_get(self, variable):
+        """Gets the raw value of any RAPID variable."""
+
+        resource = (
+            f"/rw/rapid/symbol/data/RAPID/T_{self._mechunit}/{variable};value?json=1"
+        )
+        response = self._robot._api_get(resource)
+        value = response.json["_embedded"]["_state"][0]["value"]
+
+        return value
+
+    def rapid_variable_set(self, variable, value):
+        """Sets the value of any RAPID variable.
+        Unless the variable is of type 'num', 'value' has to be a string.
+        """
+
+        resource = (
+            f"/rw/rapid/symbol/data/RAPID/T_{self._mechunit}/{variable}?action=set"
+        )
+        response = self._robot._api_post(resource, payload={"value": str(value)})
+
 
 class RobotWebServices:
     """
