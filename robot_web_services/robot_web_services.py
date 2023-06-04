@@ -63,7 +63,7 @@ class APIResponse:
     def __repr__(self) -> str:
         return json.dumps(self.json, indent=4)
 
-    def _handle_response(self):
+    def check(self):
         status_okay = ["200", "201", "202", "204", "301", "304"]
         status_bad = ["400","401","403","404","405","406","409","410","415","500","501","503"]
 
@@ -74,21 +74,58 @@ class APIResponse:
             message = f"[ERROR] {self.status_code} | {self._resource} | {self.text}"
             raise APIException(message, self._response)
 
+class API():
+    headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/x-www-form-urlencoded;v=2.0",
+    }
+
+    def __init__(self, hostname: str, username: str, password: str):
+        self.hostname = hostname
+        self.session = requests.Session()
+        self.session.auth = requests.auth.HTTPDigestAuth(username, password)
+
+    def get(self, resource) -> APIResponse:
+        url = f"{self.hostname}{resource}"
+        url = f"{url}&json=1" if "?" in url else f"{url}?json=1"
+
+        response = self.session.get(
+            url=url,
+            headers=self.headers,
+            cookies=self.session.cookies,
+            auth=self.session.auth,
+        )
+
+        response = APIResponse(resource, response)
+        response.check()
+
+        return response
+
+    def post(self, resource, payload=None) -> APIResponse:
+        url = f"{self.hostname}{resource}"
+        url = f"{url}&json=1" if "?" in url else f"{url}?json=1"
+
+        response = self.session.post(
+            url=url,
+            data=payload,
+            headers=self.headers,
+            cookies=self.session.cookies,
+            auth=self.session.auth,
+        )
+
+        response = APIResponse(resource, response)
+        response.check()
+
+        return response
+
 class RobotArm:
-    def __init__(self, robot, mechunit: str) -> None:
+    def __init__(self, robot, mechunit: str, api: API) -> None:
         self._robot = robot
         self._mechunit = mechunit
-
-    def _api_get(self, resource) -> APIResponse:
-        # pylint: disable-next=protected-access
-        return self._robot._api_get(resource)
-
-    def _api_post(self, resource, payload=None) -> APIResponse:
-        # pylint: disable-next=protected-access
-        return self._robot._api_post(resource, payload)
+        self._api = api
 
     def _rotation_get(self):
-        response = self._api_get(
+        response = self._api.get(
             f"/rw/motionsystem/mechunits/{self._mechunit}/jointtarget"
         )
 
@@ -108,12 +145,12 @@ class RobotArm:
     def _arm_jog(
         self, axis1, axis2, axis3, axis4, axis5, axis6, ccount=0, inc_mode="Small"
     ):
-        self._api_post(f"/rw/motionsystem/{self._mechunit}")  # TODO: Fix this
+        self._api.post(f"/rw/motionsystem/{self._mechunit}")  # TODO: Fix this
 
         payload = f"axis1={axis1}&axis2={axis2}&axis3={axis3}&axis4={axis4}&axis5={axis5}&axis6={axis6}"
         payload = f"{payload}&ccount={ccount}&inc-mode={inc_mode}"
 
-        self._api_post(resource="/rw/motionsystem?action=jog", payload=payload)
+        self._api.post(resource="/rw/motionsystem?action=jog", payload=payload)
 
     def _rotation_set(self, axis1, axis2, axis3, axis4, axis5, axis6):
         axis_target = [axis1, axis2, axis3, axis4, axis5, axis6]
@@ -151,7 +188,7 @@ class RobotArm:
         resource = (
             f"/rw/rapid/symbol/data/RAPID/T_{self._mechunit}/{variable};value?json=1"
         )
-        response = self._api_get(resource)
+        response = self._api.get(resource)
         value = response.json["_embedded"]["_state"][0]["value"]
 
         return value
@@ -165,7 +202,7 @@ class RobotArm:
             f"/rw/rapid/symbol/data/RAPID/T_{self._mechunit}/{variable}?action=set"
         )
 
-        self._api_post(resource, payload={"value": str(value)})
+        self._api.post(resource, payload={"value": str(value)})
 
 
 class RobotWebServices:
@@ -175,69 +212,34 @@ class RobotWebServices:
     Source: <https://github.com/mhiversflaten/ABB-Robot-Machine-Vision.git>
     """
 
-    headers = {
-        "Accept": "application/json",
-        "Content-Type": "application/x-www-form-urlencoded;v=2.0",
-    }
-
     def __init__(self, hostname: str, username: str, password: str, model: str):
-        self.hostname = hostname
+        self._api = API(hostname, username, password)
 
         self.model = model
         self._adapt_to_model()
 
-        self.session = requests.Session()
-        self.session.auth = requests.auth.HTTPDigestAuth(username, password)
-
     def _adapt_to_model(self):
         if self.model == "IRB14000":
-            self.arm_left = RobotArm(self, "ROB_L")
-            self.arm_right = RobotArm(self, "ROB_R")
+            self.arm_left = RobotArm(self, "ROB_L", self._api)
+            self.arm_right = RobotArm(self, "ROB_R", self._api)
             return
 
         raise RWSException("Unknown model")
 
-    def _api_get(self, resource) -> APIResponse:
-        url = f"{self.hostname}{resource}"
-        url = f"{url}&json=1" if "?" in url else f"{url}?json=1"
-
-        response = self.session.get(
-            url=url,
-            headers=self.headers,
-            cookies=self.session.cookies,
-            auth=self.session.auth,
-        )
-
-        return APIResponse(resource, response)
-
-    def _api_post(self, resource, payload=None) -> APIResponse:
-        url = f"{self.hostname}{resource}"
-        url = f"{url}&json=1" if "?" in url else f"{url}?json=1"
-
-        response = self.session.post(
-            url=url,
-            data=payload,
-            headers=self.headers,
-            cookies=self.session.cookies,
-            auth=self.session.auth,
-        )
-
-        return APIResponse(resource, response)
-
     def login(self):
-        self._api_post(resource="/users?action=set-locale", payload="type=local")
+        self._api.post(resource="/users?action=set-locale", payload="type=local")
 
     def rmmp(self):
-        self._api_post(resource="/users/rmmp", payload="privilege=modify")
+        self._api.post(resource="/users/rmmp", payload="privilege=modify")
 
     def get_system(self):
-        self._api_get("/rw/system?json=1")
+        self._api.get("/rw/system?json=1")
 
     def request_mastership(self):
-        self._api_post(resource="/rw/mastership?action=request")
+        self._api.post(resource="/rw/mastership?action=request")
 
     def release_mastership(self):
-        self._api_post("/rw/mastership?action=release")
+        self._api.post("/rw/mastership?action=release")
 
     def ready_robot(self):
         self.login()
@@ -256,7 +258,7 @@ class RobotWebServices:
         :rtype: ControllerStates
         """
 
-        response = self._api_get("rw/panel/ctrlstate")
+        response = self._api.get("/rw/panel/ctrlstate")
         state = response.json["_embedded"]["_state"][0]["ctrlstate"]
         state = ControllerStates[state]
 
@@ -265,7 +267,7 @@ class RobotWebServices:
     def set_controller_state(self, ctrl_state) -> APIResponse:
         payload = {"ctrl-state": ctrl_state}
 
-        response = self._api_post("rw/panel/ctrlstate?action=setctrlstate", payload)
+        response = self._api.post("/rw/panel/ctrlstate?action=setctrlstate", payload)
 
         print(response)
 
@@ -285,12 +287,12 @@ class RobotWebServices:
         """Turns the robot's motors off."""
 
         payload = {"ctrl-state": ControllerStates.motoroff}
-        self._api_post("/rw/panel/ctrlstate?action=setctrlstate", payload)
+        self._api.post("/rw/panel/ctrlstate?action=setctrlstate", payload)
 
     def rapid_reset_pp(self):
         """Resets the program pointer to main procedure in RAPID."""
 
-        response = self._api_post("/rw/rapid/execution?action=resetpp")
+        response = self._api.post("/rw/rapid/execution?action=resetpp")
 
         if response.status_code != 204:
             logger.warning("Could not reset program pointer to main")
@@ -312,7 +314,7 @@ class RobotWebServices:
             "alltaskbytsp": "false",
         }
 
-        response = self._api_post("/rw/rapid/execution?action=start", payload)
+        response = self._api.post("/rw/rapid/execution?action=start", payload)
 
         if response.status_code != 204:
             raise APIException("[ERROR] rapid_start()", response)
@@ -324,7 +326,7 @@ class RobotWebServices:
 
         payload = {"stopmode": "stop", "usetsp": "normal"}
 
-        response = self._api_post("/rw/rapid/execution?action=stop", payload)
+        response = self._api.post("/rw/rapid/execution?action=stop", payload)
 
         if response.status_code != 204:
             logger.warning("Could not stop RAPID execution")
