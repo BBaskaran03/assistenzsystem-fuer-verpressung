@@ -10,6 +10,10 @@ import time
 import requests
 import requests.auth
 
+from positions import Position
+from positions import Positions
+
+
 logger = logging.getLogger(__name__)
 
 
@@ -387,10 +391,18 @@ def main() -> int:
         model=config["Robot Web Services"]["model"]
     )
 
-    position_home = [0, -130, 30, 0, 40, 0]
+    # region positions
+    positions = Positions()
 
-    # robot.arm_left.rotation_set(*position_home)
-    robot.arm_right.rotation_set(*position_home)
+    positions["home"] =  Position.from_rotation([0, -130, 30, 0, 40, 0])
+    # endregion positions
+
+    def task_1():
+        robot.ready_robot()
+        # robot.arm_left.rotation_set(*list(positions["home"].rotation.to_array()))
+        robot.arm_right.rotation_set(*list(positions["home"].rotation.to_array()))
+
+    task_1()
 
     return 0
 
