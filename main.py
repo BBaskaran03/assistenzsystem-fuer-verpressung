@@ -183,8 +183,6 @@ def main() -> int:
 
     logger.debug("Loading positions from file")
     positions = Positions.from_file(positions_file)
-    # positions["root"] = Position.from_worldpoint(0, 0, 0)
-    # positions.to_file(positions_file)
 
     logger.debug("Creating instance of RobotWebServices")
     robot = RobotWebServices(
@@ -205,6 +203,7 @@ def main() -> int:
 
     # TODO: Implement this
     # return execute()
+    return 0
 
 
 if __name__ == "__main__":
