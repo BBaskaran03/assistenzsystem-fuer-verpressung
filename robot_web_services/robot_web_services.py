@@ -204,6 +204,21 @@ class RobotArm:
 
         self._api.post(resource, payload={"value": str(value)})
 
+    def move_to(self, position: Position):
+        self._robot.rapid_start()
+
+        self.rapid_variable_set("target", position.to_rapid_robtarget())
+        logger.info(f"Moving to target <{position}>")
+        self.rapid_variable_set("ready", "TRUE")
+
+        # TODO: Replace timer with actual check
+        time.sleep(5)
+
+        logger.info("Stopping movement")
+        self.rapid_variable_set("ready", "FALSE")
+        self._robot.rapid_stop()
+        time.sleep(1)
+
 
 class RobotWebServices:
     """
@@ -444,7 +459,48 @@ def main() -> int:
         move_arm(robot, robot.arm_right, arm_right_position_1)
         move_arm(robot, robot.arm_right, arm_right_position_2)
 
-    task_3()
+    def task_4():
+        arm_left_position_1 = Position.from_robtarget(
+            [
+                [50, 210.610123632, 180.627879465],
+                [0.066010741, 0.842421005, -0.11121506, 0.523068488],
+                [0, 0, 0, 4],
+                [141.502558998, 9e09, 9e09, 9e09, 9e09, 9e09],
+            ]
+        )
+        arm_left_position_2 = Position.from_robtarget(
+            [
+                [60, 210.610123632, 180.627879465],
+                [0.066010741, 0.842421005, -0.11121506, 0.523068488],
+                [0, 0, 0, 4],
+                [141.502558998, 9e09, 9e09, 9e09, 9e09, 9e09],
+            ]
+        )
+
+        arm_right_position_1 = Position.from_robtarget(
+            [
+                [-9.578368507, -182.609892723, 198.627808149],
+                [0.066010726, -0.842420918, -0.111214912, -0.523068661],
+                [0, 0, 0, 4],
+                [-135, 9e09, 9e09, 9e09, 9e09, 9e09],
+            ]
+        )
+        arm_right_position_2 = Position.from_robtarget(
+            [
+                [-19.578368507, -182.609892723, 198.627808149],
+                [0.066010726, -0.842420918, -0.111214912, -0.523068661],
+                [0, 0, 0, 4],
+                [-135, 9e09, 9e09, 9e09, 9e09, 9e09],
+            ]
+        )
+
+        robot.arm_left.move_to(arm_left_position_1)
+        robot.arm_left.move_to(arm_left_position_2)
+
+        robot.arm_right.move_to(arm_right_position_1)
+        robot.arm_right.move_to(arm_right_position_2)
+
+    task_4()
 
     return 0
 

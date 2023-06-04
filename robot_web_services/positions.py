@@ -286,6 +286,15 @@ class Position(Jointtarget, Robtarget):
 
         return array
 
+    def to_rapid_robtarget(self) -> str:
+        robtarget = self.to_array()
+
+        robtarget[3][1::] = ["9E+09", "9E+09", "9E+09", "9E+09", "9E+09"]
+        robtarget = str(robtarget).replace(" ", "")
+        robtarget = str(robtarget).replace("'", "")
+
+        return robtarget
+
     def __str__(self):
         return str(self.json)
 
