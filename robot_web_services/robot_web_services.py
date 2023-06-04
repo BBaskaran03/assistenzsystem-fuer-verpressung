@@ -94,6 +94,8 @@ class RobotArm:
         axis_target = [axis1, axis2, axis3, axis4, axis5, axis6]
         axis_target = [int(value) for value in axis_target]
 
+        logger.info("Moving to rotation <{axis_target}>")
+
         evaluate = (
             lambda target, value: (+1)
             if (value < target)
