@@ -6,6 +6,6 @@
     },
     "python.formatting.provider": "none",
     "python.linting.pylintArgs": [
-        "--disable=C0115,C0301"
+        "--disable=C0115,C0116,C0301"
     ]
 }
