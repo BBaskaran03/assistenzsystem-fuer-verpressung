@@ -276,6 +276,16 @@ class Position(Jointtarget, Robtarget):
 
         return json
 
+    def to_array(self) -> list[list[int]]:
+        array = [
+            self.worldpoint.to_array(),
+            self.orientation.to_array(),
+            self.axis_configuration.to_array(),
+            self.external_axes_position.to_array()
+        ]
+
+        return array
+
     def __str__(self):
         return str(self.json)
 
