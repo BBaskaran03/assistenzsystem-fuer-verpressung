@@ -80,7 +80,7 @@ class RobotArm:
 
         return axis_values
 
-    def _arm_job(
+    def _arm_jog(
         self, axis1, axis2, axis3, axis4, axis5, axis6, ccount=0, inc_mode="Small"
     ):
         self._robot._api_post(f"/rw/motionsystem/{self._mechunit}") # TODO: Fix this
@@ -113,7 +113,7 @@ class RobotArm:
                 evaluate(target, value)
                 for target, value in zip(axis_target, axis_current)
             ]
-            self._arm_job(*movement, 0, "Large")
+            self._arm_jog(*movement, 0, "Large")
 
             time.sleep(1)
 
