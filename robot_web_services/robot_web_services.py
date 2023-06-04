@@ -71,9 +71,11 @@ class RobotArm:
         self._mechunit = mechunit
 
     def _api_get(self, resource) -> APIResponse:
+        # pylint: disable-next=protected-access
         return self._robot._api_get(resource)
 
     def _api_post(self, resource, payload=None) -> APIResponse:
+        # pylint: disable-next=protected-access
         return self._robot._api_post(resource, payload)
 
     def _rotation_get(self):
