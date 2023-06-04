@@ -63,97 +63,15 @@ class APIResponse:
         return json.dumps(self.json, indent=4)
 
     def _handle_response(self):
-        # (200) HTTP_OK => Standard response for successful HTTP requests.
-        if self.status_code == 200:
-            pass
+        status_okay = ["200", "201", "202", "204", "301", "304"]
+        status_bad = ["400","401","403","404","405","406","409","410","415","500","501","503"]
 
-        # (201) CREATED => The request has been fulfilled, and a new resource is created
-        if self.status_code == 201:
-            pass
+        if self.status_code in status_okay:
+            return
 
-        # (202) ACCEPTED => The request has been accepted for processing, but the processing has not been completed
-        if self.status_code == 202:
-            pass
-
-        # (204) NO_CONTENT => The request has been successfully processed, but is not returning any content
-        if self.status_code == 204:
-            pass
-
-        # (301) MOVED_PERMANENTLY => The requested page has moved to a new URL
-        if self.status_code == 301:
-            pass
-
-        # (304) NOT_MODIFIED => Indicates the requested page has not been modified since last requested
-        if self.status_code == 304:
-            pass
-
-        # (400) BAD_REQUEST => The request cannot be fulfilled due to bad syntax
-        if self.status_code == 400:
-            raise APIException(
-                f"[ERROR] {self.status_code} | {self.text}", self._response
-            )
-
-        # (401) UNAUTHORIZED => The request was a legal request, but the server is refusing to respond to it. For use when authentication is possible but has failed or not yet been provided
-        if self.status_code == 401:
-            raise APIException(
-                f"[ERROR] {self.status_code} | {self.text}", self._response
-            )
-
-        # (403) FORBIDDEN => The request was a legal request, but the server is refusing to respond to it
-        if self.status_code == 403:
-            raise APIException(
-                f"[ERROR] {self.status_code} | {self.text}", self._response
-            )
-
-        # (404) NOT_FOUND => The requested page could not be found but may be available again in the future
-        if self.status_code == 404:
-            raise APIException(
-                f"[ERROR] {self.status_code} | {self.text}", self._response
-            )
-
-        # (405) METHOD_NOT_ALLOWED => A request was made of a page using a request method not supported by that page
-        if self.status_code == 405:
-            raise APIException(
-                f"[ERROR] {self.status_code} | {self.text}", self._response
-            )
-
-        # (406) NOT_ACCEPTABLE => The server can only generate a response that is not accepted by the client
-        if self.status_code == 406:
-            raise APIException(
-                f"[ERROR] {self.status_code} | {self.text}", self._response
-            )
-
-        # (409) CONFLICT => The request could not be completed due to a conflict with the current state of the target resource
-        if self.status_code == 409:
-            raise APIException(
-                f"[ERROR] {self.status_code} | {self.text}", self._response
-            )
-
-        # (410) GONE => The requested page is no longer available
-        if self.status_code == 410:
-            raise APIException(
-                f"[ERROR] {self.status_code} | {self.text}", self._response
-            )
-
-        # (415) UNSUPPORTED_MEDIA => The server will not accept the request, because the media type is not supported
-        if self.status_code == 415:
-            raise APIException(
-                f"[ERROR] {self.status_code} | {self.text}", self._response
-            )
-
-        # (500) INTERNAL_SERVER_ERROR => A generic error message, given when no more specific message is suitable
-        if self.status_code == 500:
-            raise APIException(
-                f"[ERROR] {self.status_code} | {self.text}", self._response
-            )
-
-        # (501) NOT_IMPLEMENTED => The server either does not recognize the request method, or it lacks the ability to fulfill the request
-        if self.status_code == 501:
-            pass
-
-        # (503) SERVICE_UNAVAILABLE => The server is currently unavailable (overloaded or down)
-        if self.status_code == 503:
-            pass
+        if self.status_code in status_bad:
+            message = f"[ERROR] {self.status_code} | {self.text}"
+            raise APIException(message, self._response)
 
 class RobotArm:
     def __init__(self, robot, mechunit: str) -> None:
