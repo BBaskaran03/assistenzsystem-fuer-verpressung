@@ -70,8 +70,14 @@ class RobotArm:
         self._robot = robot
         self._mechunit = mechunit
 
+    def _api_get(self, resource) -> APIResponse:
+        return self._robot._api_get(resource)
+
+    def _api_post(self, resource, payload=None) -> APIResponse:
+        return self._robot._api_post(resource, payload)
+
     def _rotation_get(self):
-        response = self._robot._api_get(
+        response = self._api_get(
             f"/rw/motionsystem/mechunits/{self._mechunit}/jointtarget"
         )
 
@@ -91,12 +97,12 @@ class RobotArm:
     def _arm_jog(
         self, axis1, axis2, axis3, axis4, axis5, axis6, ccount=0, inc_mode="Small"
     ):
-        self._robot._api_post(f"/rw/motionsystem/{self._mechunit}") # TODO: Fix this
+        self._api_post(f"/rw/motionsystem/{self._mechunit}") # TODO: Fix this
 
         payload = f"axis1={axis1}&axis2={axis2}&axis3={axis3}&axis4={axis4}&axis5={axis5}&axis6={axis6}"
         payload = f"{payload}&ccount={ccount}&inc-mode={inc_mode}"
 
-        self._robot._api_post(resource="/rw/motionsystem?action=jog", payload=payload)
+        self._api_post(resource="/rw/motionsystem?action=jog", payload=payload)
 
     def _rotation_set(self, axis1, axis2, axis3, axis4, axis5, axis6):
         axis_target = [axis1, axis2, axis3, axis4, axis5, axis6]
@@ -135,7 +141,7 @@ class RobotArm:
         resource = (
             f"/rw/rapid/symbol/data/RAPID/T_{self._mechunit}/{variable};value?json=1"
         )
-        response = self._robot._api_get(resource)
+        response = self._api_get(resource)
         value = response.json["_embedded"]["_state"][0]["value"]
 
         return value
@@ -148,7 +154,8 @@ class RobotArm:
         resource = (
             f"/rw/rapid/symbol/data/RAPID/T_{self._mechunit}/{variable}?action=set"
         )
-        response = self._robot._api_post(resource, payload={"value": str(value)})
+
+        self._api_post(resource, payload={"value": str(value)})
 
 
 class RobotWebServices:
