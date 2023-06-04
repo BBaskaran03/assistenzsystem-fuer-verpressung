@@ -70,7 +70,7 @@ class RobotArm:
         self._robot = robot
         self._mechunit = mechunit
 
-    def rotation_get(self):
+    def _rotation_get(self):
         response = self._robot._api_get(
             f"/rw/motionsystem/mechunits/{self._mechunit}/jointtarget"
         )
@@ -83,6 +83,10 @@ class RobotArm:
         axis_values = [float(value) for value in axis_values]
 
         return axis_values
+
+    @property
+    def rotation(self):
+        return self._rotation_get()
 
     def _arm_jog(
         self, axis1, axis2, axis3, axis4, axis5, axis6, ccount=0, inc_mode="Small"
@@ -109,8 +113,7 @@ class RobotArm:
         )
 
         while True:
-            axis_current = self.rotation_get()
-            axis_current = [int(value) for value in axis_current]
+            axis_current = [int(value) for value in self.rotation]
 
             if axis_target == axis_current:
                 break
