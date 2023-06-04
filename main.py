@@ -161,6 +161,53 @@ def execute():
     start_thread_task()
 
 
+def testing():
+    global positions, detector, robot, text_to_speech, voice_control
+
+    arm_left_position_1 = Position.from_robtarget(
+        [
+            [50, 210.610123632, 180.627879465],
+            [0.066010741, 0.842421005, -0.11121506, 0.523068488],
+            [0, 0, 0, 4],
+            [141.502558998, 9e09, 9e09, 9e09, 9e09, 9e09],
+        ]
+    )
+    arm_left_position_2 = Position.from_robtarget(
+        [
+            [60, 210.610123632, 180.627879465],
+            [0.066010741, 0.842421005, -0.11121506, 0.523068488],
+            [0, 0, 0, 4],
+            [141.502558998, 9e09, 9e09, 9e09, 9e09, 9e09],
+        ]
+    )
+
+    arm_right_position_1 = Position.from_robtarget(
+        [
+            [-9.578368507, -182.609892723, 198.627808149],
+            [0.066010726, -0.842420918, -0.111214912, -0.523068661],
+            [0, 0, 0, 4],
+            [-135, 9e09, 9e09, 9e09, 9e09, 9e09],
+        ]
+    )
+    arm_right_position_2 = Position.from_robtarget(
+        [
+            [-19.578368507, -182.609892723, 198.627808149],
+            [0.066010726, -0.842420918, -0.111214912, -0.523068661],
+            [0, 0, 0, 4],
+            [-135, 9e09, 9e09, 9e09, 9e09, 9e09],
+        ]
+    )
+
+    robot.arm_left.move_to(arm_left_position_1)
+    robot.arm_left.move_to(arm_left_position_2)
+
+    robot.arm_right.move_to(arm_right_position_1)
+    robot.arm_right.move_to(arm_right_position_2)
+
+    position = positions["home_arm_left"]
+    robot.arm_right.move_to(position)
+
+
 def main() -> int:
     print("Hello, World!")
 
@@ -203,7 +250,7 @@ def main() -> int:
 
     # TODO: Implement this
     # return execute()
-    return 0
+    return testing()
 
 
 if __name__ == "__main__":
