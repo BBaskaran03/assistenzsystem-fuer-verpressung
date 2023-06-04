@@ -298,6 +298,51 @@ class RobotWebServices:
         payload = {"ctrl-state": ControllerStates.motoroff}
         self._api_post("/rw/panel/ctrlstate?action=setctrlstate", payload)
 
+    def rapid_reset_pp(self):
+        """Resets the program pointer to main procedure in RAPID."""
+
+        response = self._api_post("/rw/rapid/execution?action=resetpp")
+
+        if response.status_code != 204:
+            logger.warning("Could not reset program pointer to main")
+            raise APIException("[ERROR] rapid_reset_pp()", response)
+
+        logger.debug("Program pointer reset to main")
+
+    def rapid_start(self):
+        """Resets program pointer to main procedure in RAPID and starts RAPID execution."""
+
+        self.rapid_reset_pp()
+
+        payload = {
+            "regain": "continue",
+            "execmode": "continue",
+            "cycle": "once",
+            "condition": "none",
+            "stopatbp": "disabled",
+            "alltaskbytsp": "false",
+        }
+
+        response = self._api_post("/rw/rapid/execution?action=start", payload)
+
+        if response.status_code != 204:
+            raise APIException("[ERROR] rapid_start()", response)
+
+        logger.debug("RAPID execution started from main")
+
+    def rapid_stop(self):
+        """Stops RAPID execution."""
+
+        payload = {"stopmode": "stop", "usetsp": "normal"}
+
+        response = self._api_post("/rw/rapid/execution?action=stop", payload)
+
+        if response.status_code != 204:
+            logger.warning("Could not stop RAPID execution")
+            raise APIException("[ERROR] rapid_stop()", response)
+
+        logger.debug("RAPID execution stopped")
+
 
 def main() -> int:
     print("Hello, World")
