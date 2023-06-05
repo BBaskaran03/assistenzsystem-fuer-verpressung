@@ -1,4 +1,4 @@
-import RobotWebServices.RWS as RWS
+import RWS
 import random
 import threading
 from time import sleep
@@ -8,11 +8,12 @@ spongebob.request_mastership()
 spongebob.motors_on()
 spongebob.start_RAPID()  # NB! Starts RAPID execution from main
 
-spongebob.get_rapid_variable_L("move")
-robtarget_pucks = spongebob.get_rapid_variable_L("puck_target")
+# spongebob.get_rapid_variable_L("move")
+# robtarget_pucks = spongebob.get_rapid_variable_L("puck_target")
 
+# spongebob.set_rapid_variable_L("active", "TRUE")
+spongebob.set_rapid_variable_L("target", "[[58.36296954,68.21461765,164.222908853],[0.338434022,0.713406389,-0.10353916,0.604808548],[0,0,0,4],[135,9E+09,9E+09,9E+09,9E+09,9E+09]]")
 
-spongebob.set_rapid_variable_L("move", "TRUE")
 # x = input("x: ")
 # y = input("y: ")
 # z = input("z: ")
@@ -22,6 +23,8 @@ spongebob.set_rapid_variable_L("move", "TRUE")
 #sleep(2)
 
 #spongebob.set_rapid_variable_L("move", "FALSE")
-print(spongebob.get_rapid_variable_L("puck_target"))
-print(spongebob.get_gripper_position())
+# print(spongebob.get_rapid_variable_L("puck_target"))
+# print(spongebob.get_gripper_position())
+
+sleep(10)
 spongebob.stop_RAPID()

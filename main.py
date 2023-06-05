@@ -3,24 +3,13 @@ import os
 import json
 import pathlib
 import sys
-import threading
 import datetime
 
 from object_detection.object_detection import ObjectDetector
-from robot_web_services.positions import Position
 from robot_web_services.positions import Positions
 from robot_web_services.robot_web_services import RobotWebServices
 from text_to_speech.text_to_speech import TextToSpeech
 from voice_control.voice_control import VoiceControl
-
-
-# region global variables
-positions = None
-detector = None
-robot = None
-text_to_speech = None
-voice_control = None
-# endregion global variables
 
 
 # region helper functions
@@ -32,7 +21,7 @@ def configure_and_get_logger(logging_file) -> logging.Logger:
 
     # Create directory and logfile if missing
     os.makedirs(os.path.dirname(logging_file), exist_ok=True)
-    open(logging_file, 'w+').close()
+    open(logging_file, 'w+', encoding="utf-8").close()
 
     logger_file_handler = logging.FileHandler(logging_file)
     logger_file_handler.setLevel(logging.DEBUG)
@@ -42,129 +31,143 @@ def configure_and_get_logger(logging_file) -> logging.Logger:
 # endregion helper functions
 
 
-# region jobs
-def job_grab_and_place_rubber():
-    global positions, detector, robot, text_to_speech, voice_control
+class System():
+    def __init__(self, config: dict, positions: Positions):
+        self.logger = logging.getLogger(__name__)
 
-    # - Yumi bewegt Arm-1 und greift das Gummiteil
-    # - Yumi bewegt Arm-1 und "pudert" das Gummiteil
-    # - Yumi bewegt Arm-1 und legt das Gummiteil in den Verpresser
-    # - Yumi bewegt Arm-1 zurück in die Startposition
+        self.positions = positions
 
-    text_to_speech.say("Ich greife jetzt das Gummiteil")
-    
-    robot.arm_left.move_to(positions["box_rubber"])
+        self.logger.debug("Creating instance of RobotWebServices")
+        self.robot = RobotWebServices(
+            hostname=config["Robot Web Services"]["hostname"],
+            username=config["Robot Web Services"]["username"],
+            password=config["Robot Web Services"]["password"],
+            model=config["Robot Web Services"]["model"],
+        )
 
-    position_rubber = detector.get_rubber()
-    robot.arm_left.grab(position_rubber)
+        self.logger.debug("Creating instace of Dectector")
+        self.detector = ObjectDetector()
 
-    robot.arm_left.move_to(positions["tool_rubber"])
-    robot.arm_left.drop()
+        self.logger.debug("Creating instace of TextToSpeech")
+        self.text_to_speech = TextToSpeech()
 
-    robot.arm_left.move_to(positions["home"])
+        self.logger.debug("Creating instace of VoiceControl")
+        self.voice_control = VoiceControl()
 
-    pass
+    def job_grab_rubber(self):
+        self.text_to_speech.say("Ich greife jetzt das Gummiteil")
 
+        self.robot.arm_right.move_to_home()
+        self.robot.arm_right.move_to(self.positions["arm_right_checkpoint"])
+        self.robot.arm_right.move_to(self.positions["arm_right_rubber_box"])
 
-def job_grab_and_place_metal():
-    global positions, detector, robot, text_to_speech, voice_control
+        position_rubber = self.detector.get_rubber()
+        self.robot.arm_left.grab(position_rubber)
 
-    # - Yumi bewegt Arm-1 und greift das Metallteil
-    # - Yumi bewegt Arm-1 und legt das Metallteil in den Verpresser
-    # - Yumi bewegt Arm-1 zurück in die Startposition
+        self.robot.arm_right.move_to(self.positions["arm_right_checkpoint"])
+        self.robot.arm_right.move_to_home()
 
-    text_to_speech.say("Ich greife jetzt das Metallteil")
-    
-    robot.arm_left.move_to(positions["box_metal"])
+    def job_place_rubber(self):
+        self.text_to_speech.say("Ich lege jetzt das Gummiteil ab")
 
-    position_metal = detector.get_metal()
-    robot.arm_left.grab(position_metal)
+        self.robot.arm_right.move_to_home()
 
-    robot.arm_left.move_to(positions["tool_metal"])
-    robot.arm_left.drop()
+        self.robot.arm_right.move_to(self.positions["arm_right_rubber_drop"])
+        self.robot.arm_left.drop()
 
-    robot.arm_left.move_to(positions["home"])
+        self.robot.arm_right.move_to_home()
 
-    pass
+    def job_grab_metal(self):
+        self.text_to_speech.say("Ich greife jetzt das Metallteil")
 
+        self.robot.arm_right.move_to_home()
+        self.robot.arm_right.move_to(self.positions["arm_right_checkpoint"])
 
-def job_move_tool_lever():
-    global positions, detector, robot, text_to_speech, voice_control
+        self.robot.arm_right.move_to(self.positions["arm_right_metal_box"])
+        position_metal = self.detector.get_metal()
+        self.robot.arm_left.grab(position_metal)
 
-    # - Yumi bewegt Arm-2 und hebt den Hebel hoch
-    # - [Optional] Yumi bewegt Arm-2 und legt den Hebel um
-    # - Yumi bewegt Arm-2 zurück in die Startposition
+        self.robot.arm_right.move_to(self.positions["arm_right_checkpoint"])
+        self.robot.arm_right.move_to_home()
 
-    text_to_speech.say("Ich lege jetzt den Hebel um")
+    def job_place_metal(self):
+        self.text_to_speech.say("Ich lege jetzt das Metallteil ab")
 
-    robot.arm_right.move_to(positions["tool_lever"])
+        self.robot.arm_right.move_to_home()
 
-    robot.arm_right.move_to(positions["tool_lever_down"])
-    robot.arm_right.move_to(positions["tool_lever_up"])
-    robot.arm_right.move_to(positions["tool_lever_down"])
+        self.robot.arm_right.move_to(self.positions["arm_right_metal_drop"])
+        self.robot.arm_left.drop()
 
-    robot.arm_right.move_to(positions["home"])
+        self.robot.arm_right.move_to_home()
 
-    pass
+    def job_move_tool_lever(self):
+        self.text_to_speech.say("Ich lege jetzt den Hebel um")
 
+        self.robot.arm_left.move_to_home()
 
-def job_grab_and_place_finished_product():
-    global positions, detector, robot, text_to_speech, voice_control
+        self.robot.arm_left.move_to(self.positions["arm_left_tool_lever"])
+        self.robot.arm_left.move_to(self.positions["arm_left_tool_lever_down"])
+        self.robot.arm_left.move_to(self.positions["arm_left_tool_lever_up_2"])
 
-    # - Yumi bewegt Arm-2 und legt das fertige Produkt in eine Box
-    # - Yumi bewegt Arm-2 zurück in die Startposition
+        self.robot.arm_left.move_to_home()
 
-    text_to_speech.say("Ich greife jetzt das fertige Bauteil")
-    robot.arm_right.move_to(positions["tool_metal"])
-    robot.arm_right.grab(positions["tool_metal"])
+    def job_grab_finished_product(self):
+        self.text_to_speech.say("Ich greife jetzt das fertige Bauteil")
 
-    text_to_speech.say("Ich lege jetzt das fertige Bauteil in die Box")
-    robot.arm_right.move_to(positions["box_finished"])
-    robot.arm_right.drop()
+        self.robot.arm_left.move_to_home()
 
-    robot.arm_right.move_to(positions["home"])
+        self.robot.arm_left.move_to(self.positions["arm_left_tool_metal"])
+        self.robot.arm_left.grab(self.positions["arm_left_tool_metal"])
 
-    pass
-# endregion jobs
+        self.robot.arm_left.move_to_home()
 
+    def job_place_finished_product(self):
+        self.text_to_speech.say("Ich lege jetzt das fertige Bauteil in die Box")
 
-def start_thread_voice_control():
-    global positions, detector, robot, text_to_speech, voice_control
+        self.robot.arm_left.move_to_home()
 
-    # thread = threading.Thread(target=voice_control.listen)
-    # thread.daemon = True
-    # thread.start()
+        self.robot.arm_left.move_to(self.positions["arm_left_box_finished"])
+        self.robot.arm_left.drop()
 
-    pass
+        self.robot.arm_left.move_to_home()
 
+    def start_thread_voice_control(self):
+        # TODO: Implement this
+        # thread = threading.Thread(target=voice_control.listen)
+        # thread.daemon = True
+        # thread.start()
 
-def start_thread_task():
-    global positions, detector, robot, text_to_speech, voice_control
+        pass
 
-    running = True
+    def start_thread_task(self):
+        running = True
 
-    while running:
-        job_grab_and_place_rubber()
-        job_grab_and_place_metal()
-        job_move_tool_lever()
-        job_grab_and_place_finished_product()
+        while running:
+            self.job_grab_rubber()
+            self.job_place_rubber()
 
+            self.job_grab_metal()
+            self.job_place_metal()
 
-def execute():
-    global positions, detector, robot, text_to_speech, voice_control
+            self.job_move_tool_lever()
 
-    # Master, Tread Sprachsteuerung, Thread Bewegung
-    # -> Master ist 3 Wörter Erkennung, kann Thread Bewegung stoppen/pausieren/weiterführen
-    # -> Status Flags für Objekt-Im-Greifer, wichtig für reset
+            self.job_grab_finished_product()
+            self.job_place_finished_product()
 
-    start_thread_voice_control()
-    start_thread_task()
+            running = False
+
+    def run(self):
+        # Master, Tread Sprachsteuerung, Thread Bewegung
+        # -> Master ist 3 Wörter Erkennung, kann Thread Bewegung stoppen/pausieren/weiterführen
+        # -> Status Flags für Objekt-Im-Greifer, wichtig für reset
+
+        # TODO: Implement thread communication
+        self.start_thread_voice_control()
+        self.start_thread_task()
 
 
 def main() -> int:
     print("Hello, World!")
-
-    global positions, detector, robot, text_to_speech, voice_control
 
     config_file = pathlib.Path("./config.json")
     timestamp =  datetime.datetime.now().strftime("%Y-%m-%d %H-%M-%S")
@@ -173,8 +176,9 @@ def main() -> int:
 
     logger = configure_and_get_logger(logging_file)
 
-    if config_file.exists() == False:
+    if not config_file.exists():
         logger.critical("Config file is missing")
+        # pylint: disable-next=broad-exception-raised
         raise Exception("Configuration file not found")
 
     with open(config_file, "r", encoding="utf-8") as config_file:
@@ -183,28 +187,8 @@ def main() -> int:
 
     logger.debug("Loading positions from file")
     positions = Positions.from_file(positions_file)
-    # positions["root"] = Position.from_worldpoint(0, 0, 0)
-    # positions.to_file(positions_file)
 
-    logger.debug("Creating instance of RobotWebServices")
-    robot = RobotWebServices(
-        hostname=config["Robot Web Services"]["hostname"],
-        username=config["Robot Web Services"]["username"],
-        password=config["Robot Web Services"]["password"],
-        model=config["Robot Web Services"]["model"],
-    )
-
-    logger.debug("Creating instace of Dectector")
-    detector = ObjectDetector()
-
-    logger.debug("Creating instace of TextToSpeech")
-    text_to_speech = TextToSpeech()
-
-    logger.debug("Creating instace of VoiceControl")
-    voice_control = VoiceControl()
-
-    # TODO: Implement this
-    # return execute()
+    return System(config, positions).run()
 
 
 if __name__ == "__main__":

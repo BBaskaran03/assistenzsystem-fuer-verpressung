@@ -1,3 +1,13 @@
 # RobotStudio
 /Station/Preview.png
-/Virtual Controllers/
+
+/Virtual Controllers/*
+
+!/Virtual Controllers/IRB14000/
+/Virtual Controllers/IRB14000/*
+
+!/Virtual Controllers/IRB14000/{A7EC159F-CFF4-4DF9-8E8C-95FC0C74F454}.xml
+
+!/Virtual Controllers/IRB14000/INTERNAL/
+/Virtual Controllers/IRB14000/INTERNAL/*
+!/Virtual Controllers/IRB14000/INTERNAL/system.guid
