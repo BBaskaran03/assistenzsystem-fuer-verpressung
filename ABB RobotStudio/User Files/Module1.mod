@@ -26,8 +26,7 @@ MODULE Module1
         WHILE ready = FALSE DO
             WaitTime 1;
         ENDWHILE
-        
-        MoveL target, v30, z30, tool0;
 
+        MoveL target, v100, z30, tool0;
     ENDPROC
 ENDMODULE
