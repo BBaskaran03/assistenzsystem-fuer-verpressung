@@ -43,99 +43,112 @@ def configure_and_get_logger(logging_file) -> logging.Logger:
 
 
 # region jobs
-def job_grab_and_place_rubber():
+def job_grab_rubber():
     global positions, detector, robot, text_to_speech, voice_control
 
-    # - Yumi bewegt Arm-1 und greift das Gummiteil
-    # - Yumi bewegt Arm-1 und "pudert" das Gummiteil
-    # - Yumi bewegt Arm-1 und legt das Gummiteil in den Verpresser
-    # - Yumi bewegt Arm-1 zurück in die Startposition
-
     text_to_speech.say("Ich greife jetzt das Gummiteil")
-    
-    robot.arm_left.move_to(positions["box_rubber"])
+
+    robot.arm_right.move_to_home()
+    robot.arm_right.move_to(positions["arm_right_checkpoint"])
+    robot.arm_right.move_to(positions["arm_right_rubber_box"])
 
     position_rubber = detector.get_rubber()
     robot.arm_left.grab(position_rubber)
 
-    robot.arm_left.move_to(positions["tool_rubber"])
-    robot.arm_left.drop()
-
-    robot.arm_left.move_to(positions["home"])
-
-    pass
+    robot.arm_right.move_to(positions["arm_right_checkpoint"])
+    robot.arm_right.move_to_home()
 
 
-def job_grab_and_place_metal():
+def job_place_rubber():
     global positions, detector, robot, text_to_speech, voice_control
 
-    # - Yumi bewegt Arm-1 und greift das Metallteil
-    # - Yumi bewegt Arm-1 und legt das Metallteil in den Verpresser
-    # - Yumi bewegt Arm-1 zurück in die Startposition
+    text_to_speech.say("Ich lege jetzt das Gummiteil ab")
+
+    robot.arm_right.move_to_home()
+
+    robot.arm_right.move_to(positions["arm_right_rubber_drop"])
+    robot.arm_left.drop()
+
+    robot.arm_right.move_to_home()
+
+
+def job_grab_metal():
+    global positions, detector, robot, text_to_speech, voice_control
 
     text_to_speech.say("Ich greife jetzt das Metallteil")
-    
-    robot.arm_left.move_to(positions["box_metal"])
 
+    robot.arm_right.move_to_home()
+    robot.arm_right.move_to(positions["arm_right_checkpoint"])
+
+    robot.arm_right.move_to(positions["arm_right_metal_box"])
     position_metal = detector.get_metal()
     robot.arm_left.grab(position_metal)
 
-    robot.arm_left.move_to(positions["tool_metal"])
+    robot.arm_right.move_to(positions["arm_right_checkpoint"])
+    robot.arm_right.move_to_home()
+
+
+def job_place_metal():
+    global positions, detector, robot, text_to_speech, voice_control
+
+    text_to_speech.say("Ich lege jetzt das Metallteil ab")
+
+    robot.arm_right.move_to_home()
+
+    robot.arm_right.move_to(positions["arm_right_metal_drop"])
     robot.arm_left.drop()
 
-    robot.arm_left.move_to(positions["home"])
-
-    pass
+    robot.arm_right.move_to_home()
 
 
 def job_move_tool_lever():
     global positions, detector, robot, text_to_speech, voice_control
 
-    # - Yumi bewegt Arm-2 und hebt den Hebel hoch
-    # - [Optional] Yumi bewegt Arm-2 und legt den Hebel um
-    # - Yumi bewegt Arm-2 zurück in die Startposition
-
     text_to_speech.say("Ich lege jetzt den Hebel um")
 
-    robot.arm_right.move_to(positions["tool_lever"])
+    robot.arm_left.move_to_home()
 
-    robot.arm_right.move_to(positions["tool_lever_down"])
-    robot.arm_right.move_to(positions["tool_lever_up"])
-    robot.arm_right.move_to(positions["tool_lever_down"])
+    robot.arm_left.move_to(positions["arm_left_tool_lever"])
+    robot.arm_left.move_to(positions["arm_left_tool_lever_down"])
+    robot.arm_left.move_to(positions["arm_left_tool_lever_up_2"])
 
-    robot.arm_right.move_to(positions["home"])
-
-    pass
+    robot.arm_left.move_to_home()
 
 
-def job_grab_and_place_finished_product():
+def job_grab_finished_product():
     global positions, detector, robot, text_to_speech, voice_control
 
-    # - Yumi bewegt Arm-2 und legt das fertige Produkt in eine Box
-    # - Yumi bewegt Arm-2 zurück in die Startposition
-
     text_to_speech.say("Ich greife jetzt das fertige Bauteil")
-    robot.arm_right.move_to(positions["tool_metal"])
-    robot.arm_right.grab(positions["tool_metal"])
+
+    robot.arm_left.move_to_home()
+
+    robot.arm_left.move_to(positions["arm_left_tool_metal"])
+    robot.arm_left.grab(positions["arm_left_tool_metal"])
+
+    robot.arm_left.move_to_home()
+
+
+def job_place_finished_product():
+    global positions, detector, robot, text_to_speech, voice_control
 
     text_to_speech.say("Ich lege jetzt das fertige Bauteil in die Box")
-    robot.arm_right.move_to(positions["box_finished"])
-    robot.arm_right.drop()
 
-    robot.arm_right.move_to(positions["home"])
+    robot.arm_left.move_to_home()
 
-    pass
+    robot.arm_left.move_to(positions["arm_left_box_finished"])
+    robot.arm_left.drop()
+
+    robot.arm_left.move_to_home()
 # endregion jobs
 
 
 def start_thread_voice_control():
     global positions, detector, robot, text_to_speech, voice_control
 
+    # TODO: Implement this
     # thread = threading.Thread(target=voice_control.listen)
     # thread.daemon = True
     # thread.start()
-
-    pass
 
 
 def start_thread_task():
@@ -144,10 +157,18 @@ def start_thread_task():
     running = True
 
     while running:
-        job_grab_and_place_rubber()
-        job_grab_and_place_metal()
+        job_grab_rubber()
+        job_place_rubber()
+
+        job_grab_metal()
+        job_place_metal()
+
         job_move_tool_lever()
-        job_grab_and_place_finished_product()
+
+        job_grab_finished_product()
+        job_place_finished_product()
+
+        running = False
 
 
 def execute():
@@ -157,55 +178,9 @@ def execute():
     # -> Master ist 3 Wörter Erkennung, kann Thread Bewegung stoppen/pausieren/weiterführen
     # -> Status Flags für Objekt-Im-Greifer, wichtig für reset
 
+    # TODO: Implement thread communication
     start_thread_voice_control()
     start_thread_task()
-
-
-def testing():
-    global positions, detector, robot, text_to_speech, voice_control
-
-    arm_left_position_1 = Position.from_robtarget(
-        [
-            [50, 210.610123632, 180.627879465],
-            [0.066010741, 0.842421005, -0.11121506, 0.523068488],
-            [0, 0, 0, 4],
-            [141.502558998, 9e09, 9e09, 9e09, 9e09, 9e09],
-        ]
-    )
-    arm_left_position_2 = Position.from_robtarget(
-        [
-            [60, 210.610123632, 180.627879465],
-            [0.066010741, 0.842421005, -0.11121506, 0.523068488],
-            [0, 0, 0, 4],
-            [141.502558998, 9e09, 9e09, 9e09, 9e09, 9e09],
-        ]
-    )
-
-    arm_right_position_1 = Position.from_robtarget(
-        [
-            [-9.578368507, -182.609892723, 198.627808149],
-            [0.066010726, -0.842420918, -0.111214912, -0.523068661],
-            [0, 0, 0, 4],
-            [-135, 9e09, 9e09, 9e09, 9e09, 9e09],
-        ]
-    )
-    arm_right_position_2 = Position.from_robtarget(
-        [
-            [-19.578368507, -182.609892723, 198.627808149],
-            [0.066010726, -0.842420918, -0.111214912, -0.523068661],
-            [0, 0, 0, 4],
-            [-135, 9e09, 9e09, 9e09, 9e09, 9e09],
-        ]
-    )
-
-    robot.arm_left.move_to(arm_left_position_1)
-    robot.arm_left.move_to(arm_left_position_2)
-
-    robot.arm_right.move_to(arm_right_position_1)
-    robot.arm_right.move_to(arm_right_position_2)
-
-    position = positions["home_arm_left"]
-    robot.arm_right.move_to(position)
 
 
 def main() -> int:
@@ -248,9 +223,7 @@ def main() -> int:
     logger.debug("Creating instace of VoiceControl")
     voice_control = VoiceControl()
 
-    # TODO: Implement this
-    # return execute()
-    return testing()
+    execute()
 
 
 if __name__ == "__main__":

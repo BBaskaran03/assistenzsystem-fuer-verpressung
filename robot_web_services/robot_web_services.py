@@ -12,6 +12,7 @@ import requests.auth
 
 from robot_web_services.positions import Position
 from robot_web_services.positions import Positions
+from robot_web_services.positions import Robtarget
 
 
 logger = logging.getLogger(__name__)
@@ -119,10 +120,11 @@ class API():
         return response
 
 class RobotArm:
-    def __init__(self, robot, mechunit: str, api: API) -> None:
+    def __init__(self, robot, mechunit: str, api: API, home: Position) -> None:
         self._robot = robot
         self._mechunit = mechunit
         self._api = api
+        self.home = home
 
     def _rotation_get(self):
         response = self._api.get(
@@ -193,6 +195,21 @@ class RobotArm:
 
         return value
 
+    @property
+    def robtarget(self):
+        # def robtarget(self) -> Robtarget:
+        response = self._api.get(f"/rw/rapid/tasks/T_{self._mechunit}/motion?resource=robtarget")
+        output = response.json["_embedded"]["_state"][0]
+
+        robtarget = Robtarget([
+            [output["x"], output["y"], output["z"]],
+            [output["q1"], output["q2"], output["q3"], output["q4"]],
+            [output["cf1"], output["cf4"], output["cf6"], output["cfx"]],
+            [output["ej1"], output["ej2"], output["ej3"], output["ej4"], output["ej5"], output["ej6"]]
+        ])
+
+        return robtarget
+
     def rapid_variable_set(self, variable, value):
         """Sets the value of any RAPID variable.
         Unless the variable is of type 'num', 'value' has to be a string.
@@ -211,13 +228,31 @@ class RobotArm:
         logger.info(f"Moving to target <{position}>")
         self.rapid_variable_set("ready", "TRUE")
 
-        # TODO: Replace timer with actual check
-        time.sleep(5)
+        def compare(robt1: Position, robt2: Position):
+            robt1 = [round(float(robt1.x), 2), round(float(robt1.y), 2), round(float(robt1.z), 2)]
+            robt2 = [round(float(robt2.x), 2), round(float(robt2.y), 2), round(float(robt2.z), 2)]
+
+            logger.debug(f"{robt1} <> {robt2}")
+            return (robt1 == robt2)
+        
+        while (compare(self.robtarget, position) == False):
+            time.sleep(1)
 
         logger.info("Stopping movement")
         self.rapid_variable_set("ready", "FALSE")
         self._robot.rapid_stop()
         time.sleep(1)
+
+    def move_to_home(self):
+        self.move_to(self.home)
+
+    def grab(self, position: Position):
+        # TODO: Implement this
+        pass
+
+    def drop(self):
+        # TODO: Implement this
+        pass
 
 
 class RobotWebServices:
@@ -235,8 +270,11 @@ class RobotWebServices:
 
     def _adapt_to_model(self):
         if self.model == "IRB14000":
-            self.arm_left = RobotArm(self, "ROB_L", self._api)
-            self.arm_right = RobotArm(self, "ROB_R", self._api)
+            arm_left_home = [[-9.578368507,182.609892723,198.627808149],[0.066010726,0.842420918,-0.111214912,0.523068661],[0,0,0,4],[135,9E+09,9E+09,9E+09,9E+09,9E+09]]
+            self.arm_left = RobotArm(self, "ROB_L", self._api, Position.from_robtarget(arm_left_home))
+
+            arm_right_home = [[-9.578368507,-182.609892723,198.627808149],[0.066010726,-0.842420918,-0.111214912,-0.523068661],[0,0,0,4],[-135,9E+09,9E+09,9E+09,9E+09,9E+09]]
+            self.arm_right = RobotArm(self, "ROB_R", self._api, Position.from_robtarget(arm_right_home))
             return
 
         raise RWSException("Unknown model")
