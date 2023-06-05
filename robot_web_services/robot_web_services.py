@@ -222,12 +222,6 @@ class RobotArm:
         self._api.post(resource, payload={"value": str(value)})
 
     def move_to(self, position: Position):
-        self._robot.rapid_start()
-
-        self.rapid_variable_set("target", position.to_rapid_robtarget())
-        logger.info(f"Moving to target <{position}>")
-        self.rapid_variable_set("ready", "TRUE")
-
         def compare(robt1: Position, robt2: Position):
             robt1 = [round(float(robt1.x), 2), round(float(robt1.y), 2), round(float(robt1.z), 2)]
             robt2 = [round(float(robt2.x), 2), round(float(robt2.y), 2), round(float(robt2.z), 2)]
@@ -235,6 +229,14 @@ class RobotArm:
             logger.debug(f"{robt1} <> {robt2}")
             return (robt1 == robt2)
         
+        if (compare(self.robtarget, position)): return
+
+        self._robot.rapid_start()
+
+        self.rapid_variable_set("target", position.to_rapid_robtarget())
+        logger.info(f"Moving to target <{position}>")
+        self.rapid_variable_set("ready", "TRUE")
+
         while (compare(self.robtarget, position) == False):
             time.sleep(1)
 
