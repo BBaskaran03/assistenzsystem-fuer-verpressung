@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <PIMDocument DocumentType="Station" Version="6" SaveVersion="22.3.10190.2" xmlns="urn:abb-robotics-pim">
   <DocumentHistory />
   <RootObject ID="1" />
@@ -3762,7 +3762,7 @@
     </TaskSimulationConfiguration>
     <IRC5Controller ID="1141" Name="" Parent="9" StopAtBreakpoints="true">
       <UniqueId Value="{2b14d9fe-5e77-4f21-9519-5210b1ea909c}" />
-      <SystemIdentity Value="{A7EC159F-CFF4-4DF9-8E8C-95FC0C74F454}" />
+      <SystemIdentity Value="{CE5DFDF7-D572-4E22-AE97-28C65BED9408}" />
       <RAPIDData ID="1142" />
       <MechanicalUnits>
         <ObjectRef ID="3229" />
