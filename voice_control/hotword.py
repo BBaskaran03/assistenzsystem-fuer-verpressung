@@ -3,7 +3,7 @@ from pvrecorder import PvRecorder
 from API_KEY import PORCUPINE_KEY
 from models.models import KEY_WORDS_PATH, MODEL_PATH, KEY_WORDS
 
-class Keyword:
+class Hotword:
     def __init__(self):
         self.porcupine = create(
             access_key=PORCUPINE_KEY,
