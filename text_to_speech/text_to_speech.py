@@ -1,5 +1,5 @@
 import sys
-
+import voice_control.online.text_to_speech as OnlineTTS
 from robot_web_services.positions import Position
 
 
@@ -7,8 +7,8 @@ class TextToSpeech():
     def __init__(self): pass
 
     def say(self, text: str):
-        # TODO: Implement this
-        print(f"<TextToSpeech> | {text}")
+        # print(f"<TextToSpeech> | {text}")
+        OnlineTTS.speak(text,'de')
 
 
 def main() -> int:
