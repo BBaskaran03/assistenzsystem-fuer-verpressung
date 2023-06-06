@@ -6,15 +6,13 @@ MODULE Module1
     ! Description:
     !   <Insert description here>
     !
-    ! Author: abina
+    ! Author: simon
     !
     ! Version: 1.0
     !
     !***********************************************************
-
-    VAR bool ready := FALSE;
-    VAR robtarget target;
-
+    
+    
     !***********************************************************
     !
     ! Procedure main
@@ -23,10 +21,6 @@ MODULE Module1
     !
     !***********************************************************
     PROC main()
-        WHILE ready = FALSE DO
-            WaitTime 1;
-        ENDWHILE
-
-        MoveL target, v100, z30, tool0;
+        !Add your code here
     ENDPROC
 ENDMODULE
