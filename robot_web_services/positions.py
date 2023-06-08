@@ -243,6 +243,15 @@ class Position(Jointtarget, Robtarget):
 
         return instance
 
+    @classmethod
+    def from_robtarget_class(cls, robtarget: Robtarget):
+        instance = robtarget
+        instance.__class__ = Position
+        instance.source = "robtarget"
+        instance.robtarget = robtarget
+
+        return instance
+
     # endregion classmethods
 
     @property
