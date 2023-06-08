@@ -267,16 +267,20 @@ class RobotWebServices:
     def __init__(self, hostname: str, username: str, password: str, model: str):
         self._api = API(hostname, username, password)
 
+        self.arms = {}
         self.model = model
         self._adapt_to_model()
 
     def _adapt_to_model(self):
         if self.model == "IRB14000":
             arm_left_home = [[-9.578368507,182.609892723,198.627808149],[0.066010726,0.842420918,-0.111214912,0.523068661],[0,0,0,4],[135,9E+09,9E+09,9E+09,9E+09,9E+09]]
-            self.arm_left = RobotArm(self, "ROB_L", self._api, Position.from_robtarget(arm_left_home))
+            self.arms["arm_left"] = RobotArm(self, "ROB_L", self._api, Position.from_robtarget(arm_left_home))
+            self.arm_left = self.arms["arm_left"]
 
             arm_right_home = [[-9.578368507,-182.609892723,198.627808149],[0.066010726,-0.842420918,-0.111214912,-0.523068661],[0,0,0,4],[-135,9E+09,9E+09,9E+09,9E+09,9E+09]]
-            self.arm_right = RobotArm(self, "ROB_R", self._api, Position.from_robtarget(arm_right_home))
+            self.arms["arm_right"] = RobotArm(self, "ROB_R", self._api, Position.from_robtarget(arm_right_home))
+            self.arm_right = self.arms["arm_right"]
+
             return
 
         raise RWSException("Unknown model")
