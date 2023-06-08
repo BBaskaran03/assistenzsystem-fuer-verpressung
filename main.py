@@ -68,7 +68,7 @@ class System():
         self.robot.arm_right.move_to(self.positions["arm_right_checkpoint"])
         self.robot.arm_right.move_to(self.positions["arm_right_rubber_box"])
 
-        position_rubber = self.detector.get_rubber()
+        position_rubber = self.detector.get("rubber")
         self.robot.arm_left.grab(position_rubber)
 
         self.robot.arm_right.move_to(self.positions["arm_right_checkpoint"])
@@ -91,7 +91,7 @@ class System():
         self.robot.arm_right.move_to(self.positions["arm_right_checkpoint"])
 
         self.robot.arm_right.move_to(self.positions["arm_right_metal_box"])
-        position_metal = self.detector.get_metal()
+        position_metal = self.detector.get("metal")
         self.robot.arm_left.grab(position_metal)
 
         self.robot.arm_right.move_to(self.positions["arm_right_checkpoint"])
@@ -123,6 +123,7 @@ class System():
 
         self.robot.arm_left.move_to_home()
 
+        # TODO: Remove line: $ self.robot.arm_left.move_to(...)
         self.robot.arm_left.move_to(self.positions["arm_left_tool_metal"])
         self.robot.arm_left.grab(self.positions["arm_left_tool_metal"])
 
