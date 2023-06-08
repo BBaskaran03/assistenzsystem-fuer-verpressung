@@ -1,3 +1,2 @@
 # Assistenzsystem für Verpressung
--r "./requirements/cached.txt"
 -r "./requirements/requirements.txt"
