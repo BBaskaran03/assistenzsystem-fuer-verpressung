@@ -1,9 +1,10 @@
+import datetime
+import json
 import logging
 import os
-import json
 import pathlib
 import sys
-import datetime
+import threading
 
 from object_detection.object_detection import ObjectDetector
 from robot_web_services.positions import Positions
@@ -12,49 +13,46 @@ from text_to_speech.text_to_speech import TextToSpeech
 from voice_control.voice_control import VoiceControl
 
 
-# region helper functions
 def configure_and_get_logger(logging_file) -> logging.Logger:
-    logging.basicConfig(level=logging.DEBUG, format='%(message)s')
+    logging.basicConfig(level=logging.DEBUG, format="%(message)s")
 
     logger = logging.getLogger(__name__)
     logger.setLevel(level=logging.INFO)
 
     # Create directory and logfile if missing
     os.makedirs(os.path.dirname(logging_file), exist_ok=True)
-    open(logging_file, 'w+', encoding="utf-8").close()
+    open(logging_file, "w+", encoding="utf-8").close()
 
     logger_file_handler = logging.FileHandler(logging_file)
     logger_file_handler.setLevel(logging.DEBUG)
     logger.addHandler(logger_file_handler)
 
     return logger
-# endregion helper functions
 
 
-class System():
+class System:
     def __init__(self, config: dict, positions: Positions):
-        self.logger = logging.getLogger(__name__)
-
         self.positions = positions
 
-        self.logger.debug("Creating instance of RobotWebServices")
+        logging.debug("Creating instance of RobotWebServices")
         self.robot = RobotWebServices(
             hostname=config["Robot Web Services"]["hostname"],
             username=config["Robot Web Services"]["username"],
             password=config["Robot Web Services"]["password"],
             model=config["Robot Web Services"]["model"],
         )
+        self.robot.ready_robot()
 
-        self.logger.debug("Creating instace of Dectector")
+        logging.debug("Creating instace of Dectector")
         self.detector = ObjectDetector()
 
-        self.logger.debug("Creating instace of TextToSpeech")
+        logging.debug("Creating instace of TextToSpeech")
         self.text_to_speech = TextToSpeech(
             top_level_domain=config["TextToSpeech"]["top_level_domain"],
-            language=config["TextToSpeech"]["language"]
+            language=config["TextToSpeech"]["language"],
         )
 
-        self.logger.debug("Creating instace of VoiceControl")
+        logging.debug("Creating instace of VoiceControl")
         self.voice_control = VoiceControl(
             porcupine_api_key=config["PORCUPINE"]["API_KEY"],
             openai_api_key=config["OPENAI"]["API_KEY"],
@@ -67,7 +65,7 @@ class System():
         self.robot.arm_right.move_to(self.positions["arm_right_checkpoint"])
         self.robot.arm_right.move_to(self.positions["arm_right_rubber_box"])
 
-        position_rubber = self.detector.get_rubber()
+        position_rubber = self.detector.get("rubber")
         self.robot.arm_left.grab(position_rubber)
 
         self.robot.arm_right.move_to(self.positions["arm_right_checkpoint"])
@@ -90,7 +88,7 @@ class System():
         self.robot.arm_right.move_to(self.positions["arm_right_checkpoint"])
 
         self.robot.arm_right.move_to(self.positions["arm_right_metal_box"])
-        position_metal = self.detector.get_metal()
+        position_metal = self.detector.get("metal")
         self.robot.arm_left.grab(position_metal)
 
         self.robot.arm_right.move_to(self.positions["arm_right_checkpoint"])
@@ -122,6 +120,7 @@ class System():
 
         self.robot.arm_left.move_to_home()
 
+        # TODO: Remove line: $ self.robot.arm_left.move_to(...)
         self.robot.arm_left.move_to(self.positions["arm_left_tool_metal"])
         self.robot.arm_left.grab(self.positions["arm_left_tool_metal"])
 
@@ -137,10 +136,10 @@ class System():
 
         self.robot.arm_left.move_to_home()
 
-    def start_thread_voice_control(self):
+    def start_voice_control(self):
         self.voice_control.listen()
 
-    def start_thread_task(self):
+    def start_movement(self):
         running = True
 
         while running:
@@ -158,20 +157,19 @@ class System():
             running = False
 
     def run(self):
-        # Master, Tread Sprachsteuerung, Thread Bewegung
-        # -> Master ist 3 Wörter Erkennung, kann Thread Bewegung stoppen/pausieren/weiterführen
-        # -> Status Flags für Objekt-Im-Greifer, wichtig für reset
+        # TODO: Check for voice commands, if found, interact with robot
+        voice_control = threading.Thread(target=self.start_voice_control)
+        voice_control.start()
 
-        # TODO: Implement thread communication
-        self.start_thread_voice_control()
-        self.start_thread_task()
+        movement = threading.Thread(target=self.start_movement)
+        movement.start()
 
 
 def main() -> int:
     print("Hello, World!")
 
     config_file = pathlib.Path("./config.json")
-    timestamp =  datetime.datetime.now().strftime("%Y-%m-%d %H-%M-%S")
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H-%M-%S")
     logging_file = pathlib.Path(f"./logs/{timestamp}.txt")
     positions_file = pathlib.Path("./positions.json")
 
