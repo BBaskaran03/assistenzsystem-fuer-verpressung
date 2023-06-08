@@ -7,8 +7,8 @@ import sys
 import threading
 
 from object_detection.object_detection import ObjectDetector
-from robot_web_services.positions import Positions
-from robot_web_services.robot_web_services import RobotWebServices
+from robot_web_services.positions import Position, Positions
+from robot_web_services.robot_web_services import RobotArm, RobotWebServices
 from text_to_speech.text_to_speech import TextToSpeech
 from voice_control.voice_control import VoiceControl
 
@@ -56,6 +56,41 @@ class System:
         self.voice_control = VoiceControl(
             porcupine_api_key=config["PORCUPINE"]["API_KEY"],
             openai_api_key=config["OPENAI"]["API_KEY"],
+        )
+
+    def _calibrate_arm(self, arm: RobotArm, positions: list[str]):
+        for position in positions:
+            message = (
+                f"Please move arm <{arm.name}> to position <{position}> and press <ENTER> ..."
+            )
+            input(message)
+
+            robtarget = arm.robtarget
+
+            logging.debug(f"Setting position <{position}> to robtarget <{robtarget}>")
+            self.positions[position] = Position.from_robtarget_class(robtarget)
+
+    def calibrate(self):
+        self._calibrate_arm(
+            self.robot.arm_right,
+            [
+                "arm_right_box_metal",
+                "arm_right_box_rubber",
+                "arm_right_tool_metal",
+                "arm_right_tool_rubber",
+            ],
+        )
+
+        self._calibrate_arm(
+            self.robot.arm_left,
+            [
+                "arm_left_box_finished",
+                "arm_left_tool_lever_down",
+                "arm_left_tool_lever_rotation_1",
+                "arm_left_tool_lever_rotation_2",
+                "arm_left_tool_lever",
+                "arm_left_tool_metal",
+            ],
         )
 
     def job_grab_rubber(self):
@@ -187,7 +222,14 @@ def main() -> int:
     logger.debug("Loading positions from file")
     positions = Positions.from_file(positions_file)
 
-    return System(config, positions).run()
+    afv = System(config, positions)
+
+    afv.calibrate()
+    positions.to_file(positions_file)
+
+    afv.run()
+
+    return 0
 
 
 if __name__ == "__main__":
