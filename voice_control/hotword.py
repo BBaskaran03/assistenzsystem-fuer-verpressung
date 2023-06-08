@@ -1,12 +1,16 @@
+import logging
+import sys
+
 from pvporcupine import create
 from pvrecorder import PvRecorder
-from API_KEY import PORCUPINE_KEY
-from models.models import KEY_WORDS_PATH, MODEL_PATH, KEY_WORDS
+
+from voice_control.models.models import KEY_WORDS, KEY_WORDS_PATH, MODEL_PATH
+
 
 class Hotword:
-    def __init__(self):
+    def __init__(self, porcupine_api_key):
         self.porcupine = create(
-            access_key=PORCUPINE_KEY,
+            access_key=porcupine_api_key,
             keyword_paths=KEY_WORDS_PATH,
             model_path=MODEL_PATH,
             sensitivities=[0.75, 0.75, 0.75],
@@ -16,20 +20,24 @@ class Hotword:
         recorder = PvRecorder(device_index=-1, frame_length=self.porcupine.frame_length)
         recorder.start()
 
-        try:
-            while True:
-                pcm = recorder.read()
-                keyword_index = self.porcupine.process(pcm)
+        while True:
+            pcm = recorder.read()
+            keyword_index = self.porcupine.process(pcm)
 
-                if keyword_index >= 0:
-                    # Todo implement here signals
-                    print(f"Detected: {KEY_WORDS[keyword_index]}")
-        except:
-            pass
-        finally:
-            recorder.delete()
-            self.porcupine.delete()
+            if keyword_index >= 0:
+                logging.debug(f"Recogniced: {KEY_WORDS[keyword_index]}")
+                return KEY_WORDS[keyword_index]
 
 
-if __name__ == '__main__':
-    Keyword().run()
+def main() -> int:
+    # TODO: Get porcupine_api_key from somewhere
+    porcupine_api_key = None
+
+    hotword = Hotword(porcupine_api_key)
+    hotword.run()
+
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
