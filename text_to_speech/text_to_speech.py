@@ -1,6 +1,9 @@
 import io
+import os
 import sys
 import time
+
+os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "1"
 
 import pygame
 from gtts import gTTS
