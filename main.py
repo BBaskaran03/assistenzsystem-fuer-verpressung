@@ -63,7 +63,7 @@ class System:
 
         self.robot.arm_right.move_to_home()
         self.robot.arm_right.move_to(self.positions["arm_right_checkpoint"])
-        self.robot.arm_right.move_to(self.positions["arm_right_rubber_box"])
+        self.robot.arm_right.move_to(self.positions["arm_right_box_rubber"])
 
         position_rubber = self.detector.get("rubber")
         self.robot.arm_left.grab(position_rubber)
@@ -76,7 +76,7 @@ class System:
 
         self.robot.arm_right.move_to_home()
 
-        self.robot.arm_right.move_to(self.positions["arm_right_rubber_drop"])
+        self.robot.arm_right.move_to(self.positions["arm_right_tool_rubber"])
         self.robot.arm_left.drop()
 
         self.robot.arm_right.move_to_home()
@@ -87,7 +87,7 @@ class System:
         self.robot.arm_right.move_to_home()
         self.robot.arm_right.move_to(self.positions["arm_right_checkpoint"])
 
-        self.robot.arm_right.move_to(self.positions["arm_right_metal_box"])
+        self.robot.arm_right.move_to(self.positions["arm_right_box_metal"])
         position_metal = self.detector.get("metal")
         self.robot.arm_left.grab(position_metal)
 
@@ -99,7 +99,7 @@ class System:
 
         self.robot.arm_right.move_to_home()
 
-        self.robot.arm_right.move_to(self.positions["arm_right_metal_drop"])
+        self.robot.arm_right.move_to(self.positions["arm_right_tool_metal"])
         self.robot.arm_left.drop()
 
         self.robot.arm_right.move_to_home()
@@ -111,7 +111,7 @@ class System:
 
         self.robot.arm_left.move_to(self.positions["arm_left_tool_lever"])
         self.robot.arm_left.move_to(self.positions["arm_left_tool_lever_down"])
-        self.robot.arm_left.move_to(self.positions["arm_left_tool_lever_up_2"])
+        self.robot.arm_left.move_to(self.positions["arm_left_tool_lever_rotation_2"])
 
         self.robot.arm_left.move_to_home()
 
