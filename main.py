@@ -49,10 +49,16 @@ class System():
         self.detector = ObjectDetector()
 
         self.logger.debug("Creating instace of TextToSpeech")
-        self.text_to_speech = TextToSpeech()
+        self.text_to_speech = TextToSpeech(
+            top_level_domain=config["TextToSpeech"]["top_level_domain"],
+            language=config["TextToSpeech"]["language"]
+        )
 
         self.logger.debug("Creating instace of VoiceControl")
-        self.voice_control = VoiceControl()
+        self.voice_control = VoiceControl(
+            porcupine_api_key=config["PORCUPINE"]["API_KEY"],
+            openai_api_key=config["OPENAI"]["API_KEY"],
+        )
 
     def job_grab_rubber(self):
         self.text_to_speech.say("Ich greife jetzt das Gummiteil")
@@ -132,12 +138,7 @@ class System():
         self.robot.arm_left.move_to_home()
 
     def start_thread_voice_control(self):
-        # TODO: Implement this
-        # thread = threading.Thread(target=voice_control.listen)
-        # thread.daemon = True
-        # thread.start()
-
-        pass
+        self.voice_control.listen()
 
     def start_thread_task(self):
         running = True

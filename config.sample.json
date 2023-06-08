@@ -4,5 +4,15 @@
         "username": "",
         "password": "",
         "model": "IRB14000"
+    },
+    "TextToSpeech": {
+        "top_level_domain": "de",
+        "language": "de"
+    },
+    "PORCUPINE": {
+        "API_KEY": ""
+    },
+    "OPENAI": {
+        "API_KEY": ""
     }
 }

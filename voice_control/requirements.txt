@@ -1,11 +1,5 @@
-# voice_control
--r "./requirements.voice_control.txt"
-
-# chat
--r "./chat/requirements.txt"
-
-# offline
--r "./offline/requirements.txt"
-
-# online
--r "./online/requirements.txt"
+pvporcupine==2.2.0
+pvrecorder==1.1.1
+openai==0.27.7
+pyaudio==0.2.13
+speechrecognition==3.10.0
