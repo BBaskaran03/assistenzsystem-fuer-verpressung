@@ -303,6 +303,9 @@ class RobotWebServices:
     def ready_robot(self):
         self.rapid_stop()
 
+        for arm in self.arms.values():
+            arm.move_to_home()
+
     def get_controller_state(self) -> ControllerStates:
         """
         Get the controller state.
