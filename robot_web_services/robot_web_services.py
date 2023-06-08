@@ -128,6 +128,10 @@ class RobotArm:
         self._api = api
         self.home = home
 
+    @property
+    def name(self) -> str:
+        return self._mechunit
+
     def _rotation_get(self):
         response = self._api.get(
             f"/rw/motionsystem/mechunits/{self._mechunit}/jointtarget"
