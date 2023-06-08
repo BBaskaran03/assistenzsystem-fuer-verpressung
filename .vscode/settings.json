@@ -2,10 +2,13 @@
     "files.insertFinalNewline": true,
     "files.trimFinalNewlines": true,
     "[python]": {
-        "editor.defaultFormatter": "ms-python.black-formatter"
+        "editor.defaultFormatter": "ms-python.black-formatter",
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true
+        }
     },
-    "python.formatting.provider": "none",
     "python.linting.pylintArgs": [
         "--disable=C0114,C0115,C0116,C0301,W0511,W1203"
-    ]
+    ],
+    "editor.formatOnSave": true
 }
