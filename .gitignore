@@ -7,3 +7,9 @@
 
 # Python
 __pycache__/
+
+# PyInstaller
+/*.manifest
+/*.spec
+/build/
+/dist/
