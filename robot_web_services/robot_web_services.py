@@ -301,12 +301,7 @@ class RobotWebServices:
         self._api.post("/rw/mastership?action=release")
 
     def ready_robot(self):
-        self.login()
-
-        time.sleep(5)
-
-        self.rmmp()
-        self.request_mastership()
+        self.rapid_stop()
 
     def get_controller_state(self) -> ControllerStates:
         """

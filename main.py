@@ -44,6 +44,7 @@ class System():
             password=config["Robot Web Services"]["password"],
             model=config["Robot Web Services"]["model"],
         )
+        self.robot.ready_robot()
 
         self.logger.debug("Creating instace of Dectector")
         self.detector = ObjectDetector()
