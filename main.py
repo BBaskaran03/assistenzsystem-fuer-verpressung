@@ -12,7 +12,6 @@ from text_to_speech.text_to_speech import TextToSpeech
 from voice_control.voice_control import VoiceControl
 
 
-# region helper functions
 def configure_and_get_logger(logging_file) -> logging.Logger:
     logging.basicConfig(level=logging.DEBUG, format='%(message)s')
 
@@ -28,16 +27,13 @@ def configure_and_get_logger(logging_file) -> logging.Logger:
     logger.addHandler(logger_file_handler)
 
     return logger
-# endregion helper functions
 
 
 class System():
     def __init__(self, config: dict, positions: Positions):
-        self.logger = logging.getLogger(__name__)
-
         self.positions = positions
 
-        self.logger.debug("Creating instance of RobotWebServices")
+        logging.debug("Creating instance of RobotWebServices")
         self.robot = RobotWebServices(
             hostname=config["Robot Web Services"]["hostname"],
             username=config["Robot Web Services"]["username"],
@@ -46,16 +42,16 @@ class System():
         )
         self.robot.ready_robot()
 
-        self.logger.debug("Creating instace of Dectector")
+        logging.debug("Creating instace of Dectector")
         self.detector = ObjectDetector()
 
-        self.logger.debug("Creating instace of TextToSpeech")
+        logging.debug("Creating instace of TextToSpeech")
         self.text_to_speech = TextToSpeech(
             top_level_domain=config["TextToSpeech"]["top_level_domain"],
             language=config["TextToSpeech"]["language"]
         )
 
-        self.logger.debug("Creating instace of VoiceControl")
+        logging.debug("Creating instace of VoiceControl")
         self.voice_control = VoiceControl(
             porcupine_api_key=config["PORCUPINE"]["API_KEY"],
             openai_api_key=config["OPENAI"]["API_KEY"],
