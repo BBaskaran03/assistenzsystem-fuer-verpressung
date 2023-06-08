@@ -1,0 +1,8 @@
+{
+    "Robot Web Services": {
+        "hostname": "http://192.168.125.1:80",
+        "username": "Default User",
+        "password": "robotics",
+        "model": "IRB14000"
+    }
+}
