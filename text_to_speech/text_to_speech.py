@@ -1,20 +1,45 @@
+import io
 import sys
+import time
 
-from robot_web_services.positions import Position
+import pygame
+from gtts import gTTS
 
 
-class TextToSpeech():
-    def __init__(self): pass
+class TextToSpeech:
+    def __init__(self, top_level_domain, language):
+        self.top_level_domain = top_level_domain
+        self.language = language
 
     def say(self, text: str):
-        # TODO: Implement this
         print(f"<TextToSpeech> | {text}")
+
+        tts = gTTS(
+            text=text,
+            tld=self.top_level_domain,
+            lang=self.language,
+            slow=False,
+            lang_check=False,
+        )
+
+        pygame.mixer.init()
+
+        with io.BytesIO() as buffer:
+            tts.write_to_fp(buffer)
+            buffer.seek(0)
+
+            pygame.mixer.music.load(buffer)
+
+            pygame.mixer.music.play()
+            while pygame.mixer.music.get_busy():
+                time.sleep(1)
 
 
 def main() -> int:
     print("Hello, World")
 
-    text_to_speech = TextToSpeech()
+    # text_to_speech = TextToSpeech("de", "de")
+    text_to_speech = TextToSpeech("us", "en")
     text_to_speech.say("Hello, World!")
 
     return 0
