@@ -9,7 +9,7 @@ class Hotword:
             access_key=PORCUPINE_KEY,
             keyword_paths=KEY_WORDS_PATH,
             model_path=MODEL_PATH,
-            sensitivities=[0.75, 0.75]
+            sensitivities=[0.75, 0.75, 0.75],
         )
 
     def run(self):
