@@ -207,12 +207,20 @@ class RobotArm:
         response = self._api.get(f"/rw/rapid/tasks/T_{self._mechunit}/motion?resource=robtarget")
         output = response.json["_embedded"]["_state"][0]
 
-        robtarget = Robtarget([
+        # Convert output from json to list
+        robtarget = [
             [output["x"], output["y"], output["z"]],
             [output["q1"], output["q2"], output["q3"], output["q4"]],
             [output["cf1"], output["cf4"], output["cf6"], output["cfx"]],
             [output["ej1"], output["ej2"], output["ej3"], output["ej4"], output["ej5"], output["ej6"]]
-        ])
+        ]
+
+        # Convert values from string to float
+        for key, value in enumerate(robtarget):
+            robtarget[key] = [float(value) for value in value]
+
+        # Create robtarget
+        robtarget = Robtarget(robtarget)
 
         return robtarget
 
