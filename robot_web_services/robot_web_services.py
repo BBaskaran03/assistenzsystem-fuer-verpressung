@@ -43,6 +43,8 @@ class APIResponse:
         self._resource = resource
         self._response = response
 
+        logging.debug(f"{resource} | {response.status_code} | {response.text}")
+
     def _maybe_json(self) -> dict:
         try:
             return json.loads(self._response.text)
