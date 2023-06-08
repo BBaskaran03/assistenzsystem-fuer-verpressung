@@ -3,7 +3,7 @@ import os
 import json
 import pathlib
 import sys
-import datetime
+import threading
 
 from object_detection.object_detection import ObjectDetector
 from robot_web_services.positions import Positions
@@ -139,10 +139,10 @@ class System():
 
         self.robot.arm_left.move_to_home()
 
-    def start_thread_voice_control(self):
+    def start_voice_control(self):
         self.voice_control.listen()
 
-    def start_thread_task(self):
+    def start_movement(self):
         running = True
 
         while running:
@@ -160,13 +160,12 @@ class System():
             running = False
 
     def run(self):
-        # Master, Tread Sprachsteuerung, Thread Bewegung
-        # -> Master ist 3 Wörter Erkennung, kann Thread Bewegung stoppen/pausieren/weiterführen
-        # -> Status Flags für Objekt-Im-Greifer, wichtig für reset
+        # TODO: Check for voice commands, if found, interact with robot
+        voice_control = threading.Thread(target=self.start_voice_control)
+        voice_control.start()
 
-        # TODO: Implement thread communication
-        self.start_thread_voice_control()
-        self.start_thread_task()
+        movement = threading.Thread(target=self.start_movement)
+        movement.start()
 
 
 def main() -> int:
