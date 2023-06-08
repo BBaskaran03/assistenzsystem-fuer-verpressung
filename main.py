@@ -1,6 +1,7 @@
+import datetime
+import json
 import logging
 import os
-import json
 import pathlib
 import sys
 import threading
@@ -13,14 +14,14 @@ from voice_control.voice_control import VoiceControl
 
 
 def configure_and_get_logger(logging_file) -> logging.Logger:
-    logging.basicConfig(level=logging.DEBUG, format='%(message)s')
+    logging.basicConfig(level=logging.DEBUG, format="%(message)s")
 
     logger = logging.getLogger(__name__)
     logger.setLevel(level=logging.INFO)
 
     # Create directory and logfile if missing
     os.makedirs(os.path.dirname(logging_file), exist_ok=True)
-    open(logging_file, 'w+', encoding="utf-8").close()
+    open(logging_file, "w+", encoding="utf-8").close()
 
     logger_file_handler = logging.FileHandler(logging_file)
     logger_file_handler.setLevel(logging.DEBUG)
@@ -29,7 +30,7 @@ def configure_and_get_logger(logging_file) -> logging.Logger:
     return logger
 
 
-class System():
+class System:
     def __init__(self, config: dict, positions: Positions):
         self.positions = positions
 
@@ -48,7 +49,7 @@ class System():
         logging.debug("Creating instace of TextToSpeech")
         self.text_to_speech = TextToSpeech(
             top_level_domain=config["TextToSpeech"]["top_level_domain"],
-            language=config["TextToSpeech"]["language"]
+            language=config["TextToSpeech"]["language"],
         )
 
         logging.debug("Creating instace of VoiceControl")
@@ -168,7 +169,7 @@ def main() -> int:
     print("Hello, World!")
 
     config_file = pathlib.Path("./config.json")
-    timestamp =  datetime.datetime.now().strftime("%Y-%m-%d %H-%M-%S")
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H-%M-%S")
     logging_file = pathlib.Path(f"./logs/{timestamp}.txt")
     positions_file = pathlib.Path("./positions.json")
 
