@@ -14,13 +14,11 @@ from text_to_speech.text_to_speech import TextToSpeech
 from voice_control.voice_control import VoiceControl
 
 
-def configure_and_get_logger(
-    logging_file, level: int = logging.DEBUG
-) -> logging.Logger:
+def configure_logger(logging_file, verbose: bool):
+    level = logging.INFO if verbose is False else logging.DEBUG
     logging.basicConfig(level=level, format="%(message)s")
 
-    logger = logging.getLogger(__name__)
-    logger.setLevel(level=logging.INFO)
+    logger = logging.getLogger()
 
     # Create directory and logfile if missing
     os.makedirs(os.path.dirname(logging_file), exist_ok=True)
@@ -29,8 +27,6 @@ def configure_and_get_logger(
     logger_file_handler = logging.FileHandler(logging_file)
     logger_file_handler.setLevel(level)
     logger.addHandler(logger_file_handler)
-
-    return logger
 
 
 class System:
@@ -213,18 +209,7 @@ def main(arguments) -> int:
 
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H-%M-%S")
     logging_file = pathlib.Path(f"./logs/{timestamp}.txt")
-
-    logger_level = logging.INFO if arguments.verbose is False else logging.DEBUG
-    logger = configure_and_get_logger(logging_file, logger_level)
-
-    if not config_file.exists():
-        logger.critical("Config file is missing")
-        # pylint: disable-next=broad-exception-raised
-        raise Exception("Configuration file not found")
-
-    with open(config_file, "r", encoding="utf-8") as config_file:
-        logger.debug("Loading config from file")
-        config = json.load(config_file)
+    configure_logger(logging_file, arguments.verbose)
 
     logging.info("[Assistenzsystem für Verpressung] [System] Startvorgang ...")
     afv = System(config)
