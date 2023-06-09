@@ -31,7 +31,7 @@ def configure_logger(logging_file, verbose: bool):
 
 class System:
     def __init__(self):
-        logging.info(f'[{CONFIG["Names"]["System"]}] [System] Startvorgang ...')
+        logging.debug(f'[{CONFIG["Names"]["System"]}] [System] Startvorgang ...')
 
         logging.debug("Loading positions from file")
         self.positions = Positions.from_file(CONFIG["Positions"]["file"])
@@ -60,10 +60,12 @@ class System:
             openai_api_key=CONFIG["OPENAI"]["API_KEY"],
         )
 
-        logging.info(
+        logging.debug(
             f'[{CONFIG["Names"]["System"]}] [System] Startvorgang abgeschlossen'
         )
-
+        logging.info(
+            f'[{CONFIG["Names"]["System"]}] System ready'
+        )
     def _calibrate_arm(self, arm: RobotArm, positions: list[str]):
         for position in positions:
             message = f"Please move arm <{arm.name}> to position <{position}> and press <ENTER> ..."
