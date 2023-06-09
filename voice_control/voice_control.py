@@ -1,33 +1,66 @@
-import sys
 import logging
+import os
+import sys
+
+import speech_recognition
+import vlc
 
 from text_to_speech.text_to_speech import TextToSpeech
-from voice_control.chat import Chat
+from voice_control.chat_gpt import ChatGPT
 from voice_control.hotword import Hotword
+from voice_control.speech_to_text import SpeechToText
 
 
 class VoiceControl:
     def __init__(self, porcupine_api_key, openai_api_key):
-        self.text_to_speech = TextToSpeech("de", "de")
+        self.chat_gpt = ChatGPT(openai_api_key, language="de-DE")
         self.hotword = Hotword(porcupine_api_key)
-        self.chat = Chat(openai_api_key, language="de-DE")
+        self.speech_to_text = SpeechToText("de")
+        self.text_to_speech = TextToSpeech("de", "de")
 
-    def listen(self):
-        i_should_listen = True
+    def check_hotword(self, hotword: str) -> bool:
+        # TODO: Implement this correctly
+        if hotword == "HEY_YUMI":
+            return True
+        if hotword == "YUMI_STOP":
+            return True
+        if hotword == "YUMI_WEITER":
+            return True
 
-        while i_should_listen:
-            keyword = self.hotword.wait_for_hotword()
-            logging.debug(f"Keyword detected: {keyword}")
-
-            # TODO: Sound abspielen
-            response = self.chat.listen_and_respond()
-            self.text_to_speech.say(response)
-
-    def check_context_stop(self, context: str) -> bool:
+    def check_response(self, context: str) -> bool:
         # TODO: Implement this
-        if context.tolower().startswith("stop"):
+
+        if context.lower().startswith("stop"):
             # TODO: Implement signal here
             return True
+
+    def listen(self):
+        hotword = self.hotword.wait_for_hotword()
+        vlc.MediaPlayer(
+            f"{os.path.dirname(os.path.realpath(__file__))}/ding-36029.mp3"
+        ).play()
+        self.check_hotword(hotword)
+
+        prompt = self.speech_to_text.get_prompt()
+        logging.info(f"[Assistenzsystem für Verpressung] Kathrin => {prompt}")
+
+        response = self.chat_gpt.get_response(prompt)
+        self.check_response(response)
+        logging.info(f"[Assistenzsystem für Verpressung] Yumi => {response}")
+
+        self.text_to_speech.say(response)
+
+    def start(self):
+        prompt = "Hallo Yumi. Begrüße mich bitte in einem Satz."
+        logging.debug(f"[Assistenzsystem für Verpressung] Kathrin => {prompt}")
+
+        response = self.chat_gpt.get_response(prompt)
+        logging.info(f"[Assistenzsystem für Verpressung] Yumi => {response}")
+        self.text_to_speech.say(response)
+
+        i_should_listen = True
+        while i_should_listen:
+            self.listen()
 
 
 def main() -> int:

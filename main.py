@@ -172,7 +172,7 @@ class System:
         self.robot.arm_left.move_to_home()
 
     def start_voice_control(self):
-        self.voice_control.listen()
+        self.voice_control.start()
 
     def start_movement(self):
         running = True
