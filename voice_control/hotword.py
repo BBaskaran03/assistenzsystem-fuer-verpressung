@@ -1,6 +1,8 @@
 import logging
+import os
 import sys
 
+import vlc
 from pvporcupine import create
 from pvrecorder import PvRecorder
 
@@ -32,6 +34,10 @@ class Hotword:
 
             keyword = KEY_WORDS[keyword_index]
             logging.debug(f"Keyword recogniced: {keyword}")
+
+            vlc.MediaPlayer(
+                f"{os.path.dirname(os.path.realpath(__file__))}/ding-36029.mp3"
+            ).play()
 
             return keyword
 

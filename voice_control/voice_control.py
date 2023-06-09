@@ -1,8 +1,5 @@
 import logging
-import os
 import sys
-
-import vlc
 
 from config import CONFIG
 from text_to_speech.text_to_speech import TextToSpeech
@@ -36,9 +33,6 @@ class VoiceControl:
 
     def listen(self):
         hotword = self.hotword.wait_for_hotword()
-        vlc.MediaPlayer(
-            f"{os.path.dirname(os.path.realpath(__file__))}/ding-36029.mp3"
-        ).play()
         self.check_hotword(hotword)
 
         prompt = self.speech_to_text.get_prompt()
