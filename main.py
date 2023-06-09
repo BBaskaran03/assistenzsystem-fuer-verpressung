@@ -16,17 +16,25 @@ from voice_control.voice_control import VoiceControl
 
 def configure_logger(logging_file, verbose: bool):
     level = logging.INFO if verbose is False else logging.DEBUG
-    logging.basicConfig(level=level, format="%(message)s")
-
-    logger = logging.getLogger()
 
     # Create directory and logfile if missing
     os.makedirs(os.path.dirname(logging_file), exist_ok=True)
     open(logging_file, "w+", encoding="utf-8").close()
 
+    logger_stream_handler = logging.StreamHandler(sys.stdout)
+    logger_stream_handler.setLevel(level)
+
     logger_file_handler = logging.FileHandler(logging_file)
     logger_file_handler.setLevel(logging.DEBUG)
-    logger.addHandler(logger_file_handler)
+
+    logging.basicConfig(
+        format="%(asctime)s | [%(levelname)s] %(message)s",
+        level=logging.DEBUG,
+        handlers=[logger_stream_handler, logger_file_handler],
+    )
+
+    # TODO: Fix error message instead of suppresing it
+    logging.raiseExceptions = False
 
 
 class System:
