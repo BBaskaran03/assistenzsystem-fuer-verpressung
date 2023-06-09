@@ -37,6 +37,8 @@ class Chat:
             voice_recording, language=self.language
         )
 
+        logging.info(f"[Assistenzsystem für Verpressung] Kathrin => {voice_recording_as_text}")
+
         return voice_recording_as_text
 
     def get_response(self, prompt: str) -> str:
