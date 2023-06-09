@@ -31,7 +31,7 @@ class Hotword:
             recorder.delete()
 
             keyword = KEY_WORDS[keyword_index]
-            logging.debug(f"Recogniced: {keyword}")
+            logging.debug(f"Keyword recogniced: {keyword}")
 
             return keyword
 
