@@ -18,5 +18,5 @@ CONFIG = {
         "language": "de",
     },
     "PORCUPINE": {"API_KEY": ""},
-    "OPENAI": {"API_KEY": ""},
+    "OPENAI": {"API_KEY": "", "Demo Mode": False},
 }
