@@ -34,8 +34,11 @@ def configure_and_get_logger(
 
 
 class System:
-    def __init__(self, config: dict, positions: Positions):
-        self.positions = positions
+    def __init__(self, config: dict):
+        self.config = config
+
+        logging.debug("Loading positions from file")
+        self.positions = Positions.from_file(config["Positions"]["file"])
 
         logging.debug("Creating instance of RobotWebServices")
         self.robot = RobotWebServices(
@@ -70,6 +73,8 @@ class System:
 
             logging.debug(f"Setting position <{position}> to robtarget <{robtarget}>")
             self.positions[position] = Position.from_robtarget_class(robtarget)
+
+        self.positions.to_file(self.config["Positions"]["file"])
 
     def calibrate(self):
         self._calibrate_arm(
@@ -205,6 +210,7 @@ def main(arguments) -> int:
     print("Hello, World!")
 
     config_file = pathlib.Path("./config.json")
+
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H-%M-%S")
     logging_file = pathlib.Path(f"./logs/{timestamp}.txt")
     positions_file = pathlib.Path("./positions.json")
@@ -221,8 +227,7 @@ def main(arguments) -> int:
         logger.debug("Loading config from file")
         config = json.load(config_file)
 
-    logger.debug("Loading positions from file")
-    positions = Positions.from_file(positions_file)
+    afv = System(config)
 
     if arguments.subparsers is None:
         if arguments.reset:
