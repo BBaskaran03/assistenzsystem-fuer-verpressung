@@ -37,122 +37,6 @@
             "a6": 9000000000.0
         }
     },
-    "arm_right_box_rubber": {
-        "source": "robtarget",
-        "position": {
-            "type": "relative",
-            "x": 0.000118624,
-            "y": -500.000273551,
-            "z": 50.000135047
-        },
-        "orientation": {
-            "q1": -7.4e-08,
-            "q2": 1,
-            "q3": 1.53e-07,
-            "q4": -2.18e-07
-        },
-        "axis_configuration": {
-            "j1": 1,
-            "j4": -3,
-            "j6": 1,
-            "jx": 4
-        },
-        "external_axes_position": {
-            "a1": 141.160749011,
-            "a2": 9000000000.0,
-            "a3": 9000000000.0,
-            "a4": 9000000000.0,
-            "a5": 9000000000.0,
-            "a6": 9000000000.0
-        }
-    },
-    "arm_right_box_metal": {
-        "source": "robtarget",
-        "position": {
-            "type": "relative",
-            "x": 6.7094e-05,
-            "y": -400.000238942,
-            "z": 50.000095187
-        },
-        "orientation": {
-            "q1": -9.6e-08,
-            "q2": 1,
-            "q3": 1.6e-08,
-            "q4": -1.44e-07
-        },
-        "axis_configuration": {
-            "j1": 1,
-            "j4": -2,
-            "j6": 0,
-            "jx": 4
-        },
-        "external_axes_position": {
-            "a1": 144.348261693,
-            "a2": 9000000000.0,
-            "a3": 9000000000.0,
-            "a4": 9000000000.0,
-            "a5": 9000000000.0,
-            "a6": 9000000000.0
-        }
-    },
-    "arm_right_tool_rubber": {
-        "source": "robtarget",
-        "position": {
-            "type": "relative",
-            "x": 250.000049229,
-            "y": 49.999763028,
-            "z": 49.999925352
-        },
-        "orientation": {
-            "q1": -1.39e-07,
-            "q2": 1,
-            "q3": -3e-09,
-            "q4": -1.55e-07
-        },
-        "axis_configuration": {
-            "j1": 2,
-            "j4": -2,
-            "j6": 0,
-            "jx": 4
-        },
-        "external_axes_position": {
-            "a1": 167.500034828,
-            "a2": 9000000000.0,
-            "a3": 9000000000.0,
-            "a4": 9000000000.0,
-            "a5": 9000000000.0,
-            "a6": 9000000000.0
-        }
-    },
-    "arm_right_tool_metal": {
-        "source": "robtarget",
-        "position": {
-            "type": "relative",
-            "x": 250.000052017,
-            "y": -50.000262069,
-            "z": 49.999940798
-        },
-        "orientation": {
-            "q1": -1.41e-07,
-            "q2": 1,
-            "q3": 3.2e-08,
-            "q4": -1.49e-07
-        },
-        "axis_configuration": {
-            "j1": 2,
-            "j4": -2,
-            "j6": 0,
-            "jx": 4
-        },
-        "external_axes_position": {
-            "a1": 164.490284649,
-            "a2": 9000000000.0,
-            "a3": 9000000000.0,
-            "a4": 9000000000.0,
-            "a5": 9000000000.0,
-            "a6": 9000000000.0
-        }
-    },
     "arm_right_checkpoint": {
         "source": "robtarget",
         "position": {
@@ -182,7 +66,7 @@
             "a6": 9000000000.0
         }
     },
-    "arm_right_rubber_box": {
+    "arm_right_box_rubber": {
         "source": "robtarget",
         "position": {
             "type": "relative",
@@ -211,7 +95,7 @@
             "a6": 9000000000.0
         }
     },
-    "arm_right_rubber_drop": {
+    "arm_right_tool_rubber": {
         "source": "robtarget",
         "position": {
             "type": "relative",
@@ -240,7 +124,7 @@
             "a6": 9000000000.0
         }
     },
-    "arm_right_metal_box": {
+    "arm_right_box_metal": {
         "source": "robtarget",
         "position": {
             "type": "relative",
@@ -269,7 +153,7 @@
             "a6": 9000000000.0
         }
     },
-    "arm_right_metal_drop": {
+    "arm_right_tool_metal": {
         "source": "robtarget",
         "position": {
             "type": "relative",
@@ -291,122 +175,6 @@
         },
         "external_axes_position": {
             "a1": -125.505627584,
-            "a2": 9000000000.0,
-            "a3": 9000000000.0,
-            "a4": 9000000000.0,
-            "a5": 9000000000.0,
-            "a6": 9000000000.0
-        }
-    },
-    "arm_right_checkpoint_tool_1": {
-        "source": "robtarget",
-        "position": {
-            "type": "relative",
-            "x": 200.001098186,
-            "y": -250.002310608,
-            "z": 100.000095494
-        },
-        "orientation": {
-            "q1": -3.76e-07,
-            "q2": 1,
-            "q3": 9.37e-07,
-            "q4": -1.402e-06
-        },
-        "axis_configuration": {
-            "j1": 1,
-            "j4": 2,
-            "j6": -2,
-            "jx": 4
-        },
-        "external_axes_position": {
-            "a1": -81.17985821,
-            "a2": 9000000000.0,
-            "a3": 9000000000.0,
-            "a4": 9000000000.0,
-            "a5": 9000000000.0,
-            "a6": 9000000000.0
-        }
-    },
-    "arm_right_checkpoint_tool_2": {
-        "source": "robtarget",
-        "position": {
-            "type": "relative",
-            "x": 200.001892883,
-            "y": -150.00392325,
-            "z": 100.00007988
-        },
-        "orientation": {
-            "q1": -4.1e-07,
-            "q2": 1,
-            "q3": 1.405e-06,
-            "q4": -2.491e-06
-        },
-        "axis_configuration": {
-            "j1": 1,
-            "j4": 2,
-            "j6": -2,
-            "jx": 4
-        },
-        "external_axes_position": {
-            "a1": -93.458058979,
-            "a2": 9000000000.0,
-            "a3": 9000000000.0,
-            "a4": 9000000000.0,
-            "a5": 9000000000.0,
-            "a6": 9000000000.0
-        }
-    },
-    "arm_right_checkpoint_tool_3": {
-        "source": "robtarget",
-        "position": {
-            "type": "relative",
-            "x": 200.002374433,
-            "y": -100.004999613,
-            "z": 100.000077531
-        },
-        "orientation": {
-            "q1": 3.77e-07,
-            "q2": 1,
-            "q3": 1.801e-06,
-            "q4": -3.168e-06
-        },
-        "axis_configuration": {
-            "j1": 1,
-            "j4": 2,
-            "j6": -2,
-            "jx": 4
-        },
-        "external_axes_position": {
-            "a1": -98.843704121,
-            "a2": 9000000000.0,
-            "a3": 9000000000.0,
-            "a4": 9000000000.0,
-            "a5": 9000000000.0,
-            "a6": 9000000000.0
-        }
-    },
-    "arm_right_checkpoint_tool_4": {
-        "source": "robtarget",
-        "position": {
-            "type": "relative",
-            "x": 200.002877667,
-            "y": -50.00626155,
-            "z": 99.999822391
-        },
-        "orientation": {
-            "q1": 4.68e-07,
-            "q2": 1,
-            "q3": 2.078e-06,
-            "q4": -4.098e-06
-        },
-        "axis_configuration": {
-            "j1": 1,
-            "j4": 2,
-            "j6": -2,
-            "jx": 4
-        },
-        "external_axes_position": {
-            "a1": -102.383251583,
             "a2": 9000000000.0,
             "a3": 9000000000.0,
             "a4": 9000000000.0,
@@ -472,7 +240,7 @@
             "a6": 9000000000.0
         }
     },
-    "arm_left_tool_lever_up_1": {
+    "arm_left_tool_lever_rotation_1": {
         "source": "robtarget",
         "position": {
             "type": "relative",
@@ -501,7 +269,7 @@
             "a6": 9000000000.0
         }
     },
-    "arm_left_tool_lever_up_2": {
+    "arm_left_tool_lever_rotation_2": {
         "source": "robtarget",
         "position": {
             "type": "relative",
@@ -639,122 +407,6 @@
         },
         "external_axes_position": {
             "a1": 104.482865394,
-            "a2": 9000000000.0,
-            "a3": 9000000000.0,
-            "a4": 9000000000.0,
-            "a5": 9000000000.0,
-            "a6": 9000000000.0
-        }
-    },
-    "arm_left_checkpoint_tool_1": {
-        "source": "robtarget",
-        "position": {
-            "type": "relative",
-            "x": 200.000110789,
-            "y": 250.000245102,
-            "z": 100.000014552
-        },
-        "orientation": {
-            "q1": 1.16e-07,
-            "q2": 1,
-            "q3": -1.08e-07,
-            "q4": -1.11e-07
-        },
-        "axis_configuration": {
-            "j1": -1,
-            "j4": -2,
-            "j6": 2,
-            "jx": 4
-        },
-        "external_axes_position": {
-            "a1": 84.929311046,
-            "a2": 9000000000.0,
-            "a3": 9000000000.0,
-            "a4": 9000000000.0,
-            "a5": 9000000000.0,
-            "a6": 9000000000.0
-        }
-    },
-    "arm_left_checkpoint_tool_2": {
-        "source": "robtarget",
-        "position": {
-            "type": "relative",
-            "x": 200.000097912,
-            "y": 150.000235942,
-            "z": 99.999985138
-        },
-        "orientation": {
-            "q1": 1.42e-07,
-            "q2": 1,
-            "q3": -4.3e-08,
-            "q4": -1.37e-07
-        },
-        "axis_configuration": {
-            "j1": -1,
-            "j4": -2,
-            "j6": 2,
-            "jx": 4
-        },
-        "external_axes_position": {
-            "a1": 95.496931918,
-            "a2": 9000000000.0,
-            "a3": 9000000000.0,
-            "a4": 9000000000.0,
-            "a5": 9000000000.0,
-            "a6": 9000000000.0
-        }
-    },
-    "arm_left_checkpoint_tool_3": {
-        "source": "robtarget",
-        "position": {
-            "type": "relative",
-            "x": 200.000096086,
-            "y": 100.000244541,
-            "z": 99.999977824
-        },
-        "orientation": {
-            "q1": 1.73e-07,
-            "q2": 1,
-            "q3": -1.21e-07,
-            "q4": -1.03e-07
-        },
-        "axis_configuration": {
-            "j1": -1,
-            "j4": -2,
-            "j6": 2,
-            "jx": 4
-        },
-        "external_axes_position": {
-            "a1": 99.61018112,
-            "a2": 9000000000.0,
-            "a3": 9000000000.0,
-            "a4": 9000000000.0,
-            "a5": 9000000000.0,
-            "a6": 9000000000.0
-        }
-    },
-    "arm_left_checkpoint_tool_4": {
-        "source": "robtarget",
-        "position": {
-            "type": "relative",
-            "x": 200.000078323,
-            "y": 50.000189051,
-            "z": 99.999975262
-        },
-        "orientation": {
-            "q1": 1.4e-08,
-            "q2": 1,
-            "q3": -4.7e-08,
-            "q4": -1.64e-07
-        },
-        "axis_configuration": {
-            "j1": -1,
-            "j4": -2,
-            "j6": 2,
-            "jx": 4
-        },
-        "external_axes_position": {
-            "a1": 102.384351243,
             "a2": 9000000000.0,
             "a3": 9000000000.0,
             "a4": 9000000000.0,

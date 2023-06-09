@@ -10,10 +10,7 @@ import time
 import requests
 import requests.auth
 
-from robot_web_services.positions import Position
-from robot_web_services.positions import Positions
-from robot_web_services.positions import Robtarget
-
+from robot_web_services.positions import Position, Positions, Robtarget
 
 logger = logging.getLogger(__name__)
 
@@ -43,6 +40,8 @@ class APIResponse:
         self._resource = resource
         self._response = response
 
+        logging.debug(f"{resource} | {response.status_code} | {response.text}")
+
     def _maybe_json(self) -> dict:
         try:
             return json.loads(self._response.text)
@@ -66,7 +65,20 @@ class APIResponse:
 
     def check(self):
         status_okay = ["200", "201", "202", "204", "301", "304"]
-        status_bad = ["400","401","403","404","405","406","409","410","415","500","501","503"]
+        status_bad = [
+            "400",
+            "401",
+            "403",
+            "404",
+            "405",
+            "406",
+            "409",
+            "410",
+            "415",
+            "500",
+            "501",
+            "503",
+        ]
 
         if self.status_code in status_okay:
             return
@@ -75,7 +87,8 @@ class APIResponse:
             message = f"[ERROR] {self.status_code} | {self._resource} | {self.text}"
             raise APIException(message, self._response)
 
-class API():
+
+class API:
     headers = {
         "Accept": "application/json",
         "Content-Type": "application/x-www-form-urlencoded;v=2.0",
@@ -119,12 +132,17 @@ class API():
 
         return response
 
+
 class RobotArm:
     def __init__(self, robot, mechunit: str, api: API, home: Position) -> None:
         self._robot = robot
         self._mechunit = mechunit
         self._api = api
         self.home = home
+
+    @property
+    def name(self) -> str:
+        return self._mechunit
 
     def _rotation_get(self):
         response = self._api.get(
@@ -198,15 +216,32 @@ class RobotArm:
     @property
     def robtarget(self):
         # def robtarget(self) -> Robtarget:
-        response = self._api.get(f"/rw/rapid/tasks/T_{self._mechunit}/motion?resource=robtarget")
+        response = self._api.get(
+            f"/rw/rapid/tasks/T_{self._mechunit}/motion?resource=robtarget"
+        )
         output = response.json["_embedded"]["_state"][0]
 
-        robtarget = Robtarget([
+        # Convert output from json to list
+        robtarget = [
             [output["x"], output["y"], output["z"]],
             [output["q1"], output["q2"], output["q3"], output["q4"]],
             [output["cf1"], output["cf4"], output["cf6"], output["cfx"]],
-            [output["ej1"], output["ej2"], output["ej3"], output["ej4"], output["ej5"], output["ej6"]]
-        ])
+            [
+                output["ej1"],
+                output["ej2"],
+                output["ej3"],
+                output["ej4"],
+                output["ej5"],
+                output["ej6"],
+            ],
+        ]
+
+        # Convert values from string to float
+        for key, value in enumerate(robtarget):
+            robtarget[key] = [float(value) for value in value]
+
+        # Create robtarget
+        robtarget = Robtarget(robtarget)
 
         return robtarget
 
@@ -223,24 +258,33 @@ class RobotArm:
 
     def move_to(self, position: Position):
         def compare(robt1: Position, robt2: Position):
-            robt1 = [round(float(robt1.x), 2), round(float(robt1.y), 2), round(float(robt1.z), 2)]
-            robt2 = [round(float(robt2.x), 2), round(float(robt2.y), 2), round(float(robt2.z), 2)]
+            robt1 = [
+                round(float(robt1.x), 2),
+                round(float(robt1.y), 2),
+                round(float(robt1.z), 2),
+            ]
+            robt2 = [
+                round(float(robt2.x), 2),
+                round(float(robt2.y), 2),
+                round(float(robt2.z), 2),
+            ]
 
             logger.debug(f"{robt1} <> {robt2}")
-            return (robt1 == robt2)
-        
-        if (compare(self.robtarget, position)): return
+            return robt1 == robt2
+
+        if compare(self.robtarget, position):
+            return
 
         self._robot.rapid_start()
 
         self.rapid_variable_set("target", position.to_rapid_robtarget())
-        logger.info(f"Moving to target <{position}>")
+        logger.debug(f"Moving to target <{position}>")
         self.rapid_variable_set("ready", "TRUE")
 
-        while (compare(self.robtarget, position) == False):
+        while compare(self.robtarget, position) == False:
             time.sleep(1)
 
-        logger.info("Stopping movement")
+        logger.debug("Stopping movement")
         self.rapid_variable_set("ready", "FALSE")
         self._robot.rapid_stop()
         time.sleep(1)
@@ -273,12 +317,26 @@ class RobotWebServices:
 
     def _adapt_to_model(self):
         if self.model == "IRB14000":
-            arm_left_home = [[-9.578368507,182.609892723,198.627808149],[0.066010726,0.842420918,-0.111214912,0.523068661],[0,0,0,4],[135,9E+09,9E+09,9E+09,9E+09,9E+09]]
-            self.arms["arm_left"] = RobotArm(self, "ROB_L", self._api, Position.from_robtarget(arm_left_home))
+            arm_left_home = [
+                [-9.578368507, 182.609892723, 198.627808149],
+                [0.066010726, 0.842420918, -0.111214912, 0.523068661],
+                [0, 0, 0, 4],
+                [135, 9e09, 9e09, 9e09, 9e09, 9e09],
+            ]
+            self.arms["arm_left"] = RobotArm(
+                self, "ROB_L", self._api, Position.from_robtarget(arm_left_home)
+            )
             self.arm_left = self.arms["arm_left"]
 
-            arm_right_home = [[-9.578368507,-182.609892723,198.627808149],[0.066010726,-0.842420918,-0.111214912,-0.523068661],[0,0,0,4],[-135,9E+09,9E+09,9E+09,9E+09,9E+09]]
-            self.arms["arm_right"] = RobotArm(self, "ROB_R", self._api, Position.from_robtarget(arm_right_home))
+            arm_right_home = [
+                [-9.578368507, -182.609892723, 198.627808149],
+                [0.066010726, -0.842420918, -0.111214912, -0.523068661],
+                [0, 0, 0, 4],
+                [-135, 9e09, 9e09, 9e09, 9e09, 9e09],
+            ]
+            self.arms["arm_right"] = RobotArm(
+                self, "ROB_R", self._api, Position.from_robtarget(arm_right_home)
+            )
             self.arm_right = self.arms["arm_right"]
 
             return
@@ -325,8 +383,6 @@ class RobotWebServices:
         payload = {"ctrl-state": ctrl_state}
 
         response = self._api.post("/rw/panel/ctrlstate?action=setctrlstate", payload)
-
-        print(response)
 
         if response.status_code != 204:
             raise APIException("Could not change controller state", response)
@@ -452,11 +508,11 @@ def main() -> int:
 
             target = convert_position(target)
             arm.rapid_variable_set("target", target)
-            print(f"Moving to target <{target}>")
+            logging.debug(f"Moving to target <{target}>")
             arm.rapid_variable_set("ready", "TRUE")
             time.sleep(5)
 
-            print("Stopping movement")
+            logging.debug("Stopping movement")
             arm.rapid_variable_set("ready", "FALSE")
             robot.rapid_stop()
             time.sleep(3)

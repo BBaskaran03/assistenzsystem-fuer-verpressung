@@ -1,6 +1,10 @@
 import io
+import logging
+import os
 import sys
 import time
+
+os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "1"
 
 import pygame
 from gtts import gTTS
@@ -12,7 +16,7 @@ class TextToSpeech:
         self.language = language
 
     def say(self, text: str):
-        print(f"<TextToSpeech> | {text}")
+        logging.debug(f"<{__name__}> | {text}")
 
         tts = gTTS(
             text=text,
