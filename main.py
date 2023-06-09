@@ -1,3 +1,4 @@
+import argparse
 import datetime
 import json
 import logging
@@ -13,8 +14,10 @@ from text_to_speech.text_to_speech import TextToSpeech
 from voice_control.voice_control import VoiceControl
 
 
-def configure_and_get_logger(logging_file) -> logging.Logger:
-    logging.basicConfig(level=logging.DEBUG, format="%(message)s")
+def configure_and_get_logger(
+    logging_file, level: int = logging.DEBUG
+) -> logging.Logger:
+    logging.basicConfig(level=level, format="%(message)s")
 
     logger = logging.getLogger(__name__)
     logger.setLevel(level=logging.INFO)
@@ -24,7 +27,7 @@ def configure_and_get_logger(logging_file) -> logging.Logger:
     open(logging_file, "w+", encoding="utf-8").close()
 
     logger_file_handler = logging.FileHandler(logging_file)
-    logger_file_handler.setLevel(logging.DEBUG)
+    logger_file_handler.setLevel(level)
     logger.addHandler(logger_file_handler)
 
     return logger
@@ -60,9 +63,7 @@ class System:
 
     def _calibrate_arm(self, arm: RobotArm, positions: list[str]):
         for position in positions:
-            message = (
-                f"Please move arm <{arm.name}> to position <{position}> and press <ENTER> ..."
-            )
+            message = f"Please move arm <{arm.name}> to position <{position}> and press <ENTER> ..."
             input(message)
 
             robtarget = arm.robtarget
@@ -200,7 +201,7 @@ class System:
         movement.start()
 
 
-def main() -> int:
+def main(arguments) -> int:
     print("Hello, World!")
 
     config_file = pathlib.Path("./config.json")
@@ -208,7 +209,8 @@ def main() -> int:
     logging_file = pathlib.Path(f"./logs/{timestamp}.txt")
     positions_file = pathlib.Path("./positions.json")
 
-    logger = configure_and_get_logger(logging_file)
+    logger_level = logging.INFO if arguments.verbose is False else logging.DEBUG
+    logger = configure_and_get_logger(logging_file, logger_level)
 
     if not config_file.exists():
         logger.critical("Config file is missing")
@@ -222,12 +224,20 @@ def main() -> int:
     logger.debug("Loading positions from file")
     positions = Positions.from_file(positions_file)
 
-    afv = System(config, positions)
+    if arguments.subparsers is None:
+        if arguments.reset:
+            return 0
+        return afv.run()
 
-    afv.calibrate()
-    positions.to_file(positions_file)
+    if arguments.subparsers == "debug":
+        if arguments.voice_control:
+            return afv.start_voice_control()
+        if arguments.movement:
+            return afv.start_movement()
+        return afv.run()
 
-    afv.run()
+    if arguments.subparsers == "calibrate":
+        return afv.calibrate()
 
     return 0
 
@@ -236,5 +246,21 @@ if __name__ == "__main__":
     # Change directory to script location
     os.chdir(pathlib.Path(__file__).parent)
 
+    # Parse arguments
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("-v", "--verbose", action="store_true", help="")
+    parser.add_argument("-r", "--reset", action="store_true", help="")
+
+    subparsers = parser.add_subparsers(dest="subparsers")
+
+    subparser_1 = subparsers.add_parser("debug", help="")
+    subparser_1.add_argument("-v", "--voice_control", action="store_true", help="")
+    subparser_1.add_argument("-m", "--movement", action="store_true", help="")
+
+    subparser_2 = subparsers.add_parser("calibrate", help="")
+
+    args = parser.parse_args()
+
     # Run main()
-    sys.exit(main())
+    sys.exit(main(args))
