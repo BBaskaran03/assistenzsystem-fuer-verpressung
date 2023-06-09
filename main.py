@@ -25,7 +25,7 @@ def configure_logger(logging_file, verbose: bool):
     open(logging_file, "w+", encoding="utf-8").close()
 
     logger_file_handler = logging.FileHandler(logging_file)
-    logger_file_handler.setLevel(level)
+    logger_file_handler.setLevel(logging.DEBUG)
     logger.addHandler(logger_file_handler)
 
 
