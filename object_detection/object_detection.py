@@ -11,7 +11,7 @@ class GrabTarget:
 
     def get_grab_position(self) -> Position:
         # TODO: Calulate robtarget from self.position
-        return Position.from_robtarget(None)
+        return Position.from_worldpoint(0, 0, 0)
 
 
 class ObjectDetector:
