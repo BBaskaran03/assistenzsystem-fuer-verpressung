@@ -1,12 +1,12 @@
 import argparse
 import datetime
-import json
 import logging
 import os
 import pathlib
 import sys
 import threading
 
+from config import CONFIG
 from object_detection.object_detection import ObjectDetector
 from robot_web_services.positions import Position, Positions
 from robot_web_services.robot_web_services import RobotArm, RobotWebServices
@@ -14,38 +14,42 @@ from text_to_speech.text_to_speech import TextToSpeech
 from voice_control.voice_control import VoiceControl
 
 
-def configure_and_get_logger(
-    logging_file, level: int = logging.DEBUG
-) -> logging.Logger:
-    logging.basicConfig(level=level, format="%(message)s")
-
-    logger = logging.getLogger(__name__)
-    logger.setLevel(level=logging.INFO)
+def configure_logger(logging_file, verbose: bool):
+    level = logging.INFO if verbose is False else logging.DEBUG
 
     # Create directory and logfile if missing
     os.makedirs(os.path.dirname(logging_file), exist_ok=True)
     open(logging_file, "w+", encoding="utf-8").close()
 
-    logger_file_handler = logging.FileHandler(logging_file)
-    logger_file_handler.setLevel(level)
-    logger.addHandler(logger_file_handler)
+    logger_stream_handler = logging.StreamHandler(sys.stdout)
+    logger_stream_handler.setLevel(level)
 
-    return logger
+    logger_file_handler = logging.FileHandler(logging_file)
+    logger_file_handler.setLevel(logging.DEBUG)
+
+    logging.basicConfig(
+        format="%(asctime)s | [%(levelname)s] %(message)s",
+        level=logging.DEBUG,
+        handlers=[logger_stream_handler, logger_file_handler],
+    )
+
+    # TODO: Fix error message instead of suppresing it
+    logging.raiseExceptions = False
 
 
 class System:
-    def __init__(self, config: dict):
-        self.config = config
+    def __init__(self):
+        logging.debug(f'[{CONFIG["Names"]["System"]}] [System] Startvorgang ...')
 
         logging.debug("Loading positions from file")
-        self.positions = Positions.from_file(config["Positions"]["file"])
+        self.positions = Positions.from_file(CONFIG["Positions"]["file"])
 
         logging.debug("Creating instance of RobotWebServices")
         self.robot = RobotWebServices(
-            hostname=config["Robot Web Services"]["hostname"],
-            username=config["Robot Web Services"]["username"],
-            password=config["Robot Web Services"]["password"],
-            model=config["Robot Web Services"]["model"],
+            hostname=CONFIG["Robot Web Services"]["hostname"],
+            username=CONFIG["Robot Web Services"]["username"],
+            password=CONFIG["Robot Web Services"]["password"],
+            model=CONFIG["Robot Web Services"]["model"],
         )
         self.robot.ready_robot()
 
@@ -54,16 +58,22 @@ class System:
 
         logging.debug("Creating instace of TextToSpeech")
         self.text_to_speech = TextToSpeech(
-            top_level_domain=config["TextToSpeech"]["top_level_domain"],
-            language=config["TextToSpeech"]["language"],
+            top_level_domain=CONFIG["TextToSpeech"]["top_level_domain"],
+            language=CONFIG["TextToSpeech"]["language"],
         )
 
         logging.debug("Creating instace of VoiceControl")
         self.voice_control = VoiceControl(
-            porcupine_api_key=config["PORCUPINE"]["API_KEY"],
-            openai_api_key=config["OPENAI"]["API_KEY"],
+            porcupine_api_key=CONFIG["PORCUPINE"]["API_KEY"],
+            openai_api_key=CONFIG["OPENAI"]["API_KEY"],
         )
 
+        logging.debug(
+            f'[{CONFIG["Names"]["System"]}] [System] Startvorgang abgeschlossen'
+        )
+        logging.info(
+            f'[{CONFIG["Names"]["System"]}] System ready'
+        )
     def _calibrate_arm(self, arm: RobotArm, positions: list[str]):
         for position in positions:
             message = f"Please move arm <{arm.name}> to position <{position}> and press <ENTER> ..."
@@ -74,7 +84,7 @@ class System:
             logging.debug(f"Setting position <{position}> to robtarget <{robtarget}>")
             self.positions[position] = Position.from_robtarget_class(robtarget)
 
-        self.positions.to_file(self.config["Positions"]["file"])
+        self.positions.to_file(CONFIG["Positions"]["file"])
 
     def calibrate(self):
         self._calibrate_arm(
@@ -100,7 +110,9 @@ class System:
         )
 
     def job_grab_rubber(self):
-        self.text_to_speech.say("Ich greife jetzt das Gummiteil")
+        message = "Ich greife jetzt das Gummiteil"
+        self.text_to_speech.say(message)
+        logging.info(f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}')
 
         self.robot.arm_right.move_to_home()
         self.robot.arm_right.move_to(self.positions["arm_right_checkpoint"])
@@ -113,7 +125,9 @@ class System:
         self.robot.arm_right.move_to_home()
 
     def job_place_rubber(self):
-        self.text_to_speech.say("Ich lege jetzt das Gummiteil ab")
+        message = "Ich lege jetzt das Gummiteil ab"
+        self.text_to_speech.say(message)
+        logging.info(f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}')
 
         self.robot.arm_right.move_to_home()
 
@@ -123,7 +137,9 @@ class System:
         self.robot.arm_right.move_to_home()
 
     def job_grab_metal(self):
-        self.text_to_speech.say("Ich greife jetzt das Metallteil")
+        message = "Ich greife jetzt das Metallteil"
+        self.text_to_speech.say(message)
+        logging.info(f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}')
 
         self.robot.arm_right.move_to_home()
         self.robot.arm_right.move_to(self.positions["arm_right_checkpoint"])
@@ -136,7 +152,9 @@ class System:
         self.robot.arm_right.move_to_home()
 
     def job_place_metal(self):
-        self.text_to_speech.say("Ich lege jetzt das Metallteil ab")
+        message = "Ich lege jetzt das Metallteil ab"
+        self.text_to_speech.say(message)
+        logging.info(f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}')
 
         self.robot.arm_right.move_to_home()
 
@@ -146,7 +164,9 @@ class System:
         self.robot.arm_right.move_to_home()
 
     def job_move_tool_lever(self):
-        self.text_to_speech.say("Ich lege jetzt den Hebel um")
+        message = "Ich lege jetzt den Hebel um"
+        self.text_to_speech.say(message)
+        logging.info(f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}')
 
         self.robot.arm_left.move_to_home()
 
@@ -157,7 +177,9 @@ class System:
         self.robot.arm_left.move_to_home()
 
     def job_grab_finished_product(self):
-        self.text_to_speech.say("Ich greife jetzt das fertige Bauteil")
+        message = "Ich greife jetzt das fertige Bauteil"
+        self.text_to_speech.say(message)
+        logging.info(f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}')
 
         self.robot.arm_left.move_to_home()
 
@@ -168,7 +190,9 @@ class System:
         self.robot.arm_left.move_to_home()
 
     def job_place_finished_product(self):
-        self.text_to_speech.say("Ich lege jetzt das fertige Bauteil in die Box")
+        message = "Ich lege jetzt das fertige Bauteil in die Box"
+        self.text_to_speech.say(message)
+        logging.info(f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}')
 
         self.robot.arm_left.move_to_home()
 
@@ -207,30 +231,14 @@ class System:
 
 
 def main(arguments) -> int:
-    print("[Assistenzsystem für Verpressung] Hello, World!")
+    print(f'[{CONFIG["Names"]["System"]}] Hello, World!')
 
-    config_file = pathlib.Path("./config.json")
+    timestamp_date = datetime.datetime.now().strftime("%Y-%m-%d")
+    timestamp_time = datetime.datetime.now().strftime("%H-%M-%S")
+    logging_file = pathlib.Path(f"./logs/{timestamp_date}/{timestamp_time}.txt")
+    configure_logger(logging_file, arguments.verbose)
 
-    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H-%M-%S")
-    logging_file = pathlib.Path(f"./logs/{timestamp}.txt")
-
-    logger_level = logging.INFO if arguments.verbose is False else logging.DEBUG
-    logger = configure_and_get_logger(logging_file, logger_level)
-
-    if not config_file.exists():
-        logger.critical("Config file is missing")
-        # pylint: disable-next=broad-exception-raised
-        raise Exception("Configuration file not found")
-
-    with open(config_file, "r", encoding="utf-8") as config_file:
-        logger.debug("Loading config from file")
-        config = json.load(config_file)
-
-    logging.info("[Assistenzsystem für Verpressung] [System] Startvorgang ...")
-    afv = System(config)
-    logging.info(
-        "[Assistenzsystem für Verpressung] [System] Startvorgang abgeschlossen"
-    )
+    afv = System()
 
     if arguments.subparsers is None:
         if arguments.reset:

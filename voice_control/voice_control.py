@@ -1,10 +1,7 @@
 import logging
-import os
 import sys
 
-import speech_recognition
-import vlc
-
+from config import CONFIG
 from text_to_speech.text_to_speech import TextToSpeech
 from voice_control.chat_gpt import ChatGPT
 from voice_control.hotword import Hotword
@@ -36,26 +33,23 @@ class VoiceControl:
 
     def listen(self):
         hotword = self.hotword.wait_for_hotword()
-        vlc.MediaPlayer(
-            f"{os.path.dirname(os.path.realpath(__file__))}/ding-36029.mp3"
-        ).play()
         self.check_hotword(hotword)
 
         prompt = self.speech_to_text.get_prompt()
-        logging.info(f"[Assistenzsystem für Verpressung] Kathrin => {prompt}")
+        logging.info(f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["User"]}> {prompt}')
 
         response = self.chat_gpt.get_response(prompt)
         self.check_response(response)
-        logging.info(f"[Assistenzsystem für Verpressung] Yumi => {response}")
+        logging.info(f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {response}')
 
         self.text_to_speech.say(response)
 
     def start(self):
-        prompt = "Hallo Yumi. Begrüße mich bitte in einem Satz."
-        logging.debug(f"[Assistenzsystem für Verpressung] Kathrin => {prompt}")
+        prompt = f'Hallo {CONFIG["Names"]["Robot"]}. Begrüße mich bitte in einem Satz.'
+        logging.debug(f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["User"]}> {prompt}')
 
         response = self.chat_gpt.get_response(prompt)
-        logging.info(f"[Assistenzsystem für Verpressung] Yumi => {response}")
+        logging.info(f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {response}')
         self.text_to_speech.say(response)
 
         i_should_listen = True
