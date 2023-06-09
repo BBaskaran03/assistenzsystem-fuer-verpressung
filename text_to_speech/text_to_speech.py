@@ -16,7 +16,7 @@ class TextToSpeech:
         self.language = language
 
     def say(self, text: str):
-        logging.info(f"[Assistenzsystem für Verpressung] Yumi => {text}")
+        logging.debug(f"<{__name__}> | {text}")
 
         tts = gTTS(
             text=text,
