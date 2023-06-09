@@ -1,4 +1,5 @@
 import io
+import logging
 import os
 import sys
 import time
@@ -15,7 +16,7 @@ class TextToSpeech:
         self.language = language
 
     def say(self, text: str):
-        print(f"<TextToSpeech> | {text}")
+        logging.info(f"[Assistenzsystem für Verpressung] Yumi => {text}")
 
         tts = gTTS(
             text=text,
