@@ -39,7 +39,7 @@ def main():
 
     chat_gpt = ChatGPT(OPENAI_API_KEY, language="de-DE")
 
-    prompt = chat_gpt.get_prompt()
+    prompt = "Hello, World!"
     response = chat_gpt.get_response(prompt)
     logging.debug(response)
 
