@@ -1,0 +1,22 @@
+"""Configuration"""
+
+CONFIG = {
+    "Names": {
+        "System": "Assistenzsystem für Verpressung",
+        "Robot": "Yumi",
+        "User": "Kathrin",
+    },
+    "Positions": {"file": "./positions.json"},
+    "Robot Web Services": {
+        "hostname": "http://localhost:80",
+        "username": "",
+        "password": "",
+        "model": "IRB14000",
+    },
+    "TextToSpeech": {
+        "top_level_domain": "de",
+        "language": "de",
+    },
+    "PORCUPINE": {"API_KEY": ""},
+    "OPENAI": {"API_KEY": ""},
+}

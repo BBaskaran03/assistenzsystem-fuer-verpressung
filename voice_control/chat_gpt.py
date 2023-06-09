@@ -2,7 +2,7 @@ import argparse
 import logging
 
 import openai
-import speech_recognition
+from config import CONFIG
 
 
 class ChatGPT:
@@ -12,7 +12,7 @@ class ChatGPT:
 
     SYSTEM_MESSAGE = {
         "role": "system",
-        "content": "Du bist Yumi. Assistent von Kathrin. Kathrin arbeitet in einer Behinderten Werkstatt und ist leicht kognitiv eingeschränkt. Du unterstützt Sie bei der Arbeit. Antworte ihr so kurz und knapp wie möglich aber freundlich. Motiviere Sie.",
+        "content": f'Du bist {CONFIG["Names"]["Robot"]}. Assistent von {CONFIG["Names"]["User"]}. {CONFIG["Names"]["User"]} arbeitet in einer Behinderten Werkstatt und ist leicht kognitiv eingeschränkt. Du unterstützt Sie bei der Arbeit. Antworte ihr so kurz und knapp wie möglich aber freundlich. Motiviere Sie.',
     }
 
     def __init__(self, api_key, language):

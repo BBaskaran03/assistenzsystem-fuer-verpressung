@@ -1,12 +1,12 @@
 import argparse
 import datetime
-import json
 import logging
 import os
 import pathlib
 import sys
 import threading
 
+from config import CONFIG
 from object_detection.object_detection import ObjectDetector
 from robot_web_services.positions import Position, Positions
 from robot_web_services.robot_web_services import RobotArm, RobotWebServices
@@ -30,18 +30,18 @@ def configure_logger(logging_file, verbose: bool):
 
 
 class System:
-    def __init__(self, config: dict):
-        self.config = config
+    def __init__(self):
+        logging.info(f'[{CONFIG["Names"]["System"]}] [System] Startvorgang ...')
 
         logging.debug("Loading positions from file")
-        self.positions = Positions.from_file(config["Positions"]["file"])
+        self.positions = Positions.from_file(CONFIG["Positions"]["file"])
 
         logging.debug("Creating instance of RobotWebServices")
         self.robot = RobotWebServices(
-            hostname=config["Robot Web Services"]["hostname"],
-            username=config["Robot Web Services"]["username"],
-            password=config["Robot Web Services"]["password"],
-            model=config["Robot Web Services"]["model"],
+            hostname=CONFIG["Robot Web Services"]["hostname"],
+            username=CONFIG["Robot Web Services"]["username"],
+            password=CONFIG["Robot Web Services"]["password"],
+            model=CONFIG["Robot Web Services"]["model"],
         )
         self.robot.ready_robot()
 
@@ -50,14 +50,18 @@ class System:
 
         logging.debug("Creating instace of TextToSpeech")
         self.text_to_speech = TextToSpeech(
-            top_level_domain=config["TextToSpeech"]["top_level_domain"],
-            language=config["TextToSpeech"]["language"],
+            top_level_domain=CONFIG["TextToSpeech"]["top_level_domain"],
+            language=CONFIG["TextToSpeech"]["language"],
         )
 
         logging.debug("Creating instace of VoiceControl")
         self.voice_control = VoiceControl(
-            porcupine_api_key=config["PORCUPINE"]["API_KEY"],
-            openai_api_key=config["OPENAI"]["API_KEY"],
+            porcupine_api_key=CONFIG["PORCUPINE"]["API_KEY"],
+            openai_api_key=CONFIG["OPENAI"]["API_KEY"],
+        )
+
+        logging.info(
+            f'[{CONFIG["Names"]["System"]}] [System] Startvorgang abgeschlossen'
         )
 
     def _calibrate_arm(self, arm: RobotArm, positions: list[str]):
@@ -70,7 +74,7 @@ class System:
             logging.debug(f"Setting position <{position}> to robtarget <{robtarget}>")
             self.positions[position] = Position.from_robtarget_class(robtarget)
 
-        self.positions.to_file(self.config["Positions"]["file"])
+        self.positions.to_file(CONFIG["Positions"]["file"])
 
     def calibrate(self):
         self._calibrate_arm(
@@ -203,19 +207,13 @@ class System:
 
 
 def main(arguments) -> int:
-    print("[Assistenzsystem für Verpressung] Hello, World!")
-
-    config_file = pathlib.Path("./config.json")
+    print(f'[{CONFIG["Names"]["System"]}] Hello, World!')
 
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H-%M-%S")
     logging_file = pathlib.Path(f"./logs/{timestamp}.txt")
     configure_logger(logging_file, arguments.verbose)
 
-    logging.info("[Assistenzsystem für Verpressung] [System] Startvorgang ...")
-    afv = System(config)
-    logging.info(
-        "[Assistenzsystem für Verpressung] [System] Startvorgang abgeschlossen"
-    )
+    afv = System()
 
     if arguments.subparsers is None:
         if arguments.reset:

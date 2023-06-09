@@ -1,6 +1,6 @@
 # Assistenzsystem für Verpressung
 /logs/
-/config.json
+/config.py
 
 # Virtual Environment
 /.venv/
