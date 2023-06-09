@@ -263,7 +263,7 @@ if __name__ == "__main__":
     subparsers = parser.add_subparsers(dest="subparsers")
 
     subparser_1 = subparsers.add_parser("debug", help="")
-    subparser_1.add_argument("-v", "--voice_control", action="store_true", help="")
+    subparser_1.add_argument("-v", "--voice-control", action="store_true", help="")
     subparser_1.add_argument("-m", "--movement", action="store_true", help="")
 
     subparser_2 = subparsers.add_parser("calibrate", help="")
