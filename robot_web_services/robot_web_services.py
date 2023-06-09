@@ -248,13 +248,13 @@ class RobotArm:
         self._robot.rapid_start()
 
         self.rapid_variable_set("target", position.to_rapid_robtarget())
-        logger.info(f"Moving to target <{position}>")
+        logger.debug(f"Moving to target <{position}>")
         self.rapid_variable_set("ready", "TRUE")
 
         while (compare(self.robtarget, position) == False):
             time.sleep(1)
 
-        logger.info("Stopping movement")
+        logger.debug("Stopping movement")
         self.rapid_variable_set("ready", "FALSE")
         self._robot.rapid_stop()
         time.sleep(1)
@@ -339,8 +339,6 @@ class RobotWebServices:
         payload = {"ctrl-state": ctrl_state}
 
         response = self._api.post("/rw/panel/ctrlstate?action=setctrlstate", payload)
-
-        print(response)
 
         if response.status_code != 204:
             raise APIException("Could not change controller state", response)
@@ -466,11 +464,11 @@ def main() -> int:
 
             target = convert_position(target)
             arm.rapid_variable_set("target", target)
-            print(f"Moving to target <{target}>")
+            logging.debug(f"Moving to target <{target}>")
             arm.rapid_variable_set("ready", "TRUE")
             time.sleep(5)
 
-            print("Stopping movement")
+            logging.debug("Stopping movement")
             arm.rapid_variable_set("ready", "FALSE")
             robot.rapid_stop()
             time.sleep(3)
