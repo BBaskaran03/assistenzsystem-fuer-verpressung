@@ -209,8 +209,9 @@ class System:
 def main(arguments) -> int:
     print(f'[{CONFIG["Names"]["System"]}] Hello, World!')
 
-    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H-%M-%S")
-    logging_file = pathlib.Path(f"./logs/{timestamp}.txt")
+    timestamp_date = datetime.datetime.now().strftime("%Y-%m-%d")
+    timestamp_time = datetime.datetime.now().strftime("%H-%M-%S")
+    logging_file = pathlib.Path(f"./logs/{timestamp_date}/{timestamp_time}.txt")
     configure_logger(logging_file, arguments.verbose)
 
     afv = System()
