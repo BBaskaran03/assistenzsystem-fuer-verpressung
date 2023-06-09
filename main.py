@@ -207,13 +207,12 @@ class System:
 
 
 def main(arguments) -> int:
-    print("Hello, World!")
+    print("[Assistenzsystem für Verpressung] Hello, World!")
 
     config_file = pathlib.Path("./config.json")
 
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H-%M-%S")
     logging_file = pathlib.Path(f"./logs/{timestamp}.txt")
-    positions_file = pathlib.Path("./positions.json")
 
     logger_level = logging.INFO if arguments.verbose is False else logging.DEBUG
     logger = configure_and_get_logger(logging_file, logger_level)
@@ -227,7 +226,11 @@ def main(arguments) -> int:
         logger.debug("Loading config from file")
         config = json.load(config_file)
 
+    logging.info("[Assistenzsystem für Verpressung] [System] Startvorgang ...")
     afv = System(config)
+    logging.info(
+        "[Assistenzsystem für Verpressung] [System] Startvorgang abgeschlossen"
+    )
 
     if arguments.subparsers is None:
         if arguments.reset:
