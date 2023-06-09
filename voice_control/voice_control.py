@@ -16,7 +16,7 @@ class VoiceControl:
         i_should_listen = True
 
         while i_should_listen:
-            keyword = self.hotword.run()
+            keyword = self.hotword.wait_for_hotword()
             logging.debug(f"Keyword detected: {keyword}")
 
             # TODO: Sound abspielen

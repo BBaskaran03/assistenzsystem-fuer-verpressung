@@ -16,7 +16,7 @@ class Hotword:
             sensitivities=[0.75, 0.75, 0.75],
         )
 
-    def run(self):
+    def wait_for_hotword(self):
         recorder = PvRecorder(device_index=-1, frame_length=self.porcupine.frame_length)
 
         recorder.start()
@@ -41,7 +41,7 @@ def main() -> int:
     porcupine_api_key = None
 
     hotword = Hotword(porcupine_api_key)
-    hotword.run()
+    hotword.wait_for_hotword()
 
     return 0
 
