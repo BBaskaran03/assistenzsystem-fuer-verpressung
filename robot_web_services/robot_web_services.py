@@ -269,7 +269,7 @@ class RobotArm:
                 round(float(robt2.z), 2),
             ]
 
-            logger.debug(f"{robt1} <> {robt2}")
+            logger.debug(f"Comparing position <{robt1}> with <{robt2}>")
             return robt1 == robt2
 
         if compare(self.robtarget, position):
