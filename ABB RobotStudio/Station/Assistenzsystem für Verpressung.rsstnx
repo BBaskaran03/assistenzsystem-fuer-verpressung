@@ -3749,6 +3749,7 @@
       <ClipPlane ID="-1" />
       <Attachments>
         <ObjectRef ID="3263" />
+        <ObjectRef ID="3273" />
       </Attachments>
       <BidirectionalAttachments>
         <ObjectRef ID="3253" />
@@ -7233,6 +7234,7 @@
       <Declarations>
         <ObjectRef ID="2187" />
         <ObjectRef ID="2189" />
+        <ObjectRef ID="3271" />
       </Declarations>
       <DefinedRoutineDeclarations>
         <ObjectRef ID="2191" />
@@ -7286,7 +7288,7 @@
         <ObjectRef ID="3194" />
       </DefinedMoveInstructionGroups>
       <ActiveWObj ID="2189" />
-      <ActiveTool ID="2187" />
+      <ActiveTool ID="3271" />
       <ActivePath ID="-1" />
       <ActiveProcess ID="2942" />
       <Frame>
@@ -11600,10 +11602,10 @@
         <ObjectRef ID="3270" />
       </ChildInstances>
       <Transform>
-        <RowX X="1" Y="0" Z="0" W="0" />
-        <RowY X="0" Y="1" Z="0" W="0" />
-        <RowZ X="0" Y="0" Z="1" W="0" />
-        <RowT X="0" Y="0" Z="0" W="1" />
+        <RowX X="0.42806113359326" Y="-0.118323528266279" Z="0.895970540009811" W="0" />
+        <RowY X="-0.256436083053403" Y="-0.966547584768893" Z="-0.00512851690525506" W="0" />
+        <RowZ X="0.866604985685567" Y="-0.227563857051243" Z="-0.444083876929664" W="0" />
+        <RowT X="-0.00957826670150375" Y="0.182610123632467" Z="0.198627879465453" W="1" />
       </Transform>
       <Source Value="" />
       <SourceFileTime HighPart="0" LowPart="0" />
@@ -11662,6 +11664,13 @@
       </CorrectionTransform>
     </MechanismLinkInstance>
     <Frame ID="3266" Name="Servo" Parent="3265" FrameSize="0.05" ShowName="true" FrameType="0">
+      <Attributes>
+        <Attribute Key="GfxObject.Invisible">
+          <Value>
+            <Integer Value="1" />
+          </Value>
+        </Attribute>
+      </Attributes>
       <Transform>
         <RowX X="1" Y="0" Z="0" W="0" />
         <RowY X="0" Y="1" Z="0" W="0" />
@@ -11789,6 +11798,31 @@
         <RowT X="-0.038" Y="0.0185" Z="0.0375" W="1" />
       </CorrectionTransform>
     </MechanismLinkInstance>
+    <DataDeclaration ID="3271" Name="Servo" Parent="2186" StorageType="1" DataType="tooldata" IsInline="false" FrameSize="0.075" ShowName="false" Dimension1="0" Dimension2="0" Dimension3="0">
+      <DeclarationInfo ID="3272" />
+      <RoutineName Value="" />
+      <InitialExpression Value="[TRUE,[[0,0,114.2],[1,0,0,0]],[0.215,[8.7,12.3,49.2],[1,0,0,0],0.00021,0.00024,0.00009]]" />
+    </DataDeclaration>
+    <RAPIDDeclarationInfo ID="3272" Name="" Parent="3271" Local="false" EnableSync="true">
+      <TaskName Value="" />
+      <ModuleName Value="CalibData" />
+    </RAPIDDeclarationInfo>
+    <Attachment ID="3273" Name="" Parent="1138" PhysicsRestoreMotionControl="0">
+      <SourceObject ID="3252" />
+      <TargetObject ID="3264" />
+      <OffsetTransform>
+        <RowX X="-0.813797681337149" Y="-0.342020143315613" Z="-0.469846310421448" W="0" />
+        <RowY X="0.106480839050635" Y="0.707038737648398" Z="-0.699112333162298" W="0" />
+        <RowZ X="0.57131004259102" Y="-0.618965625080203" Z="-0.538967893481347" W="0" />
+        <RowT X="0.5678217175995" Y="-0.0047315353159" Z="0.4151320745258" W="1" />
+      </OffsetTransform>
+      <OriginalTransform>
+        <RowX X="1" Y="0" Z="0" W="0" />
+        <RowY X="0" Y="1" Z="0" W="0" />
+        <RowZ X="0" Y="0" Z="1" W="0" />
+        <RowT X="0" Y="0" Z="0" W="1" />
+      </OriginalTransform>
+    </Attachment>
   </Objects>
   <ReferencedDocuments>
     <DocRef ID="1" DocumentType="ComponentLibrary" Location="%ABBLIBRARY%\Robots\IRB14000_0.5_0.5__01.rslib" RelativeLocation="C:\Program Files (x86)\ABB\RobotStudio 2022\ABB Library\Robots\IRB14000_0.5_0.5__01.rslib" GUID="{B161BA02-3824-4351-9363-82439DFF8D32}" />
