@@ -27,7 +27,6 @@ class ObjectDetector:
         img = cv.convertScaleAbs(img, 1, 1.5)
         _, img = cv.threshold(img, 200,255, cv.THRESH_BINARY)
         #img = cv.adaptiveThreshold(img, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 19, 1)
-        cv.imwrite("out.jpg", img)
         return img
 
     
@@ -65,9 +64,7 @@ class ObjectDetector:
 
         # angle in degree
         deg_angle = -int(np.rad2deg(angle)) - 90
-
-        print(x,y,deg_angle)
-
+        
         return x, y, deg_angle
 
 
@@ -108,7 +105,7 @@ class ObjectDetector:
 def main() -> int:
     print("Hello, World")
     object_detector = ObjectDetector()
-    object_detector.get_position_and_rotation("rohr (13).jpg")
+    object_detector.get_position_and_rotation("rohr (1).jpg")
 
     position_rubber = object_detector.get("rubber")
     print(f"Gummiteil ist an Position <{position_rubber}>")
