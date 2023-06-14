@@ -22,6 +22,19 @@ class ObjectDetector:
     def __init__(self):
         pass
 
+    def __capture(self):
+        import cv2 as cv
+    cap = cv.VideoCapture(0, cv.CAP_DSHOW)
+    focus = 20
+    cap.set(cv.CAP_PROP_AUTOFOCUS, 0)
+    cap.set(cv.CAP_PROP_FRAME_WIDTH, 3840)
+    cap.set(cv.CAP_PROP_FRAME_HEIGHT, 2160)
+    cap.set(cv.CAP_PROP_FOCUS, focus)
+
+    for index in range(20):
+        ret, frame = cap.read()
+    cv.imwrite("image.jpg", frame, [cv.IMWRITE_JPEG_QUALITY, 100])
+    cap.release()
     def __adjust_image(self, img):
         img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
         img = cv.convertScaleAbs(img, 1, 1.5)
@@ -71,8 +84,8 @@ class ObjectDetector:
     def get_position_and_rotation(self, image) -> dict:
         # Example values for location of object
         # At the moment returns x,y pixel-koordinates and rotation in degree
-        
-        image = cv.imread(image)
+        self.cap()
+        image = cv.imread("image.jpg")
         adjusted_image = self.__adjust_image(image)
         try:
             x, y, angle = self.__getOrientation(adjusted_image)
