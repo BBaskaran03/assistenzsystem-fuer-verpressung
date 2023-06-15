@@ -88,6 +88,8 @@ class System:
         self.positions.to_file(CONFIG["Positions"]["file"])
 
     def calibrate(self):
+        # TODO: Make calibration interactive, let use choose arm (l/r) and position (1/2/3/...)
+
         self._calibrate_arm(
             self.robot.arm_right,
             [
