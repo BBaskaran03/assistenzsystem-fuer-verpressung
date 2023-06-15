@@ -6,7 +6,7 @@ MODULE Module1
     ! Description:
     !   <Insert description here>
     !
-    ! Author: abina
+    ! Author: Author
     !
     ! Version: 1.0
     !
