@@ -1,6 +1,8 @@
 import logging
 import os
 import sys
+import threading
+import time
 
 import vlc
 from pvporcupine import create
@@ -17,6 +19,20 @@ class Hotword:
             model_path=MODEL_PATH,
             sensitivities=[0.75, 0.75, 0.75],
         )
+
+    def play_sound_effect(self):
+        file = f"{os.path.dirname(os.path.realpath(__file__))}/ding-36029.mp3"
+
+        vlc_instance = vlc.Instance()
+        player = vlc_instance.media_player_new()
+        media = vlc_instance.media_new(file)
+        player.set_media(media)
+
+        player.play()
+        time.sleep(1.5)
+
+        duration = player.get_length() / 1000
+        time.sleep(duration)
 
     def wait_for_hotword(self):
         recorder = PvRecorder(device_index=-1, frame_length=self.porcupine.frame_length)
@@ -35,9 +51,8 @@ class Hotword:
             keyword = KEY_WORDS[keyword_index]
             logging.debug(f"Keyword recogniced: {keyword}")
 
-            vlc.MediaPlayer(
-                f"{os.path.dirname(os.path.realpath(__file__))}/ding-36029.mp3"
-            ).play()
+            thread_sound_effect = threading.Thread(target=self.play_sound_effect)
+            thread_sound_effect.start()
 
             return keyword
 
