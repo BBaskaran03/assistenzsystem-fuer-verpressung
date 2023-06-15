@@ -3734,6 +3734,8 @@
         <ObjectRef ID="3233" />
         <ObjectRef ID="3235" />
         <ObjectRef ID="3244" />
+        <ObjectRef ID="3254" />
+        <ObjectRef ID="3264" />
       </Instances>
       <Transform>
         <RowX X="1" Y="0" Z="0" W="0" />
@@ -3745,6 +3747,10 @@
       <SourceFileTime HighPart="0" LowPart="0" />
       <ComponentType Value="AssemblyRoot" />
       <ClipPlane ID="-1" />
+      <Attachments>
+        <ObjectRef ID="3263" />
+        <ObjectRef ID="3273" />
+      </Attachments>
       <BidirectionalAttachments>
         <ObjectRef ID="3253" />
       </BidirectionalAttachments>
@@ -3825,6 +3831,7 @@
       <Declarations>
         <ObjectRef ID="1144" />
         <ObjectRef ID="1146" />
+        <ObjectRef ID="3261" />
       </Declarations>
       <DefinedRoutineDeclarations>
         <ObjectRef ID="1148" />
@@ -3878,7 +3885,7 @@
         <ObjectRef ID="2151" />
       </DefinedMoveInstructionGroups>
       <ActiveWObj ID="1146" />
-      <ActiveTool ID="1144" />
+      <ActiveTool ID="3261" />
       <ActivePath ID="-1" />
       <ActiveProcess ID="1899" />
       <Frame>
@@ -7227,6 +7234,7 @@
       <Declarations>
         <ObjectRef ID="2187" />
         <ObjectRef ID="2189" />
+        <ObjectRef ID="3271" />
       </Declarations>
       <DefinedRoutineDeclarations>
         <ObjectRef ID="2191" />
@@ -7280,7 +7288,7 @@
         <ObjectRef ID="3194" />
       </DefinedMoveInstructionGroups>
       <ActiveWObj ID="2189" />
-      <ActiveTool ID="2187" />
+      <ActiveTool ID="3271" />
       <ActivePath ID="-1" />
       <ActiveProcess ID="2942" />
       <Frame>
@@ -10841,7 +10849,7 @@
         <RowX X="0.978538538748952" Y="0.147130079369051" Z="0.144274280202409" W="0" />
         <RowY X="-0.182504023856876" Y="0.943887839032859" Z="0.275259929161382" W="0" />
         <RowZ X="-0.0956797233436397" Y="-0.295683085533713" Z="0.950482458265353" W="0" />
-        <RowT X="0.0276158125710975" Y="0.110736696796598" Z="0.0327777324842092" W="1" />
+        <RowT X="0.0276158125710974" Y="0.110736696796598" Z="0.0327777324842092" W="1" />
       </Transform>
       <Source Value="" />
       <SourceFileTime HighPart="0" LowPart="0" />
@@ -10868,10 +10876,10 @@
       <UniqueId Value="{ee0f3c80-f731-4c57-883c-ec15ad87ea03}" />
       <Definition ID="32" DocID="1" />
       <Transform>
-        <RowX X="-0.192236304988861" Y="-0.934863151055867" Z="0.298456180773871" W="0" />
-        <RowY X="0.422419207512628" Y="0.195683203757723" Z="0.885025478103041" W="0" />
-        <RowZ X="-0.885780568859259" Y="0.296207651091273" Z="0.35728673536301" W="0" />
-        <RowT X="0.619331100876208" Y="-0.138444752815975" Z="0.374667006605772" W="1" />
+        <RowX X="-0.192236304988859" Y="-0.934863151055867" Z="0.298456180773871" W="0" />
+        <RowY X="0.422419207512628" Y="0.195683203757724" Z="0.885025478103041" W="0" />
+        <RowZ X="-0.88578056885926" Y="0.296207651091271" Z="0.357286735363011" W="0" />
+        <RowT X="0.619331100876208" Y="-0.138444752815974" Z="0.374667006605771" W="1" />
       </Transform>
       <Source Value="" />
       <SourceFileTime HighPart="0" LowPart="0" />
@@ -10898,10 +10906,10 @@
       <UniqueId Value="{adf9f86f-1a6e-436f-b208-1547f481e61d}" />
       <Definition ID="33" DocID="1" />
       <Transform>
-        <RowX X="-0.824808364748701" Y="-0.387512355667823" Z="-0.411734545120214" W="0" />
-        <RowY X="0.499101157878277" Y="-0.156814496286914" Z="-0.85223661500715" W="0" />
-        <RowZ X="0.265686272970844" Y="-0.908429077011" Z="0.322749773657249" W="0" />
-        <RowT X="0.181001931131779" Y="0.306510865772938" Z="0.301066095244782" W="1" />
+        <RowX X="-0.824808364748699" Y="-0.387512355667826" Z="-0.411734545120215" W="0" />
+        <RowY X="0.499101157878279" Y="-0.156814496286916" Z="-0.852236615007148" W="0" />
+        <RowZ X="0.265686272970845" Y="-0.908429077010998" Z="0.322749773657254" W="0" />
+        <RowT X="0.181001931131778" Y="0.306510865772937" Z="0.30106609524478" W="1" />
       </Transform>
       <Source Value="" />
       <SourceFileTime HighPart="0" LowPart="0" />
@@ -10928,10 +10936,10 @@
       <UniqueId Value="{14c96d1f-fd23-4afb-9760-46b5051192db}" />
       <Definition ID="34" DocID="1" />
       <Transform>
-        <RowX X="-0.627622687799375" Y="-0.039329313929983" Z="-0.777523611747762" W="0" />
-        <RowY X="0.778404925891714" Y="-0.0147054096067536" Z="-0.627590250303343" W="0" />
-        <RowZ X="0.0132488907839035" Y="-0.999118089113642" Z="0.0398435803976215" W="0" />
-        <RowT X="0.297233864847827" Y="0.254625655888784" Z="0.629445070962468" W="1" />
+        <RowX X="-0.627622687799373" Y="-0.0393293139299873" Z="-0.777523611747764" W="0" />
+        <RowY X="0.778404925891715" Y="-0.0147054096067544" Z="-0.627590250303342" W="0" />
+        <RowZ X="0.0132488907839055" Y="-0.999118089113642" Z="0.0398435803976256" W="0" />
+        <RowT X="0.297233864847826" Y="0.254625655888785" Z="0.629445070962466" W="1" />
       </Transform>
       <Source Value="" />
       <SourceFileTime HighPart="0" LowPart="0" />
@@ -10958,10 +10966,10 @@
       <UniqueId Value="{b8f03b2c-e027-4527-a139-0df4b5970c53}" />
       <Definition ID="35" DocID="1" />
       <Transform>
-        <RowX X="-0.737292441516194" Y="0.456010397775374" Z="-0.498451976426852" W="0" />
-        <RowY X="0.384262925063054" Y="-0.323769540861419" Z="-0.864589665004372" W="0" />
-        <RowZ X="-0.555645444600309" Y="-0.828992039485984" Z="0.063484945961961" W="0" />
-        <RowT X="0.597537915202629" Y="-0.0958014220676967" Z="0.462289217630546" W="1" />
+        <RowX X="-0.737292441516194" Y="0.45601039777537" Z="-0.498451976426856" W="0" />
+        <RowY X="0.384262925063057" Y="-0.323769540861422" Z="-0.86458966500437" W="0" />
+        <RowZ X="-0.555645444600308" Y="-0.828992039485985" Z="0.0634849459619631" W="0" />
+        <RowT X="0.597537915202629" Y="-0.0958014220676955" Z="0.462289217630547" W="1" />
       </Transform>
       <Source Value="" />
       <SourceFileTime HighPart="0" LowPart="0" />
@@ -10988,10 +10996,10 @@
       <UniqueId Value="{4233a19c-dc7c-4ea1-a18d-454994cb2e29}" />
       <Definition ID="36" DocID="1" />
       <Transform>
-        <RowX X="0.0942890927066087" Y="0.597475723537005" Z="-0.796324259821649" W="0" />
-        <RowY X="0.679509576209155" Y="-0.623212704840002" Z="-0.38713390495546" W="0" />
-        <RowZ X="-0.727582505862132" Y="-0.504607455662261" Z="-0.464752636198484" W="0" />
-        <RowT X="0.235710050216679" Y="-0.309442322382332" Z="0.845563552193487" W="1" />
+        <RowX X="0.0942890927066089" Y="0.597475723537002" Z="-0.796324259821651" W="0" />
+        <RowY X="0.679509576209158" Y="-0.623212704840002" Z="-0.387133904955455" W="0" />
+        <RowZ X="-0.727582505862129" Y="-0.504607455662265" Z="-0.464752636198484" W="0" />
+        <RowT X="0.235710050216679" Y="-0.30944232238233" Z="0.845563552193488" W="1" />
       </Transform>
       <Source Value="" />
       <SourceFileTime HighPart="0" LowPart="0" />
@@ -11018,10 +11026,10 @@
       <UniqueId Value="{e9b395a6-189c-4ec8-b2c3-cbbc24e8e11f}" />
       <Definition ID="37" DocID="1" />
       <Transform>
-        <RowX X="0.11943944400573" Y="0.136636901722846" Z="-0.983394415432172" W="0" />
-        <RowY X="0.864114471371485" Y="-0.502063349091543" Z="0.0351933781464898" W="0" />
-        <RowZ X="-0.4889175795387" Y="-0.853968822959342" Z="-0.178036091373223" W="0" />
-        <RowT X="0.121478203981542" Y="0.0966898556665855" Z="0.830762558754565" W="1" />
+        <RowX X="0.119439444005732" Y="0.136636901722842" Z="-0.983394415432172" W="0" />
+        <RowY X="0.864114471371487" Y="-0.502063349091541" Z="0.0351933781464943" W="0" />
+        <RowZ X="-0.488917579538697" Y="-0.853968822959345" Z="-0.178036091373221" W="0" />
+        <RowT X="0.12147820398154" Y="0.0966898556665874" Z="0.830762558754565" W="1" />
       </Transform>
       <Source Value="" />
       <SourceFileTime HighPart="0" LowPart="0" />
@@ -11118,10 +11126,10 @@
       <UniqueId Value="{d5a73d0a-a0c3-465c-845a-5a181556bb9a}" />
       <Definition ID="41" DocID="1" />
       <Transform>
-        <RowX X="0.978538538748952" Y="-0.147130079369051" Z="0.144274280202409" W="0" />
+        <RowX X="0.978538538748952" Y="-0.147130079369051" Z="0.144274280202408" W="0" />
         <RowY X="0.182504023856876" Y="0.943887839032859" Z="-0.275259929161382" W="0" />
         <RowZ X="-0.0956797233436389" Y="0.295683085533713" Z="0.950482458265353" W="0" />
-        <RowT X="0.0276158125710967" Y="-0.110736696796598" Z="0.0327777324842098" W="1" />
+        <RowT X="0.0276158125710967" Y="-0.110736696796598" Z="0.0327777324842097" W="1" />
       </Transform>
       <Source Value="" />
       <SourceFileTime HighPart="0" LowPart="0" />
@@ -11148,10 +11156,10 @@
       <UniqueId Value="{ca829529-9226-4520-bce1-1c9fdbc39690}" />
       <Definition ID="42" DocID="1" />
       <Transform>
-        <RowX X="-0.19223630498895" Y="0.934863151055672" Z="0.298456180774424" W="0" />
-        <RowY X="-0.422419207511843" Y="0.195683203758475" Z="-0.88502547810325" W="0" />
-        <RowZ X="-0.885780568859614" Y="-0.296207651091391" Z="0.357286735362032" W="0" />
-        <RowT X="0.619331100876395" Y="0.138444752815954" Z="0.374667006606234" W="1" />
+        <RowX X="-0.192236304988948" Y="0.934863151055672" Z="0.298456180774425" W="0" />
+        <RowY X="-0.422419207511844" Y="0.195683203758476" Z="-0.885025478103249" W="0" />
+        <RowZ X="-0.885780568859614" Y="-0.29620765109139" Z="0.357286735362033" W="0" />
+        <RowT X="0.619331100876395" Y="0.138444752815953" Z="0.374667006606234" W="1" />
       </Transform>
       <Source Value="" />
       <SourceFileTime HighPart="0" LowPart="0" />
@@ -11178,10 +11186,10 @@
       <UniqueId Value="{94473a22-d02f-43f5-af50-4f3c81992660}" />
       <Definition ID="43" DocID="1" />
       <Transform>
-        <RowX X="-0.824808364748286" Y="0.387512355668282" Z="-0.411734545120611" W="0" />
-        <RowY X="-0.499101157879023" Y="-0.156814496287485" Z="0.852236615006608" W="0" />
-        <RowZ X="0.265686272970728" Y="0.908429077010705" Z="0.322749773658174" W="0" />
-        <RowT X="0.181001931131952" Y="-0.306510865772824" Z="0.301066095244531" W="1" />
+        <RowX X="-0.824808364748285" Y="0.387512355668285" Z="-0.411734545120612" W="0" />
+        <RowY X="-0.499101157879026" Y="-0.156814496287487" Z="0.852236615006606" W="0" />
+        <RowZ X="0.265686272970729" Y="0.908429077010703" Z="0.322749773658178" W="0" />
+        <RowT X="0.181001931131952" Y="-0.306510865772823" Z="0.301066095244529" W="1" />
       </Transform>
       <Source Value="" />
       <SourceFileTime HighPart="0" LowPart="0" />
@@ -11208,10 +11216,10 @@
       <UniqueId Value="{54c56d29-7f86-4f65-9bb6-d85eb6dc6f0b}" />
       <Definition ID="44" DocID="1" />
       <Transform>
-        <RowX X="-0.627622687798805" Y="0.0393293139305372" Z="-0.777523611748195" W="0" />
-        <RowY X="-0.778404925892176" Y="-0.014705409607341" Z="0.627590250302757" W="0" />
-        <RowZ X="0.0132488907837654" Y="0.999118089113611" Z="0.0398435803984319" W="0" />
-        <RowT X="0.297233864847905" Y="-0.254625655888858" Z="0.629445070962277" W="1" />
+        <RowX X="-0.627622687798803" Y="0.0393293139305416" Z="-0.777523611748196" W="0" />
+        <RowY X="-0.778404925892177" Y="-0.0147054096073417" Z="0.627590250302755" W="0" />
+        <RowZ X="0.0132488907837674" Y="0.999118089113611" Z="0.0398435803984357" W="0" />
+        <RowT X="0.297233864847904" Y="-0.254625655888859" Z="0.629445070962276" W="1" />
       </Transform>
       <Source Value="" />
       <SourceFileTime HighPart="0" LowPart="0" />
@@ -11238,10 +11246,10 @@
       <UniqueId Value="{bc0464ee-f229-4cd4-8087-3ab0ffe10f72}" />
       <Definition ID="45" DocID="1" />
       <Transform>
-        <RowX X="-0.737292441516015" Y="-0.456010397774868" Z="-0.49845197642758" W="0" />
-        <RowY X="-0.384262925063437" Y="-0.323769540862189" Z="0.864589665003913" W="0" />
-        <RowZ X="-0.555645444600282" Y="0.828992039485962" Z="0.0634849459624901" W="0" />
-        <RowT X="0.597537915202737" Y="0.095801422067673" Z="0.462289217630608" W="1" />
+        <RowX X="-0.737292441516015" Y="-0.456010397774864" Z="-0.498451976427583" W="0" />
+        <RowY X="-0.38426292506344" Y="-0.323769540862191" Z="0.864589665003911" W="0" />
+        <RowZ X="-0.555645444600281" Y="0.828992039485963" Z="0.0634849459624919" W="0" />
+        <RowT X="0.597537915202737" Y="0.0958014220676716" Z="0.462289217630609" W="1" />
       </Transform>
       <Source Value="" />
       <SourceFileTime HighPart="0" LowPart="0" />
@@ -11268,10 +11276,10 @@
       <UniqueId Value="{415f306c-c8b3-4c33-b777-8c1bd8e970cf}" />
       <Definition ID="46" DocID="1" />
       <Transform>
-        <RowX X="0.0942890927068966" Y="-0.597475723536259" Z="-0.796324259822175" W="0" />
-        <RowY X="-0.679509576209403" Y="-0.623212704840291" Z="0.387133904954561" W="0" />
-        <RowZ X="-0.727582505861864" Y="0.504607455662789" Z="-0.464752636198331" W="0" />
-        <RowT X="0.235710050216598" Y="0.309442322381945" Z="0.845563552193606" W="1" />
+        <RowX X="0.094289092706897" Y="-0.597475723536256" Z="-0.796324259822177" W="0" />
+        <RowY X="-0.679509576209405" Y="-0.62321270484029" Z="0.387133904954557" W="0" />
+        <RowZ X="-0.727582505861861" Y="0.504607455662792" Z="-0.464752636198331" W="0" />
+        <RowT X="0.235710050216597" Y="0.309442322381943" Z="0.845563552193607" W="1" />
       </Transform>
       <Source Value="" />
       <SourceFileTime HighPart="0" LowPart="0" />
@@ -11298,10 +11306,10 @@
       <UniqueId Value="{23456ca3-eb3c-44b5-8daf-5e6e646c425f}" />
       <Definition ID="47" DocID="1" />
       <Transform>
-        <RowX X="0.119439444006478" Y="-0.136636901721954" Z="-0.983394415432206" W="0" />
-        <RowY X="-0.864114471371475" Y="-0.502063349091483" Z="-0.0351933781476093" W="0" />
-        <RowZ X="-0.488917579538535" Y="0.853968822959521" Z="-0.178036091372819" W="0" />
-        <RowT X="0.121478203981299" Y="-0.0966898556668879" Z="0.830762558754396" W="1" />
+        <RowX X="0.11943944400648" Y="-0.13663690172195" Z="-0.983394415432206" W="0" />
+        <RowY X="-0.864114471371476" Y="-0.50206334909148" Z="-0.0351933781476133" W="0" />
+        <RowZ X="-0.488917579538533" Y="0.853968822959523" Z="-0.178036091372817" W="0" />
+        <RowT X="0.121478203981297" Y="-0.0966898556668896" Z="0.830762558754395" W="1" />
       </Transform>
       <Source Value="" />
       <SourceFileTime HighPart="0" LowPart="0" />
@@ -11353,8 +11361,471 @@
       </Items>
       <DisplayParent ID="3233" />
     </BidirectionalAttachment>
+    <MechanismInstance ID="3254" Name="Smart_Gripper_Servo_Fingers_R" Parent="1138" PickingEnabled="true" Detectable="true" PhysicsMotionControl="0" NumJoints="1" NumTransforms="5" TraceTCP="false">
+      <Definition ID="10" DocID="2" />
+      <ChildInstances>
+        <ObjectRef ID="3255" />
+        <ObjectRef ID="3257" />
+        <ObjectRef ID="3258" />
+        <ObjectRef ID="3259" />
+        <ObjectRef ID="3260" />
+      </ChildInstances>
+      <Transform>
+        <RowX X="0.42806113359395" Y="0.118323528265448" Z="0.895970540009591" W="0" />
+        <RowY X="0.256436083053375" Y="-0.966547584768906" Z="0.00512851690417766" W="0" />
+        <RowZ X="0.866604985685234" Y="0.227563857051619" Z="-0.444083876930119" W="0" />
+        <RowT X="-0.00957826670175375" Y="-0.182610123632188" Z="0.198627879465468" W="1" />
+      </Transform>
+      <Source Value="" />
+      <SourceFileTime HighPart="0" LowPart="0" />
+      <ComponentType Value="Mechanism" />
+      <ClipPlane ID="-1" />
+      <JointValues>
+        <Double Value="0" />
+      </JointValues>
+      <CalibFrames>
+        <Element type="TDoubleMatrix4">
+          <RowX X="1" Y="0" Z="0" W="0" />
+          <RowY X="0" Y="1" Z="0" W="0" />
+          <RowZ X="0" Y="0" Z="1" W="0" />
+          <RowT X="0" Y="0" Z="0" W="1" />
+        </Element>
+      </CalibFrames>
+      <CalibFrameKnownValid />
+      <HomePos />
+      <UserDefinedPositions />
+      <TransitionTimes />
+      <JointLimitsMatrix />
+      <JointLimitsVector />
+      <JointModelOffset />
+    </MechanismInstance>
+    <MechanismLinkInstance ID="3255" Name="HandBase" Parent="3254" PickingEnabled="true" Detectable="true" PhysicsMotionControl="2">
+      <UniqueId Value="{97e010e6-95d5-47e8-9e89-6470e9a72631}" />
+      <Definition ID="12" DocID="2" />
+      <Transform>
+        <RowX X="1" Y="0" Z="0" W="0" />
+        <RowY X="0" Y="1" Z="0" W="0" />
+        <RowZ X="0" Y="0" Z="1" W="0" />
+        <RowT X="0" Y="0" Z="0" W="1" />
+      </Transform>
+      <AttachmentPoints>
+        <ObjectRef ID="3256" />
+      </AttachmentPoints>
+      <Source Value="" />
+      <SourceFileTime HighPart="0" LowPart="0" />
+      <ComponentType Value="PartMechanismLink" />
+      <ClipPlane ID="-1" />
+      <Skeleton>
+        <Bones />
+        <InverseBindMatrices />
+      </Skeleton>
+      <PhysicsMaterial SurfaceViscosity="5E-09" SurfaceRoughness="0.7" SurfaceAdhesion="0" SurfaceAdhesionOverlap="0" Density="7800" Damping="0.05" PoissonsRatio="0.3" Restitution="0.5" YoungsModulus="200000000000" CableDamping="0" CableYoungsModulus="0" />
+      <PhysicsGeometry UseOriginal="false" />
+      <PhysicsSurfaceVelocity Speed="0" Enabled="false">
+        <Direction X="0" Y="0" Z="0" />
+        <ControlPoints />
+      </PhysicsSurfaceVelocity>
+      <CorrectionTransform>
+        <RowX X="1" Y="0" Z="0" W="0" />
+        <RowY X="0" Y="1" Z="0" W="0" />
+        <RowZ X="0" Y="0" Z="1" W="0" />
+        <RowT X="0" Y="0" Z="0" W="1" />
+      </CorrectionTransform>
+    </MechanismLinkInstance>
+    <Frame ID="3256" Name="Servo" Parent="3255" FrameSize="0.05" ShowName="true" FrameType="0">
+      <Attributes>
+        <Attribute Key="GfxObject.Invisible">
+          <Value>
+            <Integer Value="1" />
+          </Value>
+        </Attribute>
+      </Attributes>
+      <Transform>
+        <RowX X="1" Y="0" Z="0" W="0" />
+        <RowY X="0" Y="1" Z="0" W="0" />
+        <RowZ X="0" Y="0" Z="1" W="0" />
+        <RowT X="0" Y="0" Z="0.1142" W="1" />
+      </Transform>
+    </Frame>
+    <MechanismLinkInstance ID="3257" Name="DownFinger" Parent="3254" PickingEnabled="true" Detectable="true" PhysicsMotionControl="2">
+      <UniqueId Value="{2d405181-c410-4664-afea-30737a275a71}" />
+      <Definition ID="13" DocID="2" />
+      <Transform>
+        <RowX X="1" Y="0" Z="0" W="0" />
+        <RowY X="0" Y="1" Z="0" W="0" />
+        <RowZ X="0" Y="0" Z="1" W="0" />
+        <RowT X="0" Y="0" Z="0" W="1" />
+      </Transform>
+      <Source Value="" />
+      <SourceFileTime HighPart="0" LowPart="0" />
+      <ComponentType Value="PartMechanismLink" />
+      <ClipPlane ID="-1" />
+      <Skeleton>
+        <Bones />
+        <InverseBindMatrices />
+      </Skeleton>
+      <PhysicsMaterial SurfaceViscosity="5E-09" SurfaceRoughness="0.7" SurfaceAdhesion="0" SurfaceAdhesionOverlap="0" Density="7800" Damping="0.05" PoissonsRatio="0.3" Restitution="0.5" YoungsModulus="200000000000" CableDamping="0" CableYoungsModulus="0" />
+      <PhysicsGeometry UseOriginal="false" />
+      <PhysicsSurfaceVelocity Speed="0" Enabled="false">
+        <Direction X="0" Y="0" Z="0" />
+        <ControlPoints />
+      </PhysicsSurfaceVelocity>
+      <CorrectionTransform>
+        <RowX X="0" Y="0" Z="1" W="0" />
+        <RowY X="0" Y="1" Z="0" W="0" />
+        <RowZ X="-1" Y="0" Z="0" W="0" />
+        <RowT X="0" Y="0" Z="0" W="1" />
+      </CorrectionTransform>
+    </MechanismLinkInstance>
+    <MechanismLinkInstance ID="3258" Name="UpFinger" Parent="3254" PickingEnabled="true" Detectable="true" PhysicsMotionControl="2">
+      <UniqueId Value="{afaf1d1d-f4dc-4cbc-a1c6-c06c4e7b7f0b}" />
+      <Definition ID="14" DocID="2" />
+      <Transform>
+        <RowX X="1" Y="0" Z="0" W="0" />
+        <RowY X="0" Y="1" Z="0" W="0" />
+        <RowZ X="0" Y="0" Z="1" W="0" />
+        <RowT X="0" Y="0" Z="0" W="1" />
+      </Transform>
+      <Source Value="" />
+      <SourceFileTime HighPart="0" LowPart="0" />
+      <ComponentType Value="PartMechanismLink" />
+      <ClipPlane ID="-1" />
+      <Skeleton>
+        <Bones />
+        <InverseBindMatrices />
+      </Skeleton>
+      <PhysicsMaterial SurfaceViscosity="5E-09" SurfaceRoughness="0.7" SurfaceAdhesion="0" SurfaceAdhesionOverlap="0" Density="7800" Damping="0.05" PoissonsRatio="0.3" Restitution="0.5" YoungsModulus="200000000000" CableDamping="0" CableYoungsModulus="0" />
+      <PhysicsGeometry UseOriginal="false" />
+      <PhysicsSurfaceVelocity Speed="0" Enabled="false">
+        <Direction X="0" Y="0" Z="0" />
+        <ControlPoints />
+      </PhysicsSurfaceVelocity>
+      <CorrectionTransform>
+        <RowX X="0" Y="0" Z="-1" W="0" />
+        <RowY X="0" Y="1" Z="0" W="0" />
+        <RowZ X="1" Y="0" Z="0" W="0" />
+        <RowT X="0" Y="0" Z="0" W="1" />
+      </CorrectionTransform>
+    </MechanismLinkInstance>
+    <MechanismLinkInstance ID="3259" Name="VacuumOne" Parent="3254" PickingEnabled="true" Detectable="true" PhysicsMotionControl="2">
+      <UniqueId Value="{03d5a02f-c993-4c75-baf9-68361d4a30af}" />
+      <Definition ID="15" DocID="2" />
+      <Transform>
+        <RowX X="0" Y="0" Z="-1" W="0" />
+        <RowY X="-0.309016994374947" Y="0.951056516295154" Z="0" W="0" />
+        <RowZ X="0.951056516295154" Y="0.309016994374947" Z="0" W="0" />
+        <RowT X="0.038" Y="0.0185" Z="0.0375" W="1" />
+      </Transform>
+      <Source Value="" />
+      <SourceFileTime HighPart="0" LowPart="0" />
+      <ComponentType Value="PartMechanismLink" />
+      <ClipPlane ID="-1" />
+      <Skeleton>
+        <Bones />
+        <InverseBindMatrices />
+      </Skeleton>
+      <PhysicsMaterial SurfaceViscosity="5E-09" SurfaceRoughness="0.7" SurfaceAdhesion="0" SurfaceAdhesionOverlap="0" Density="7800" Damping="0.05" PoissonsRatio="0.3" Restitution="0.5" YoungsModulus="200000000000" CableDamping="0" CableYoungsModulus="0" />
+      <PhysicsGeometry UseOriginal="false" />
+      <PhysicsSurfaceVelocity Speed="0" Enabled="false">
+        <Direction X="0" Y="0" Z="0" />
+        <ControlPoints />
+      </PhysicsSurfaceVelocity>
+      <CorrectionTransform>
+        <RowX X="0" Y="0" Z="-1" W="0" />
+        <RowY X="-0.309016994374947" Y="0.951056516295154" Z="0" W="0" />
+        <RowZ X="0.951056516295154" Y="0.309016994374947" Z="0" W="0" />
+        <RowT X="0.038" Y="0.0185" Z="0.0375" W="1" />
+      </CorrectionTransform>
+    </MechanismLinkInstance>
+    <MechanismLinkInstance ID="3260" Name="VacuumTwo" Parent="3254" PickingEnabled="true" Detectable="true" PhysicsMotionControl="2">
+      <UniqueId Value="{6630f4e0-4438-4bc9-a7a0-37d356f1d6e1}" />
+      <Definition ID="16" DocID="2" />
+      <Transform>
+        <RowX X="0" Y="0" Z="-1" W="0" />
+        <RowY X="-0.309016994374947" Y="-0.951056516295154" Z="0" W="0" />
+        <RowZ X="-0.951056516295154" Y="0.309016994374947" Z="0" W="0" />
+        <RowT X="-0.038" Y="0.0185" Z="0.0375" W="1" />
+      </Transform>
+      <Source Value="" />
+      <SourceFileTime HighPart="0" LowPart="0" />
+      <ComponentType Value="PartMechanismLink" />
+      <ClipPlane ID="-1" />
+      <Skeleton>
+        <Bones />
+        <InverseBindMatrices />
+      </Skeleton>
+      <PhysicsMaterial SurfaceViscosity="5E-09" SurfaceRoughness="0.7" SurfaceAdhesion="0" SurfaceAdhesionOverlap="0" Density="7800" Damping="0.05" PoissonsRatio="0.3" Restitution="0.5" YoungsModulus="200000000000" CableDamping="0" CableYoungsModulus="0" />
+      <PhysicsGeometry UseOriginal="false" />
+      <PhysicsSurfaceVelocity Speed="0" Enabled="false">
+        <Direction X="0" Y="0" Z="0" />
+        <ControlPoints />
+      </PhysicsSurfaceVelocity>
+      <CorrectionTransform>
+        <RowX X="0" Y="0" Z="-1" W="0" />
+        <RowY X="-0.309016994374947" Y="-0.951056516295154" Z="0" W="0" />
+        <RowZ X="-0.951056516295154" Y="0.309016994374947" Z="0" W="0" />
+        <RowT X="-0.038" Y="0.0185" Z="0.0375" W="1" />
+      </CorrectionTransform>
+    </MechanismLinkInstance>
+    <DataDeclaration ID="3261" Name="Servo" Parent="1143" StorageType="1" DataType="tooldata" IsInline="false" FrameSize="0.075" ShowName="false" Dimension1="0" Dimension2="0" Dimension3="0">
+      <DeclarationInfo ID="3262" />
+      <RoutineName Value="" />
+      <InitialExpression Value="[TRUE,[[0,0,114.2],[1,0,0,0]],[0.215,[8.7,12.3,49.2],[1,0,0,0],0.00021,0.00024,0.00009]]" />
+    </DataDeclaration>
+    <RAPIDDeclarationInfo ID="3262" Name="" Parent="3261" Local="false" EnableSync="true">
+      <TaskName Value="" />
+      <ModuleName Value="CalibData" />
+    </RAPIDDeclarationInfo>
+    <Attachment ID="3263" Name="" Parent="1138" PhysicsRestoreMotionControl="0">
+      <SourceObject ID="3243" />
+      <TargetObject ID="3254" />
+      <OffsetTransform>
+        <RowX X="-0.813797681337149" Y="0.342020143315613" Z="-0.469846310421448" W="0" />
+        <RowY X="-0.106480839050635" Y="0.707038737648398" Z="0.699112333162298" W="0" />
+        <RowZ X="0.57131004259102" Y="0.618965625080203" Z="-0.538967893481347" W="0" />
+        <RowT X="0.5678217175995" Y="0.0047315353159" Z="0.4151320745258" W="1" />
+      </OffsetTransform>
+      <OriginalTransform>
+        <RowX X="1" Y="0" Z="0" W="0" />
+        <RowY X="0" Y="1" Z="0" W="0" />
+        <RowZ X="0" Y="0" Z="1" W="0" />
+        <RowT X="0" Y="0" Z="0" W="1" />
+      </OriginalTransform>
+    </Attachment>
+    <MechanismInstance ID="3264" Name="Smart_Gripper_Servo_Fingers_L" Parent="1138" PickingEnabled="true" Detectable="true" PhysicsMotionControl="0" NumJoints="1" NumTransforms="5" TraceTCP="false">
+      <Definition ID="10" DocID="2" />
+      <ChildInstances>
+        <ObjectRef ID="3265" />
+        <ObjectRef ID="3267" />
+        <ObjectRef ID="3268" />
+        <ObjectRef ID="3269" />
+        <ObjectRef ID="3270" />
+      </ChildInstances>
+      <Transform>
+        <RowX X="0.42806113359326" Y="-0.118323528266279" Z="0.895970540009811" W="0" />
+        <RowY X="-0.256436083053403" Y="-0.966547584768893" Z="-0.00512851690525506" W="0" />
+        <RowZ X="0.866604985685567" Y="-0.227563857051243" Z="-0.444083876929664" W="0" />
+        <RowT X="-0.00957826670150375" Y="0.182610123632467" Z="0.198627879465453" W="1" />
+      </Transform>
+      <Source Value="" />
+      <SourceFileTime HighPart="0" LowPart="0" />
+      <ComponentType Value="Mechanism" />
+      <ClipPlane ID="-1" />
+      <JointValues>
+        <Double Value="0" />
+      </JointValues>
+      <CalibFrames>
+        <Element type="TDoubleMatrix4">
+          <RowX X="1" Y="0" Z="0" W="0" />
+          <RowY X="0" Y="1" Z="0" W="0" />
+          <RowZ X="0" Y="0" Z="1" W="0" />
+          <RowT X="0" Y="0" Z="0" W="1" />
+        </Element>
+      </CalibFrames>
+      <CalibFrameKnownValid />
+      <HomePos />
+      <UserDefinedPositions />
+      <TransitionTimes />
+      <JointLimitsMatrix />
+      <JointLimitsVector />
+      <JointModelOffset />
+    </MechanismInstance>
+    <MechanismLinkInstance ID="3265" Name="HandBase" Parent="3264" PickingEnabled="true" Detectable="true" PhysicsMotionControl="2">
+      <UniqueId Value="{58112e3e-c044-465f-8720-fe11c712fcd2}" />
+      <Definition ID="12" DocID="2" />
+      <Transform>
+        <RowX X="1" Y="0" Z="0" W="0" />
+        <RowY X="0" Y="1" Z="0" W="0" />
+        <RowZ X="0" Y="0" Z="1" W="0" />
+        <RowT X="0" Y="0" Z="0" W="1" />
+      </Transform>
+      <AttachmentPoints>
+        <ObjectRef ID="3266" />
+      </AttachmentPoints>
+      <Source Value="" />
+      <SourceFileTime HighPart="0" LowPart="0" />
+      <ComponentType Value="PartMechanismLink" />
+      <ClipPlane ID="-1" />
+      <Skeleton>
+        <Bones />
+        <InverseBindMatrices />
+      </Skeleton>
+      <PhysicsMaterial SurfaceViscosity="5E-09" SurfaceRoughness="0.7" SurfaceAdhesion="0" SurfaceAdhesionOverlap="0" Density="7800" Damping="0.05" PoissonsRatio="0.3" Restitution="0.5" YoungsModulus="200000000000" CableDamping="0" CableYoungsModulus="0" />
+      <PhysicsGeometry UseOriginal="false" />
+      <PhysicsSurfaceVelocity Speed="0" Enabled="false">
+        <Direction X="0" Y="0" Z="0" />
+        <ControlPoints />
+      </PhysicsSurfaceVelocity>
+      <CorrectionTransform>
+        <RowX X="1" Y="0" Z="0" W="0" />
+        <RowY X="0" Y="1" Z="0" W="0" />
+        <RowZ X="0" Y="0" Z="1" W="0" />
+        <RowT X="0" Y="0" Z="0" W="1" />
+      </CorrectionTransform>
+    </MechanismLinkInstance>
+    <Frame ID="3266" Name="Servo" Parent="3265" FrameSize="0.05" ShowName="true" FrameType="0">
+      <Attributes>
+        <Attribute Key="GfxObject.Invisible">
+          <Value>
+            <Integer Value="1" />
+          </Value>
+        </Attribute>
+      </Attributes>
+      <Transform>
+        <RowX X="1" Y="0" Z="0" W="0" />
+        <RowY X="0" Y="1" Z="0" W="0" />
+        <RowZ X="0" Y="0" Z="1" W="0" />
+        <RowT X="0" Y="0" Z="0.1142" W="1" />
+      </Transform>
+    </Frame>
+    <MechanismLinkInstance ID="3267" Name="DownFinger" Parent="3264" PickingEnabled="true" Detectable="true" PhysicsMotionControl="2">
+      <UniqueId Value="{e94f6110-d993-4852-952d-5ecf2d683c20}" />
+      <Definition ID="13" DocID="2" />
+      <Transform>
+        <RowX X="1" Y="0" Z="0" W="0" />
+        <RowY X="0" Y="1" Z="0" W="0" />
+        <RowZ X="0" Y="0" Z="1" W="0" />
+        <RowT X="0" Y="0" Z="0" W="1" />
+      </Transform>
+      <Source Value="" />
+      <SourceFileTime HighPart="0" LowPart="0" />
+      <ComponentType Value="PartMechanismLink" />
+      <ClipPlane ID="-1" />
+      <Skeleton>
+        <Bones />
+        <InverseBindMatrices />
+      </Skeleton>
+      <PhysicsMaterial SurfaceViscosity="5E-09" SurfaceRoughness="0.7" SurfaceAdhesion="0" SurfaceAdhesionOverlap="0" Density="7800" Damping="0.05" PoissonsRatio="0.3" Restitution="0.5" YoungsModulus="200000000000" CableDamping="0" CableYoungsModulus="0" />
+      <PhysicsGeometry UseOriginal="false" />
+      <PhysicsSurfaceVelocity Speed="0" Enabled="false">
+        <Direction X="0" Y="0" Z="0" />
+        <ControlPoints />
+      </PhysicsSurfaceVelocity>
+      <CorrectionTransform>
+        <RowX X="0" Y="0" Z="1" W="0" />
+        <RowY X="0" Y="1" Z="0" W="0" />
+        <RowZ X="-1" Y="0" Z="0" W="0" />
+        <RowT X="0" Y="0" Z="0" W="1" />
+      </CorrectionTransform>
+    </MechanismLinkInstance>
+    <MechanismLinkInstance ID="3268" Name="UpFinger" Parent="3264" PickingEnabled="true" Detectable="true" PhysicsMotionControl="2">
+      <UniqueId Value="{00e02326-6e5e-453b-8a3b-1638d3b86265}" />
+      <Definition ID="14" DocID="2" />
+      <Transform>
+        <RowX X="1" Y="0" Z="0" W="0" />
+        <RowY X="0" Y="1" Z="0" W="0" />
+        <RowZ X="0" Y="0" Z="1" W="0" />
+        <RowT X="0" Y="0" Z="0" W="1" />
+      </Transform>
+      <Source Value="" />
+      <SourceFileTime HighPart="0" LowPart="0" />
+      <ComponentType Value="PartMechanismLink" />
+      <ClipPlane ID="-1" />
+      <Skeleton>
+        <Bones />
+        <InverseBindMatrices />
+      </Skeleton>
+      <PhysicsMaterial SurfaceViscosity="5E-09" SurfaceRoughness="0.7" SurfaceAdhesion="0" SurfaceAdhesionOverlap="0" Density="7800" Damping="0.05" PoissonsRatio="0.3" Restitution="0.5" YoungsModulus="200000000000" CableDamping="0" CableYoungsModulus="0" />
+      <PhysicsGeometry UseOriginal="false" />
+      <PhysicsSurfaceVelocity Speed="0" Enabled="false">
+        <Direction X="0" Y="0" Z="0" />
+        <ControlPoints />
+      </PhysicsSurfaceVelocity>
+      <CorrectionTransform>
+        <RowX X="0" Y="0" Z="-1" W="0" />
+        <RowY X="0" Y="1" Z="0" W="0" />
+        <RowZ X="1" Y="0" Z="0" W="0" />
+        <RowT X="0" Y="0" Z="0" W="1" />
+      </CorrectionTransform>
+    </MechanismLinkInstance>
+    <MechanismLinkInstance ID="3269" Name="VacuumOne" Parent="3264" PickingEnabled="true" Detectable="true" PhysicsMotionControl="2">
+      <UniqueId Value="{1b0072fc-662f-40fe-9c78-a3d4f5f36251}" />
+      <Definition ID="15" DocID="2" />
+      <Transform>
+        <RowX X="0" Y="0" Z="-1" W="0" />
+        <RowY X="-0.309016994374947" Y="0.951056516295154" Z="0" W="0" />
+        <RowZ X="0.951056516295154" Y="0.309016994374947" Z="0" W="0" />
+        <RowT X="0.038" Y="0.0185" Z="0.0375" W="1" />
+      </Transform>
+      <Source Value="" />
+      <SourceFileTime HighPart="0" LowPart="0" />
+      <ComponentType Value="PartMechanismLink" />
+      <ClipPlane ID="-1" />
+      <Skeleton>
+        <Bones />
+        <InverseBindMatrices />
+      </Skeleton>
+      <PhysicsMaterial SurfaceViscosity="5E-09" SurfaceRoughness="0.7" SurfaceAdhesion="0" SurfaceAdhesionOverlap="0" Density="7800" Damping="0.05" PoissonsRatio="0.3" Restitution="0.5" YoungsModulus="200000000000" CableDamping="0" CableYoungsModulus="0" />
+      <PhysicsGeometry UseOriginal="false" />
+      <PhysicsSurfaceVelocity Speed="0" Enabled="false">
+        <Direction X="0" Y="0" Z="0" />
+        <ControlPoints />
+      </PhysicsSurfaceVelocity>
+      <CorrectionTransform>
+        <RowX X="0" Y="0" Z="-1" W="0" />
+        <RowY X="-0.309016994374947" Y="0.951056516295154" Z="0" W="0" />
+        <RowZ X="0.951056516295154" Y="0.309016994374947" Z="0" W="0" />
+        <RowT X="0.038" Y="0.0185" Z="0.0375" W="1" />
+      </CorrectionTransform>
+    </MechanismLinkInstance>
+    <MechanismLinkInstance ID="3270" Name="VacuumTwo" Parent="3264" PickingEnabled="true" Detectable="true" PhysicsMotionControl="2">
+      <UniqueId Value="{b1ce57db-0496-42c5-bdcf-d6998574648b}" />
+      <Definition ID="16" DocID="2" />
+      <Transform>
+        <RowX X="0" Y="0" Z="-1" W="0" />
+        <RowY X="-0.309016994374947" Y="-0.951056516295154" Z="0" W="0" />
+        <RowZ X="-0.951056516295154" Y="0.309016994374947" Z="0" W="0" />
+        <RowT X="-0.038" Y="0.0185" Z="0.0375" W="1" />
+      </Transform>
+      <Source Value="" />
+      <SourceFileTime HighPart="0" LowPart="0" />
+      <ComponentType Value="PartMechanismLink" />
+      <ClipPlane ID="-1" />
+      <Skeleton>
+        <Bones />
+        <InverseBindMatrices />
+      </Skeleton>
+      <PhysicsMaterial SurfaceViscosity="5E-09" SurfaceRoughness="0.7" SurfaceAdhesion="0" SurfaceAdhesionOverlap="0" Density="7800" Damping="0.05" PoissonsRatio="0.3" Restitution="0.5" YoungsModulus="200000000000" CableDamping="0" CableYoungsModulus="0" />
+      <PhysicsGeometry UseOriginal="false" />
+      <PhysicsSurfaceVelocity Speed="0" Enabled="false">
+        <Direction X="0" Y="0" Z="0" />
+        <ControlPoints />
+      </PhysicsSurfaceVelocity>
+      <CorrectionTransform>
+        <RowX X="0" Y="0" Z="-1" W="0" />
+        <RowY X="-0.309016994374947" Y="-0.951056516295154" Z="0" W="0" />
+        <RowZ X="-0.951056516295154" Y="0.309016994374947" Z="0" W="0" />
+        <RowT X="-0.038" Y="0.0185" Z="0.0375" W="1" />
+      </CorrectionTransform>
+    </MechanismLinkInstance>
+    <DataDeclaration ID="3271" Name="Servo" Parent="2186" StorageType="1" DataType="tooldata" IsInline="false" FrameSize="0.075" ShowName="false" Dimension1="0" Dimension2="0" Dimension3="0">
+      <DeclarationInfo ID="3272" />
+      <RoutineName Value="" />
+      <InitialExpression Value="[TRUE,[[0,0,114.2],[1,0,0,0]],[0.215,[8.7,12.3,49.2],[1,0,0,0],0.00021,0.00024,0.00009]]" />
+    </DataDeclaration>
+    <RAPIDDeclarationInfo ID="3272" Name="" Parent="3271" Local="false" EnableSync="true">
+      <TaskName Value="" />
+      <ModuleName Value="CalibData" />
+    </RAPIDDeclarationInfo>
+    <Attachment ID="3273" Name="" Parent="1138" PhysicsRestoreMotionControl="0">
+      <SourceObject ID="3252" />
+      <TargetObject ID="3264" />
+      <OffsetTransform>
+        <RowX X="-0.813797681337149" Y="-0.342020143315613" Z="-0.469846310421448" W="0" />
+        <RowY X="0.106480839050635" Y="0.707038737648398" Z="-0.699112333162298" W="0" />
+        <RowZ X="0.57131004259102" Y="-0.618965625080203" Z="-0.538967893481347" W="0" />
+        <RowT X="0.5678217175995" Y="-0.0047315353159" Z="0.4151320745258" W="1" />
+      </OffsetTransform>
+      <OriginalTransform>
+        <RowX X="1" Y="0" Z="0" W="0" />
+        <RowY X="0" Y="1" Z="0" W="0" />
+        <RowZ X="0" Y="0" Z="1" W="0" />
+        <RowT X="0" Y="0" Z="0" W="1" />
+      </OriginalTransform>
+    </Attachment>
   </Objects>
   <ReferencedDocuments>
     <DocRef ID="1" DocumentType="ComponentLibrary" Location="%ABBLIBRARY%\Robots\IRB14000_0.5_0.5__01.rslib" RelativeLocation="C:\Program Files (x86)\ABB\RobotStudio 2022\ABB Library\Robots\IRB14000_0.5_0.5__01.rslib" GUID="{B161BA02-3824-4351-9363-82439DFF8D32}" />
+    <DocRef ID="2" DocumentType="ComponentLibrary" Location="%ABBLIBRARY%\Tools\ABB_Smart_Gripper_Servo_Fingers.rslib" RelativeLocation="C:\Program Files (x86)\ABB\RobotStudio 2022\ABB Library\Tools\ABB_Smart_Gripper_Servo_Fingers.rslib" GUID="{7E93D888-09B0-4267-890F-9BF900939A80}" />
   </ReferencedDocuments>
 </PIMDocument>

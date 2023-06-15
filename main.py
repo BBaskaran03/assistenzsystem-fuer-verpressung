@@ -3,8 +3,8 @@ import datetime
 import logging
 import os
 import pathlib
+import signal
 import sys
-import threading
 
 from config import CONFIG
 from object_detection.object_detection import ObjectDetector
@@ -51,7 +51,6 @@ class System:
             password=CONFIG["Robot Web Services"]["password"],
             model=CONFIG["Robot Web Services"]["model"],
         )
-        self.robot.ready_robot()
 
         logging.debug("Creating instace of Dectector")
         self.detector = ObjectDetector()
@@ -71,9 +70,12 @@ class System:
         logging.debug(
             f'[{CONFIG["Names"]["System"]}] [System] Startvorgang abgeschlossen'
         )
-        logging.info(
-            f'[{CONFIG["Names"]["System"]}] System ready'
-        )
+        logging.info(f'[{CONFIG["Names"]["System"]}] System ready')
+
+    def ready_robot(self):
+        logging.info(f'[{CONFIG["Names"]["System"]}] [System] Roboter ist bereit')
+        self.robot.ready_robot()
+
     def _calibrate_arm(self, arm: RobotArm, positions: list[str]):
         for position in positions:
             message = f"Please move arm <{arm.name}> to position <{position}> and press <ENTER> ..."
@@ -87,11 +89,14 @@ class System:
         self.positions.to_file(CONFIG["Positions"]["file"])
 
     def calibrate(self):
+        # TODO: Make calibration interactive, let use choose arm (l/r) and position (1/2/3/...)
+
         self._calibrate_arm(
             self.robot.arm_right,
             [
                 "arm_right_box_metal",
                 "arm_right_box_rubber",
+                "arm_right_checkpoint",
                 "arm_right_tool_metal",
                 "arm_right_tool_rubber",
             ],
@@ -101,6 +106,7 @@ class System:
             self.robot.arm_left,
             [
                 "arm_left_box_finished",
+                "arm_left_checkpoint",
                 "arm_left_tool_lever_down",
                 "arm_left_tool_lever_rotation_1",
                 "arm_left_tool_lever_rotation_2",
@@ -112,7 +118,9 @@ class System:
     def job_grab_rubber(self):
         message = "Ich greife jetzt das Gummiteil"
         self.text_to_speech.say(message)
-        logging.info(f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}')
+        logging.info(
+            f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}'
+        )
 
         self.robot.arm_right.move_to_home()
         self.robot.arm_right.move_to(self.positions["arm_right_checkpoint"])
@@ -127,7 +135,9 @@ class System:
     def job_place_rubber(self):
         message = "Ich lege jetzt das Gummiteil ab"
         self.text_to_speech.say(message)
-        logging.info(f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}')
+        logging.info(
+            f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}'
+        )
 
         self.robot.arm_right.move_to_home()
 
@@ -139,7 +149,9 @@ class System:
     def job_grab_metal(self):
         message = "Ich greife jetzt das Metallteil"
         self.text_to_speech.say(message)
-        logging.info(f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}')
+        logging.info(
+            f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}'
+        )
 
         self.robot.arm_right.move_to_home()
         self.robot.arm_right.move_to(self.positions["arm_right_checkpoint"])
@@ -154,7 +166,9 @@ class System:
     def job_place_metal(self):
         message = "Ich lege jetzt das Metallteil ab"
         self.text_to_speech.say(message)
-        logging.info(f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}')
+        logging.info(
+            f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}'
+        )
 
         self.robot.arm_right.move_to_home()
 
@@ -166,7 +180,9 @@ class System:
     def job_move_tool_lever(self):
         message = "Ich lege jetzt den Hebel um"
         self.text_to_speech.say(message)
-        logging.info(f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}')
+        logging.info(
+            f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}'
+        )
 
         self.robot.arm_left.move_to_home()
 
@@ -179,7 +195,9 @@ class System:
     def job_grab_finished_product(self):
         message = "Ich greife jetzt das fertige Bauteil"
         self.text_to_speech.say(message)
-        logging.info(f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}')
+        logging.info(
+            f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}'
+        )
 
         self.robot.arm_left.move_to_home()
 
@@ -192,7 +210,9 @@ class System:
     def job_place_finished_product(self):
         message = "Ich lege jetzt das fertige Bauteil in die Box"
         self.text_to_speech.say(message)
-        logging.info(f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}')
+        logging.info(
+            f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}'
+        )
 
         self.robot.arm_left.move_to_home()
 
@@ -201,37 +221,66 @@ class System:
 
         self.robot.arm_left.move_to_home()
 
-    def start_voice_control(self):
+    def debug_movement(self):
+        self.ready_robot()
+
+        self.job_grab_rubber()
+        self.job_place_rubber()
+
+        self.job_grab_metal()
+        self.job_place_metal()
+
+        self.job_move_tool_lever()
+
+        self.job_grab_finished_product()
+        self.job_place_finished_product()
+
+    def debug_voice_control(self):
         self.voice_control.start()
 
-    def start_movement(self):
-        running = True
-
-        while running:
-            self.job_grab_rubber()
-            self.job_place_rubber()
-
-            self.job_grab_metal()
-            self.job_place_metal()
-
-            self.job_move_tool_lever()
-
-            self.job_grab_finished_product()
-            self.job_place_finished_product()
-
-            running = False
+        task = self.voice_control.wait_for_task()
+        logging.info(f"Reacting to <{task}>")
 
     def run(self):
-        # TODO: Check for voice commands, if found, interact with robot
-        voice_control = threading.Thread(target=self.start_voice_control)
-        voice_control.start()
+        self.ready_robot()
 
-        movement = threading.Thread(target=self.start_movement)
-        movement.start()
+        self.voice_control.start()
+
+        while True:
+            task = self.voice_control.wait_for_task()
+
+            if task == "YUMI_STOP":
+                message = "Alles klar, ich stoppe."
+                self.text_to_speech.say(message)
+                logging.info(
+                    f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}'
+                )
+
+            if task == "YUMI_WEITER":
+                message = "Alles klar, ich mache weiter."
+                self.text_to_speech.say(message)
+                logging.info(
+                    f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}'
+                )
+
+            if task == "ROBOT TASK 1":
+                self.job_grab_rubber()
+                self.job_place_rubber()
+
+            if task == "ROBOT TASK 2":
+                self.job_grab_metal()
+                self.job_place_metal()
+
+            if task == "ROBOT TASK 3":
+                self.job_move_tool_lever()
+
+            if task == "ROBOT TASK 4":
+                self.job_grab_finished_product()
+                self.job_place_finished_product()
 
 
 def main(arguments) -> int:
-    print(f'[{CONFIG["Names"]["System"]}] Hello, World!')
+    # print(f'[{CONFIG["Names"]["System"]}] Hello, World!')
 
     timestamp_date = datetime.datetime.now().strftime("%Y-%m-%d")
     timestamp_time = datetime.datetime.now().strftime("%H-%M-%S")
@@ -240,20 +289,40 @@ def main(arguments) -> int:
 
     afv = System()
 
+    def signal_handler(sig, frame):
+        logging.debug(f"Received signal <{sig}> and frame <{frame}>")
+        logging.info(f'[{CONFIG["Names"]["System"]}] System wird heruntergefahren')
+
+        afv.robot.rapid_stop()
+
+        sys.exit(0)
+
+    signal.signal(signal.SIGINT, signal_handler)
+
     if arguments.subparsers is None:
         if arguments.reset:
+            afv.ready_robot()
             return 0
-        return afv.run()
+
+        afv.run()
+        return 0
 
     if arguments.subparsers == "debug":
+        CONFIG["DEBUG"] = True
         if arguments.voice_control:
-            return afv.start_voice_control()
+            afv.debug_voice_control()
+            return 0
+
         if arguments.movement:
-            return afv.start_movement()
-        return afv.run()
+            afv.debug_movement()
+            return 0
+
+        logging.warning("No debug routine selected")
+        return 1
 
     if arguments.subparsers == "calibrate":
-        return afv.calibrate()
+        afv.calibrate()
+        return 0
 
     return 0
 
