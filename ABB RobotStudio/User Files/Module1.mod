@@ -25,16 +25,16 @@ MODULE Module1
     !
     !***********************************************************
     PROC main()
-        WHILE ready = FALSE DO
+        WHILE TRUE DO
             WaitTime 1;
+
+            IF job = 1 THEN
+                MoveJ target, v100, z30, tool0;
+            ELSEIF job = 2 THEN
+                g_GripOut;
+            ELSEIF job = 3 THEN
+                g_GripIn;
+            ENDIF
         ENDWHILE
-        
-        IF job = 1 THEN
-            MoveJ target, v100, z30, tool0;
-        ELSEIF job = 2 THEN
-            g_GripOut;
-        ELSEIF job = 3 THEN
-            g_GripIn;
-        ENDIF
     ENDPROC
 ENDMODULE
