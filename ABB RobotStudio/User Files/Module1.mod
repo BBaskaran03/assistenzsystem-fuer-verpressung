@@ -26,7 +26,9 @@ MODULE Module1
     !***********************************************************
     PROC main()
         WHILE TRUE DO
-            WaitTime 1;
+            WHILE ready = FALSE DO
+                WaitTime 1;
+            ENDWHILE
 
             IF job = 1 THEN
                 MoveJ target, v100, z30, tool0;
