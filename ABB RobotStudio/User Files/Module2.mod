@@ -1,7 +1,7 @@
-MODULE Module1
+MODULE Module2
     !***********************************************************
     !
-    ! Module:  Module1
+    ! Module:  Module2
     !
     ! Description:
     !   <Insert description here>
@@ -33,9 +33,9 @@ MODULE Module1
             IF job=1 THEN
                 MoveJ target,v100,z30,tool0;
             ELSEIF job=2 THEN
-                g_GripOut;
+                ! g_GripOut;
             ELSEIF job=3 THEN
-                g_GripIn;
+                ! g_GripIn;
             ENDIF
         ENDWHILE
     ENDPROC
