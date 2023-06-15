@@ -95,6 +95,7 @@ class System:
             [
                 "arm_right_box_metal",
                 "arm_right_box_rubber",
+                "arm_right_checkpoint",
                 "arm_right_tool_metal",
                 "arm_right_tool_rubber",
             ],
@@ -104,6 +105,7 @@ class System:
             self.robot.arm_left,
             [
                 "arm_left_box_finished",
+                "arm_left_checkpoint",
                 "arm_left_tool_lever_down",
                 "arm_left_tool_lever_rotation_1",
                 "arm_left_tool_lever_rotation_2",
