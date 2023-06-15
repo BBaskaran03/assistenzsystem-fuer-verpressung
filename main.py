@@ -260,7 +260,7 @@ class System:
 
 
 def main(arguments) -> int:
-    print(f'[{CONFIG["Names"]["System"]}] Hello, World!')
+    # print(f'[{CONFIG["Names"]["System"]}] Hello, World!')
 
     timestamp_date = datetime.datetime.now().strftime("%Y-%m-%d")
     timestamp_time = datetime.datetime.now().strftime("%H-%M-%S")
