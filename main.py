@@ -5,6 +5,7 @@ import os
 import pathlib
 import signal
 import sys
+import time
 
 from config import CONFIG
 from object_detection.object_detection import ObjectDetector
@@ -126,8 +127,13 @@ class System:
         self.robot.arm_right.move_to(self.positions["arm_right_checkpoint"])
         self.robot.arm_right.move_to(self.positions["arm_right_box_rubber"])
 
+        self.robot.arm_right.gripper_open()
+
         position_rubber = self.detector.get("rubber")
-        self.robot.arm_right.grab(position_rubber)
+        # self.robot.arm_right.grab(position_rubber)
+        time.sleep(2)
+
+        self.robot.arm_right.gripper_close()
 
         self.robot.arm_right.move_to(self.positions["arm_right_checkpoint"])
         self.robot.arm_right.move_to_home()
@@ -142,7 +148,7 @@ class System:
         self.robot.arm_right.move_to_home()
 
         self.robot.arm_right.move_to(self.positions["arm_right_tool_rubber"])
-        self.robot.arm_right.drop()
+        self.robot.arm_right.gripper_open()
 
         self.robot.arm_right.move_to_home()
 
@@ -157,8 +163,14 @@ class System:
         self.robot.arm_right.move_to(self.positions["arm_right_checkpoint"])
 
         self.robot.arm_right.move_to(self.positions["arm_right_box_metal"])
+
+        self.robot.arm_right.gripper_open()
+
         position_metal = self.detector.get("metal")
-        self.robot.arm_right.grab(position_metal)
+        # self.robot.arm_right.grab(position_metal)
+        time.sleep(2)
+
+        self.robot.arm_right.gripper_close()
 
         self.robot.arm_right.move_to(self.positions["arm_right_checkpoint"])
         self.robot.arm_right.move_to_home()
@@ -173,7 +185,7 @@ class System:
         self.robot.arm_right.move_to_home()
 
         self.robot.arm_right.move_to(self.positions["arm_right_tool_metal"])
-        self.robot.arm_right.drop()
+        self.robot.arm_right.gripper_open()
 
         self.robot.arm_right.move_to_home()
 
@@ -203,7 +215,13 @@ class System:
 
         # TODO: Remove line: $ self.robot.arm_left.move_to(...)
         self.robot.arm_left.move_to(self.positions["arm_left_tool_metal"])
-        self.robot.arm_left.grab(self.positions["arm_left_tool_metal"])
+
+        self.robot.arm_left.gripper_open()
+
+        # self.robot.arm_left.grab(self.positions["arm_left_tool_metal"])
+        time.sleep(2)
+
+        self.robot.arm_left.gripper_close()
 
         self.robot.arm_left.move_to_home()
 
@@ -217,7 +235,7 @@ class System:
         self.robot.arm_left.move_to_home()
 
         self.robot.arm_left.move_to(self.positions["arm_left_box_finished"])
-        self.robot.arm_left.drop()
+        self.robot.arm_left.gripper_open()
 
         self.robot.arm_left.move_to_home()
 

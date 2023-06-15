@@ -13,6 +13,8 @@ MODULE Module1
     !***********************************************************
 
     VAR bool ready := FALSE;
+    VAR intnum job := 0;
+    
     VAR robtarget target;
 
     !***********************************************************
@@ -26,7 +28,13 @@ MODULE Module1
         WHILE ready = FALSE DO
             WaitTime 1;
         ENDWHILE
-
-        MoveL target, v100, z30, tool0;
+        
+        IF job = 1 THEN
+            MoveJ target, v100, z30, tool0;
+        ELSEIF job = 2 THEN
+            g_GripOut;
+        ELSEIF job = 3 THEN
+            g_GripIn;
+        ENDIF
     ENDPROC
 ENDMODULE
