@@ -12,7 +12,7 @@ class ChatGPT:
 
     SYSTEM_MESSAGE = {
         "role": "system",
-        "content": f'Du bist {CONFIG["Names"]["Robot"]}. Assistent von {CONFIG["Names"]["User"]}. {CONFIG["Names"]["User"]} arbeitet in einer Behinderten Werkstatt und ist leicht kognitiv eingeschränkt. Du unterstützt Sie bei der Arbeit. Antworte ihr so kurz und knapp wie möglich aber freundlich. Motiviere Sie.',
+        "content": CONFIG["OPENAI"]["Context"]
     }
 
     def __init__(self, api_key, language):
