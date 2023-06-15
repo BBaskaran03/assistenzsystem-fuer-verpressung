@@ -5,7 +5,6 @@ import os
 import pathlib
 import signal
 import sys
-import threading
 
 from config import CONFIG
 from object_detection.object_detection import ObjectDetector
@@ -52,7 +51,6 @@ class System:
             password=CONFIG["Robot Web Services"]["password"],
             model=CONFIG["Robot Web Services"]["model"],
         )
-        self.robot.ready_robot()
 
         logging.debug("Creating instace of Dectector")
         self.detector = ObjectDetector()
@@ -73,6 +71,11 @@ class System:
             f'[{CONFIG["Names"]["System"]}] [System] Startvorgang abgeschlossen'
         )
         logging.info(f'[{CONFIG["Names"]["System"]}] System ready')
+
+    def ready_robot(self):
+        logging.info(f'[{CONFIG["Names"]["System"]}] [System] Roboter ist bereit')
+        self.robot.ready_robot()
+
     def _calibrate_arm(self, arm: RobotArm, positions: list[str]):
         for position in positions:
             message = f"Please move arm <{arm.name}> to position <{position}> and press <ENTER> ..."
@@ -204,25 +207,25 @@ class System:
 
         self.robot.arm_left.move_to_home()
 
-    def start_voice_control(self):
+    def debug_movement(self):
+        self.ready_robot()
+
+        self.job_grab_rubber()
+        self.job_place_rubber()
+
+        self.job_grab_metal()
+        self.job_place_metal()
+
+        self.job_move_tool_lever()
+
+        self.job_grab_finished_product()
+        self.job_place_finished_product()
+
+    def debug_voice_control(self):
         self.voice_control.start()
 
-    def start_movement(self):
-        running = True
-
-        while running:
-            self.job_grab_rubber()
-            self.job_place_rubber()
-
-            self.job_grab_metal()
-            self.job_place_metal()
-
-            self.job_move_tool_lever()
-
-            self.job_grab_finished_product()
-            self.job_place_finished_product()
-
-            running = False
+        task = self.voice_control.wait_for_task()
+        logging.info(f"Reacting to <{task}>")
 
     def run(self):
         self.ready_robot()
@@ -284,18 +287,28 @@ def main(arguments) -> int:
 
     if arguments.subparsers is None:
         if arguments.reset:
+            afv.ready_robot()
             return 0
-        return afv.run()
+
+        afv.run()
+        return 0
 
     if arguments.subparsers == "debug":
+        CONFIG["DEBUG"] = True
         if arguments.voice_control:
-            return afv.start_voice_control()
+            afv.debug_voice_control()
+            return 0
+
         if arguments.movement:
-            return afv.start_movement()
-        return afv.run()
+            afv.debug_movement()
+            return 0
+
+        logging.warning("No debug routine selected")
+        return 1
 
     if arguments.subparsers == "calibrate":
-        return afv.calibrate()
+        afv.calibrate()
+        return 0
 
     return 0
 
