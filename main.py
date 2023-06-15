@@ -118,7 +118,9 @@ class System:
     def job_grab_rubber(self):
         message = "Ich greife jetzt das Gummiteil"
         self.text_to_speech.say(message)
-        logging.info(f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}')
+        logging.info(
+            f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}'
+        )
 
         self.robot.arm_right.move_to_home()
         self.robot.arm_right.move_to(self.positions["arm_right_checkpoint"])
@@ -133,7 +135,9 @@ class System:
     def job_place_rubber(self):
         message = "Ich lege jetzt das Gummiteil ab"
         self.text_to_speech.say(message)
-        logging.info(f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}')
+        logging.info(
+            f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}'
+        )
 
         self.robot.arm_right.move_to_home()
 
@@ -145,7 +149,9 @@ class System:
     def job_grab_metal(self):
         message = "Ich greife jetzt das Metallteil"
         self.text_to_speech.say(message)
-        logging.info(f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}')
+        logging.info(
+            f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}'
+        )
 
         self.robot.arm_right.move_to_home()
         self.robot.arm_right.move_to(self.positions["arm_right_checkpoint"])
@@ -160,7 +166,9 @@ class System:
     def job_place_metal(self):
         message = "Ich lege jetzt das Metallteil ab"
         self.text_to_speech.say(message)
-        logging.info(f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}')
+        logging.info(
+            f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}'
+        )
 
         self.robot.arm_right.move_to_home()
 
@@ -172,7 +180,9 @@ class System:
     def job_move_tool_lever(self):
         message = "Ich lege jetzt den Hebel um"
         self.text_to_speech.say(message)
-        logging.info(f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}')
+        logging.info(
+            f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}'
+        )
 
         self.robot.arm_left.move_to_home()
 
@@ -185,7 +195,9 @@ class System:
     def job_grab_finished_product(self):
         message = "Ich greife jetzt das fertige Bauteil"
         self.text_to_speech.say(message)
-        logging.info(f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}')
+        logging.info(
+            f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}'
+        )
 
         self.robot.arm_left.move_to_home()
 
@@ -198,7 +210,9 @@ class System:
     def job_place_finished_product(self):
         message = "Ich lege jetzt das fertige Bauteil in die Box"
         self.text_to_speech.say(message)
-        logging.info(f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}')
+        logging.info(
+            f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}'
+        )
 
         self.robot.arm_left.move_to_home()
 
