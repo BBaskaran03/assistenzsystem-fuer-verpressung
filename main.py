@@ -3,6 +3,7 @@ import datetime
 import logging
 import os
 import pathlib
+import signal
 import sys
 import threading
 
@@ -268,6 +269,16 @@ def main(arguments) -> int:
     configure_logger(logging_file, arguments.verbose)
 
     afv = System()
+
+    def signal_handler(sig, frame):
+        logging.debug(f"Received signal <{sig}> and frame <{frame}>")
+        logging.info(f'[{CONFIG["Names"]["System"]}] System wird heruntergefahren')
+
+        afv.robot.rapid_stop()
+
+        sys.exit(0)
+
+    signal.signal(signal.SIGINT, signal_handler)
 
     if arguments.subparsers is None:
         if arguments.reset:
