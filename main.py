@@ -72,9 +72,7 @@ class System:
         logging.debug(
             f'[{CONFIG["Names"]["System"]}] [System] Startvorgang abgeschlossen'
         )
-        logging.info(
-            f'[{CONFIG["Names"]["System"]}] System ready'
-        )
+        logging.info(f'[{CONFIG["Names"]["System"]}] System ready')
     def _calibrate_arm(self, arm: RobotArm, positions: list[str]):
         for position in positions:
             message = f"Please move arm <{arm.name}> to position <{position}> and press <ENTER> ..."
