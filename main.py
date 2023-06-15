@@ -222,12 +222,41 @@ class System:
             running = False
 
     def run(self):
-        # TODO: Check for voice commands, if found, interact with robot
-        voice_control = threading.Thread(target=self.start_voice_control)
-        voice_control.start()
+        self.ready_robot()
 
-        movement = threading.Thread(target=self.start_movement)
-        movement.start()
+        self.voice_control.start()
+
+        while True:
+            task = self.voice_control.wait_for_task()
+
+            if task == "YUMI_STOP":
+                message = "Alles klar, ich stoppe."
+                self.text_to_speech.say(message)
+                logging.info(
+                    f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}'
+                )
+
+            if task == "YUMI_WEITER":
+                message = "Alles klar, ich mache weiter."
+                self.text_to_speech.say(message)
+                logging.info(
+                    f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}'
+                )
+
+            if task == "ROBOT TASK 1":
+                self.job_grab_rubber()
+                self.job_place_rubber()
+
+            if task == "ROBOT TASK 2":
+                self.job_grab_metal()
+                self.job_place_metal()
+
+            if task == "ROBOT TASK 3":
+                self.job_move_tool_lever()
+
+            if task == "ROBOT TASK 4":
+                self.job_grab_finished_product()
+                self.job_place_finished_product()
 
 
 def main(arguments) -> int:
