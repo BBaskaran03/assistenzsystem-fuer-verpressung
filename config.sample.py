@@ -1,6 +1,7 @@
 """Configuration"""
 
 CONFIG = {
+    "DEBUG": False,
     "Names": {
         "System": "Assistenzsystem für Verpressung",
         "Robot": "Yumi",
@@ -9,6 +10,7 @@ CONFIG = {
     "Positions": {"file": "./positions.json"},
     "Robot Web Services": {
         "hostname": "http://localhost:80",
+        # "hostname": "http://192.168.125.1:80",
         "username": "",
         "password": "",
         "model": "IRB14000",
@@ -18,5 +20,5 @@ CONFIG = {
         "language": "de",
     },
     "PORCUPINE": {"API_KEY": ""},
-    "OPENAI": {"API_KEY": "", "Demo Mode": False},
+    "OPENAI": {"API_KEY": "", "DONT QUERY": False},
 }

@@ -21,7 +21,7 @@ class ChatGPT:
         self.language = language
 
     def get_response(self, prompt: str) -> str:
-        if CONFIG["OPENAI"]["Demo Mode"]:
+        if CONFIG["OPENAI"]["DONT QUERY"]:
             return "Hier könnte Ihre Werbung stehen."
 
         response = openai.ChatCompletion.create(
