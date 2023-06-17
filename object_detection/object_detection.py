@@ -1,8 +1,9 @@
 import logging
 import sys
+from math import atan2
+
 #imports for ObjectDetector
 import cv2 as cv
-from math import atan2
 import numpy as np
 
 from robot_web_services.positions import Position
@@ -23,24 +24,29 @@ class ObjectDetector:
         pass
 
     def __capture(self):
-        import cv2 as cv
-    cap = cv.VideoCapture(0, cv.CAP_DSHOW)
-    focus = 20
-    cap.set(cv.CAP_PROP_AUTOFOCUS, 0)
-    cap.set(cv.CAP_PROP_FRAME_WIDTH, 3840)
-    cap.set(cv.CAP_PROP_FRAME_HEIGHT, 2160)
-    cap.set(cv.CAP_PROP_FOCUS, focus)
+        # captures an imagage with the camera on channel 0
+        cap = cv.VideoCapture(0, cv.CAP_DSHOW)
 
-    for index in range(20):
-        ret, frame = cap.read()
-    cv.imwrite("image.jpg", frame, [cv.IMWRITE_JPEG_QUALITY, 100])
-    cap.release()
+        # focus set to 20 due to problems with autofocus may adjust this
+        focus = 20
+        cap.set(cv.CAP_PROP_AUTOFOCUS, 0)
+        cap.set(cv.CAP_PROP_FRAME_WIDTH, 3840)
+        cap.set(cv.CAP_PROP_FRAME_HEIGHT, 2160)
+        cap.set(cv.CAP_PROP_FOCUS, focus)
+
+        for index in range(20):
+            ret, frame = cap.read()
+        # Saves the image with name image.jpg
+        cv.imwrite("image.jpg", frame, [cv.IMWRITE_JPEG_QUALITY, 100])
+        cap.release()
+
     def __adjust_image(self, img):
+        # converts any given image to a grayscale image in order to simplify edge recognition
         img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
         img = cv.convertScaleAbs(img, 1, 1.5)
         _, img = cv.threshold(img, 200,255, cv.THRESH_BINARY)
         #img = cv.adaptiveThreshold(img, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 19, 1)
-        return img
+        return 0
 
     
     def __getOrientation(self, img):
@@ -49,6 +55,7 @@ class ObjectDetector:
         merged_contours = []
         # ignore too small and too big contours and Approximate the contour with convex hull
         for contour in contours:
+            # TODO: Check contour size
             area = cv.contourArea(contour)
             if area < 10000 or 50000 < area:
                 continue
@@ -82,9 +89,8 @@ class ObjectDetector:
 
 
     def get_position_and_rotation(self, image) -> dict:
-        # Example values for location of object
         # At the moment returns x,y pixel-koordinates and rotation in degree
-        self.cap()
+        self.__capture()
         image = cv.imread("image.jpg")
         adjusted_image = self.__adjust_image(image)
         try:
