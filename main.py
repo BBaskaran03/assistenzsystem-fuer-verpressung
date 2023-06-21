@@ -34,6 +34,29 @@ def configure_logger(logging_file, verbose: bool):
     logging.raiseExceptions = False
 
 
+def handle_arguments(arguments):
+    if arguments.subparsers is None:
+        if arguments.reset:
+            system.SYSTEM.ready_robot()
+
+        system.SYSTEM.run()
+
+    if arguments.subparsers == "debug":
+        CONFIG["DEBUG"] = True
+
+        if (not arguments.voice_control) and (not arguments.movement):
+            logging.warning("No debug routine selected")
+            return 1
+
+        if arguments.movement:
+            system.SYSTEM.debug_movement()
+
+        if arguments.voice_control:
+            system.SYSTEM.debug_voice_control()
+
+    if arguments.subparsers == "calibrate":
+        system.SYSTEM.calibrate()
+
 def main(arguments) -> int:
     # print(f'[{CONFIG["Names"]["System"]}] Hello, World!')
 
@@ -42,40 +65,27 @@ def main(arguments) -> int:
     logging_file = pathlib.Path(f"./logs/{timestamp_date}/{timestamp_time}.txt")
     configure_logger(logging_file, arguments.verbose)
 
-    system.initialize()
-
     def signal_handler(sig, frame):
         logging.debug(f"Received signal <{sig}> and frame <{frame}>")
-
         system.SYSTEM.shutdown()
         sys.exit(0)
 
     signal.signal(signal.SIGINT, signal_handler)
 
-    if arguments.subparsers is None:
-        if arguments.reset:
-            system.SYSTEM.ready_robot()
-            return 0
-
-        system.SYSTEM.run()
-        return 0
-
-    if arguments.subparsers == "debug":
-        CONFIG["DEBUG"] = True
-        if arguments.voice_control:
-            system.SYSTEM.debug_voice_control()
-            return 0
-
-        if arguments.movement:
-            system.SYSTEM.debug_movement()
-            return 0
-
-        logging.warning("No debug routine selected")
-        return 1
-
-    if arguments.subparsers == "calibrate":
-        system.SYSTEM.calibrate()
-        return 0
+    try:
+        system.initialize()
+        handle_arguments(arguments)
+    # pylint: disable-next=broad-exception-caught
+    except Exception as exception:
+        logging.critical('handle_arguments(arguments)')
+        logging.debug(exception)
+    finally:
+        try:
+            system.SYSTEM.shutdown()
+        # pylint: disable-next=broad-exception-caught
+        except Exception as exception:
+            logging.critical('system.SYSTEM.shutdown()')
+            logging.debug(exception)
 
     return 0
 
