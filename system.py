@@ -23,6 +23,21 @@ class System:
         self.text_to_speech = None
         self.voice_control = None
 
+    def log_debug(self, source: str, message: str):
+        # logging.debug(f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"][source]}> {message}')
+        logging.debug(f'<{CONFIG["Names"][source]}> {message}')
+
+    def log_info(self, source: str, message: str):
+        # logging.info(f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"][source]}> {message}')
+        logging.info(f'<{CONFIG["Names"][source]}> {message}')
+
+    def inform_user(self, source: str, message: str):
+        self.log_info(source, message)
+        self.text_to_speech.say(message)
+
+    def inform_user_only_text(self, source: str, message: str):
+        self.log_info(source, message)
+
     def ready_positions(self):
         logging.debug("Loading positions from file")
         self.positions = Positions.from_file(CONFIG["Positions"]["file"])
@@ -38,7 +53,7 @@ class System:
 
         logging.debug("Running robot.ready_robot()")
         self.robot.ready_robot()
-        logging.info(f'[{CONFIG["Names"]["System"]}] [System] Roboter ist bereit')
+        logging.debug("Robot is ready")
 
     def ready_detector(self):
         logging.debug("Creating instace of Dectector")
@@ -59,7 +74,7 @@ class System:
         )
 
     def ready_system(self):
-        logging.debug(f'[{CONFIG["Names"]["System"]}] [System] Startvorgang ...')
+        self.log_info("System", "System wird gestartet ...")
 
         self.ready_positions()
 
@@ -68,10 +83,7 @@ class System:
         self.ready_text_to_speech()
         self.ready_voice_control()
 
-        logging.debug(
-            f'[{CONFIG["Names"]["System"]}] [System] Startvorgang abgeschlossen'
-        )
-        logging.info(f'[{CONFIG["Names"]["System"]}] System ready')
+        self.log_info("System", "System ist startklar")
 
     def _calibrate_arm(self, arm: RobotArm, positions: list[str]):
         for position in positions:
@@ -118,10 +130,7 @@ class System:
 
     def job_grab_rubber(self):
         message = "Ich greife jetzt das Gummiteil"
-        self.text_to_speech.say(message)
-        logging.info(
-            f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}'
-        )
+        self.inform_user("Robot", message)
 
         self.robot.arm_right.move_to_home()
         self.robot.arm_right.move_to(self.positions["arm_right_checkpoint"])
@@ -140,10 +149,7 @@ class System:
 
     def job_place_rubber(self):
         message = "Ich lege jetzt das Gummiteil ab"
-        self.text_to_speech.say(message)
-        logging.info(
-            f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}'
-        )
+        self.inform_user("Robot", message)
 
         self.robot.arm_right.move_to_home()
 
@@ -154,10 +160,7 @@ class System:
 
     def job_grab_metal(self):
         message = "Ich greife jetzt das Metallteil"
-        self.text_to_speech.say(message)
-        logging.info(
-            f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}'
-        )
+        self.inform_user("Robot", message)
 
         self.robot.arm_right.move_to_home()
         self.robot.arm_right.move_to(self.positions["arm_right_checkpoint"])
@@ -177,10 +180,7 @@ class System:
 
     def job_place_metal(self):
         message = "Ich lege jetzt das Metallteil ab"
-        self.text_to_speech.say(message)
-        logging.info(
-            f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}'
-        )
+        self.inform_user("Robot", message)
 
         self.robot.arm_right.move_to_home()
 
@@ -191,10 +191,7 @@ class System:
 
     def job_move_tool_lever(self):
         message = "Ich lege jetzt den Hebel um"
-        self.text_to_speech.say(message)
-        logging.info(
-            f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}'
-        )
+        self.inform_user("Robot", message)
 
         self.robot.arm_left.move_to_home()
 
@@ -206,10 +203,7 @@ class System:
 
     def job_grab_finished_product(self):
         message = "Ich greife jetzt das fertige Bauteil"
-        self.text_to_speech.say(message)
-        logging.info(
-            f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}'
-        )
+        self.inform_user("Robot", message)
 
         self.robot.arm_left.move_to_home()
 
@@ -227,10 +221,7 @@ class System:
 
     def job_place_finished_product(self):
         message = "Ich lege jetzt das fertige Bauteil in die Box"
-        self.text_to_speech.say(message)
-        logging.info(
-            f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}'
-        )
+        self.inform_user("Robot", message)
 
         self.robot.arm_left.move_to_home()
 
@@ -276,17 +267,11 @@ class System:
 
             if task == "YUMI_STOP":
                 message = "Alles klar, ich stoppe."
-                self.text_to_speech.say(message)
-                logging.info(
-                    f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}'
-                )
+                self.inform_user("Robot", message)
 
             if task == "YUMI_WEITER":
                 message = "Alles klar, ich mache weiter."
-                self.text_to_speech.say(message)
-                logging.info(
-                    f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}'
-                )
+                self.inform_user("Robot", message)
 
             if task == "ROBOT TASK 1":
                 self.job_grab_rubber()
