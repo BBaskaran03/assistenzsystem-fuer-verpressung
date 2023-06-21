@@ -113,7 +113,9 @@ class System:
                 "arm_right_box_metal",
                 "arm_right_box_rubber",
                 "arm_right_checkpoint",
+                "arm_right_tool_metal_above",
                 "arm_right_tool_metal",
+                "arm_right_tool_rubber_above",
                 "arm_right_tool_rubber",
             ],
         )
@@ -156,6 +158,7 @@ class System:
 
         self.robot.arm_right.move_to_home()
 
+        self.robot.arm_right.move_to(self.positions["arm_right_tool_rubber_above"])
         self.robot.arm_right.move_to(self.positions["arm_right_tool_rubber"])
         self.robot.arm_right.gripper_open()
 
@@ -187,6 +190,7 @@ class System:
 
         self.robot.arm_right.move_to_home()
 
+        self.robot.arm_right.move_to(self.positions["arm_right_tool_metal_above"])
         self.robot.arm_right.move_to(self.positions["arm_right_tool_metal"])
         self.robot.arm_right.gripper_open()
 
