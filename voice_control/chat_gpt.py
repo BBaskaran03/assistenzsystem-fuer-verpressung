@@ -28,6 +28,9 @@ class ChatGPT:
             model=self.MODEL,
             messages=[self.SYSTEM_MESSAGE, {"role": "user", "content": prompt}],
         )
+
+        logging.debug(response)
+
         response = response["choices"][0]["message"]["content"]
 
         return response
