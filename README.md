@@ -5,15 +5,19 @@ Hello, World!
 ## QuickStart
 
 ```powershell
-pip install "virtualenv"
-python -m venv ".venv"
+python3 -m pip install "virtualenv"
+python3 -m venv ".venv"
+```
 
+```powershell
 .\.venv\Scripts\activate
+python3 -m pip install --upgrade pip
+python3 -m pip install -r "requirements.txt"
+```
 
-python.exe -m pip install --upgrade pip
-python.exe -m pip install -r "requirements.txt"
-
-python.exe "main.py"
+```powershell
+.\.venv\Scripts\activate
+python "main.py"
 ```
 
 ## Further references
