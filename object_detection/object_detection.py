@@ -6,17 +6,17 @@ from math import atan2
 import cv2 as cv
 import numpy as np
 
-from robot_web_services.positions import Position
+#from robot_web_services.positions import Position
 
 
-class GrabTarget:
-    def __init__(self, position: Position, rotation: float):
-        self.position = position
-        self.rotation = rotation
+# class GrabTarget:
+#     def __init__(self, position: Position, rotation: float):
+#         self.position = position
+#         self.rotation = rotation
 
-    def get_grab_position(self) -> Position:
-        # TODO: Calulate robtarget from self.position
-        return Position.from_worldpoint(0, 0, 0)
+#     def get_grab_position(self) -> Position:
+#         # TODO: Calulate robtarget from self.position
+#         return Position.from_worldpoint(0, 0, 0)
 
 
 class ObjectDetector:
@@ -35,19 +35,27 @@ class ObjectDetector:
         cap.set(cv.CAP_PROP_FOCUS, focus)
 
         for index in range(20):
-            ret, frame = cap.read()
+            _, img = cap.read()
         # Saves the image with name image.jpg
-        cv.imwrite("image.jpg", frame, [cv.IMWRITE_JPEG_QUALITY, 100])
+        # cv.imwrite("image.jpg", frame, [cv.IMWRITE_JPEG_QUALITY, 100])
         cap.release()
-        return 0
+        return img
 
-    def __adjust_image(self, img):
+    def __adjust_image(self, img, target):
+        #crop image for target
+        
+        if target == 'metal':
+            # y:y, x:x
+            # TODO: Muss noch angepasst werden
+            img = img[100:300, 100:300]
+        if target == 'rubber':
+            img = img[100:300, 100:300]
         # converts any given image to a grayscale image in order to simplify edge recognition
         img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
-        img = cv.convertScaleAbs(img, 1, 1.5)
-        _, img = cv.threshold(img, 200,255, cv.THRESH_BINARY)
+        img = cv.convertScaleAbs(img, 1, 1.7)
+        _, img = cv.threshold(img, 210,255, cv.THRESH_BINARY)
         #img = cv.adaptiveThreshold(img, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 19, 1)
-        return 0
+        return img
 
     
     def __getOrientation(self, img):
@@ -58,7 +66,7 @@ class ObjectDetector:
         for contour in contours:
             # TODO: Check contour size
             area = cv.contourArea(contour)
-            if area < 10000 or 50000 < area:
+            if area < 100_000 or 150_000 < area:
                 continue
             hull = cv.convexHull(contour)
             merged_contours.append(hull)
@@ -87,60 +95,41 @@ class ObjectDetector:
         deg_angle = -int(np.rad2deg(angle)) - 90
         
         return x, y, deg_angle
+    
+    def move_to_target(self, init_x, init_y, x, y):
+        move_x = (init_x-x)/8
+        move_y = (init_y-y)/8
+        return move_x, move_y
 
 
-    def __get_position_and_rotation(self) -> dict:
-        # At the moment returns x,y pixel-koordinates and rotation in degree
-        self.__capture()
-        image = cv.imread("image.jpg")
-        adjusted_image = self.__adjust_image(image)
+    def get(self, target):
+        if target not in ["rubber", "metal"]:
+            raise ValueError(f"Unkown target: <{target}>")
+
+        image = self.__capture()
+        adjusted_image = self.__adjust_image(image, target)
+        
         try:
             x, y, angle = self.__getOrientation(adjusted_image)
         except Exception as e:
             print("Keine Orientierung gefunden, bitte Objekt neu Poisitionieren")
-            print("Error:", e)
+            # print("Error:", e)
+            sys.exit()
+        
+        move_x, move_y = self.move_to_target(1,1, x, y)
 
-        return {"x": x, "y": y, "rotation": angle}
-    
-    def move_to_target(self, init_x, init_y):
-        x ,y ,angle = __get_position_and_rotation()
-        move_x = (init_x-x)/8
-        move_y = (init_y-y)/8
-        return move_x, move_y, angle
-
-
-    def get(self, target) -> Position:
-        if target not in ["rubber", "metal"]:
-            raise ValueError(f"Unkown target: <{target}>")
-
-        position_and_rotation = self.get_position_and_rotation()
-
-        position = Position.from_worldpoint(
-            x=position_and_rotation["x"], y=position_and_rotation["y"], z=0
-        )
-        rotation = position_and_rotation["rotation"]
-
-        grab_target = GrabTarget(position, rotation)
-        logging.debug(f"Grab target for <{target}> is: <{grab_target}>")
-
-        grab_position = grab_target.get_grab_position()
-        logging.debug(f"Grab position for <{target}> is: <{grab_position}>")
-
-        return grab_position
-    
-    
+        return move_x, move_y, angle   
 
 
 def main() -> int:
     print("Hello, World")
     object_detector = ObjectDetector()
-    object_detector.get_position_and_rotation("rohr (1).jpg")
 
-    position_rubber = object_detector.get("rubber")
-    print(f"Gummiteil ist an Position <{position_rubber}>")
+    move_x, move_y, angle = object_detector.get('rubber')
+    print("Gummiteil ist an Position" +str(move_x)+","+ str(move_y)+","+ str(angle)+ ">")
 
-    position_metal = object_detector.get("metal")
-    print(f"Metallteil ist an Position <{position_metal}>")
+    move_x, move_y, angle = object_detector.get('metal')
+    print("Metallteil ist an Position <" +str(move_x)+","+ str(move_y)+","+ str(angle) +">")
 
     return 0
 
