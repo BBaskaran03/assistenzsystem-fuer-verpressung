@@ -257,7 +257,7 @@ class RobotArm:
         self._api.post(resource, payload={"value": str(value)})
 
     def gripper_open(self):
-        logging.info("Gripper will open")
+        logging.debug("Gripper will open")
         self._robot.rapid_start()
 
         self.rapid_variable_set("ready", "TRUE")
@@ -268,10 +268,10 @@ class RobotArm:
 
         self._robot.rapid_stop()
         time.sleep(2)
-        logging.info("Gripper has been opened")
+        logging.debug("Gripper has been opened")
 
     def gripper_close(self):
-        logging.info("Gripper will close")
+        logging.debug("Gripper will close")
         self._robot.rapid_start()
 
         self.rapid_variable_set("ready", "TRUE")
@@ -282,7 +282,7 @@ class RobotArm:
 
         self._robot.rapid_stop()
         time.sleep(2)
-        logging.info("Gripper has been closed")
+        logging.debug("Gripper has been closed")
 
     def move_to(self, position: Position):
         def compare(robt1: Position, robt2: Position):
