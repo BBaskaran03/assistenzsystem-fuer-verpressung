@@ -8,6 +8,7 @@ import vlc
 from pvporcupine import create
 from pvrecorder import PvRecorder
 
+from config import CONFIG
 from voice_control.models.models import KEY_WORDS, KEY_WORDS_PATH, MODEL_PATH
 
 
@@ -21,7 +22,7 @@ class Hotword:
         )
 
     def play_sound_effect(self):
-        file = f"{os.path.dirname(os.path.realpath(__file__))}/ding-36029.mp3"
+        file = f'{CONFIG["PORCUPINE"]["SoundEffectFile"]}'
 
         vlc_instance = vlc.Instance()
         player = vlc_instance.media_player_new()
