@@ -23,7 +23,10 @@ CONFIG = {
         "API_KEY": "",
         "SoundEffectFile": "./assets/ding-36029.mp3",
     },
-    "OPENAI": {"API_KEY": "", "DONT QUERY": False},
+    "OPENAI": {
+        "API_KEY": "",
+        "DONT QUERY": False,
+    },
 }
 
 CONFIG["OPENAI"][
