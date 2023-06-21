@@ -255,10 +255,12 @@ class System:
         self.ready_text_to_speech()
         self.ready_voice_control()
 
-        self.voice_control.start()
+        if not CONFIG["DEBUG"]:
+            self.voice_control.start()
 
-        task = self.voice_control.wait_for_task()
-        logging.info(f"Reacting to <{task}>")
+        while True:
+            task = self.voice_control.wait_for_task()
+            logging.info(f"Reacting to <{task}>")
 
     def run(self):
         self.ready_system()
