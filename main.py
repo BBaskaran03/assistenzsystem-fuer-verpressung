@@ -55,27 +55,26 @@ def main(arguments) -> int:
     if arguments.subparsers is None:
         if arguments.reset:
             system.SYSTEM.ready_robot()
-            return 0
 
         system.SYSTEM.run()
-        return 0
 
     if arguments.subparsers == "debug":
         CONFIG["DEBUG"] = True
-        if arguments.voice_control:
-            system.SYSTEM.debug_voice_control()
-            return 0
+
+        if (not arguments.voice_control) and (not arguments.movement):
+            logging.warning("No debug routine selected")
+            return 1
 
         if arguments.movement:
             system.SYSTEM.debug_movement()
-            return 0
 
-        logging.warning("No debug routine selected")
-        return 1
+        if arguments.voice_control:
+            system.SYSTEM.debug_voice_control()
 
     if arguments.subparsers == "calibrate":
         system.SYSTEM.calibrate()
-        return 0
+
+    system.SYSTEM.shutdown()
 
     return 0
 
