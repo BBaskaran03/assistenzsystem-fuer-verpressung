@@ -112,9 +112,7 @@ class ObjectDetector:
         try:
             x, y, angle = self.__getOrientation(adjusted_image)
         except Exception as e:
-            print("Keine Orientierung gefunden, bitte Objekt neu Poisitionieren")
-            # print("Error:", e)
-            sys.exit()
+            raise Exception ("Fehler in Bildverarbeitung - es konnten keine Kanten gefunden werden")
         
         # TODO: init_x und init_y anpassen
         move_x, move_y = self.move_to_target(1,1, x, y)
