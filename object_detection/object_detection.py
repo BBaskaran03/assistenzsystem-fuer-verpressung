@@ -39,6 +39,7 @@ class ObjectDetector:
         # Saves the image with name image.jpg
         cv.imwrite("image.jpg", frame, [cv.IMWRITE_JPEG_QUALITY, 100])
         cap.release()
+        return 0
 
     def __adjust_image(self, img):
         # converts any given image to a grayscale image in order to simplify edge recognition
@@ -88,7 +89,7 @@ class ObjectDetector:
         return x, y, deg_angle
 
 
-    def get_position_and_rotation(self, image) -> dict:
+    def __get_position_and_rotation(self) -> dict:
         # At the moment returns x,y pixel-koordinates and rotation in degree
         self.__capture()
         image = cv.imread("image.jpg")
@@ -100,6 +101,13 @@ class ObjectDetector:
             print("Error:", e)
 
         return {"x": x, "y": y, "rotation": angle}
+    
+    def move_to_target(self, init_x, init_y):
+        x ,y ,angle = __get_position_and_rotation()
+        move_x = (init_x-x)/8
+        move_y = (init_y-y)/8
+        return move_x, move_y, angle
+
 
     def get(self, target) -> Position:
         if target not in ["rubber", "metal"]:
@@ -119,6 +127,8 @@ class ObjectDetector:
         logging.debug(f"Grab position for <{target}> is: <{grab_position}>")
 
         return grab_position
+    
+    
 
 
 def main() -> int:
