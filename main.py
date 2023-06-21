@@ -72,9 +72,20 @@ def main(arguments) -> int:
 
     signal.signal(signal.SIGINT, signal_handler)
 
-    system.initialize()
-    handle_arguments(arguments)
-    system.SYSTEM.shutdown()
+    try:
+        system.initialize()
+        handle_arguments(arguments)
+    # pylint: disable-next=broad-exception-caught
+    except Exception as exception:
+        logging.critical('handle_arguments(arguments)')
+        logging.debug(exception)
+    finally:
+        try:
+            system.SYSTEM.shutdown()
+        # pylint: disable-next=broad-exception-caught
+        except Exception as exception:
+            logging.critical('system.SYSTEM.shutdown()')
+            logging.debug(exception)
 
     return 0
 
