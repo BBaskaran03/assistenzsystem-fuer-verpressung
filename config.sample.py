@@ -19,8 +19,14 @@ CONFIG = {
         "top_level_domain": "de",
         "language": "de",
     },
-    "PORCUPINE": {"API_KEY": ""},
-    "OPENAI": {"API_KEY": "", "DONT QUERY": False},
+    "PORCUPINE": {
+        "API_KEY": "",
+        "SoundEffectFile": "./assets/ding-36029.mp3",
+    },
+    "OPENAI": {
+        "API_KEY": "",
+        "DONT QUERY": False,
+    },
 }
 
 CONFIG["OPENAI"][

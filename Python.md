@@ -2,10 +2,10 @@
 
 ```powershell
 # Install "virtualenv" module
-pip install "virtualenv"
+python3 -m pip install "virtualenv"
 
 # Create virtual environment
-python -m venv ".venv"
+python3 -m venv ".venv"
 ```
 
 ```powershell
@@ -18,9 +18,12 @@ deactivate
 
 ```powershell
 # Install requirements
-python.exe -m pip install --upgrade pip
-python.exe -m pip install -r "requirements.txt"
+python3 -m pip install --upgrade pip
+python3 -m pip install -r "requirements.txt"
 
-# Save dependencies
-python.exe -m pip freeze > "requirements.txt"
+# Save current environment
+python3 -m pip freeze > "./requirements/cached.txt"
+
+# Determine needed requirements
+pipreqs --encoding=utf-8-sig --savepath "./requirements/cached.txt" .
 ```
