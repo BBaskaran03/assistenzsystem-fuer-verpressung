@@ -79,6 +79,15 @@ class System:
 
         self.log_info("System", "System ist einsatzbereit")
 
+    def shutdown(self):
+        if CONFIG["DEBUG"]:
+            self.inform_user_only_text("System", "System wird heruntergefahren")
+        else:
+            self.inform_user("System", "System wird heruntergefahren")
+
+        if self.robot:
+            self.robot.rapid_stop()
+
     def _calibrate_arm(self, arm: RobotArm, positions: list[str]):
         for position in positions:
             message = f"Please move arm <{arm.name}> to position <{position}> and press <ENTER> ..."

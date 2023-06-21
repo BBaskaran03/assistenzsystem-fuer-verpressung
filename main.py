@@ -46,10 +46,8 @@ def main(arguments) -> int:
 
     def signal_handler(sig, frame):
         logging.debug(f"Received signal <{sig}> and frame <{frame}>")
-        logging.info(f'[{CONFIG["Names"]["System"]}] System wird heruntergefahren')
 
-        system.SYSTEM.robot.rapid_stop()
-
+        system.SYSTEM.shutdown()
         sys.exit(0)
 
     signal.signal(signal.SIGINT, signal_handler)
