@@ -34,24 +34,7 @@ def configure_logger(logging_file, verbose: bool):
     logging.raiseExceptions = False
 
 
-def main(arguments) -> int:
-    # print(f'[{CONFIG["Names"]["System"]}] Hello, World!')
-
-    timestamp_date = datetime.datetime.now().strftime("%Y-%m-%d")
-    timestamp_time = datetime.datetime.now().strftime("%H-%M-%S")
-    logging_file = pathlib.Path(f"./logs/{timestamp_date}/{timestamp_time}.txt")
-    configure_logger(logging_file, arguments.verbose)
-
-    system.initialize()
-
-    def signal_handler(sig, frame):
-        logging.debug(f"Received signal <{sig}> and frame <{frame}>")
-
-        system.SYSTEM.shutdown()
-        sys.exit(0)
-
-    signal.signal(signal.SIGINT, signal_handler)
-
+def handle_arguments(arguments):
     if arguments.subparsers is None:
         if arguments.reset:
             system.SYSTEM.ready_robot()
@@ -74,6 +57,23 @@ def main(arguments) -> int:
     if arguments.subparsers == "calibrate":
         system.SYSTEM.calibrate()
 
+def main(arguments) -> int:
+    # print(f'[{CONFIG["Names"]["System"]}] Hello, World!')
+
+    timestamp_date = datetime.datetime.now().strftime("%Y-%m-%d")
+    timestamp_time = datetime.datetime.now().strftime("%H-%M-%S")
+    logging_file = pathlib.Path(f"./logs/{timestamp_date}/{timestamp_time}.txt")
+    configure_logger(logging_file, arguments.verbose)
+
+    def signal_handler(sig, frame):
+        logging.debug(f"Received signal <{sig}> and frame <{frame}>")
+        system.SYSTEM.shutdown()
+        sys.exit(0)
+
+    signal.signal(signal.SIGINT, signal_handler)
+
+    system.initialize()
+    handle_arguments(arguments)
     system.SYSTEM.shutdown()
 
     return 0
