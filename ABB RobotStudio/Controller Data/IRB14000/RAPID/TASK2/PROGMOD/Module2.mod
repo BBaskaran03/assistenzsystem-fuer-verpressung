@@ -1,18 +1,20 @@
-MODULE Module1
+MODULE Module2
     !***********************************************************
     !
-    ! Module:  Module1
+    ! Module:  Module2
     !
     ! Description:
     !   <Insert description here>
     !
-    ! Author: abina
+    ! Author: Assistenzsystem für Verpressung
     !
     ! Version: 1.0
     !
     !***********************************************************
 
     VAR bool ready := FALSE;
+    VAR intnum job := 0;
+    
     VAR robtarget target;
 
     !***********************************************************
@@ -23,10 +25,18 @@ MODULE Module1
     !
     !***********************************************************
     PROC main()
-        WHILE ready = FALSE DO
-            WaitTime 1;
-        ENDWHILE
+        WHILE TRUE DO
+            WHILE ready = FALSE DO
+                WaitTime 1;
+            ENDWHILE
 
-        MoveL target, v100, z30, tool0;
+            IF job = 1 THEN
+                MoveJ target, v100, z30, tool0;
+            ELSEIF job = 2 THEN
+                ! g_GripOut;
+            ELSEIF job = 3 THEN
+                ! g_GripIn;
+            ENDIF
+        ENDWHILE
     ENDPROC
 ENDMODULE
