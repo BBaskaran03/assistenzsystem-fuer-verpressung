@@ -77,7 +77,7 @@ class System:
         self.ready_text_to_speech()
         self.ready_voice_control()
 
-        self.log_info("System", "System ist startklar")
+        self.log_info("System", "System ist einsatzbereit")
 
     def _calibrate_arm(self, arm: RobotArm, positions: list[str]):
         for position in positions:
