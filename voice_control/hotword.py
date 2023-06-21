@@ -20,8 +20,13 @@ class Hotword:
             model_path=MODEL_PATH,
             sensitivities=[0.75, 0.75, 0.75],
         )
+
+        # TODO: [WARN] Overflow - reader is not reading fast enough.
+        # Workaround: Suppress error with <log_overflow=False>
         self.recorder = PvRecorder(
-            device_index=-1, frame_length=self.porcupine.frame_length
+            device_index=-1,
+            frame_length=self.porcupine.frame_length,
+            log_overflow=False,
         )
 
     def play_sound_effect(self):
