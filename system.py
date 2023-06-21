@@ -17,11 +17,17 @@ from voice_control.voice_control import VoiceControl
 
 class System:
     def __init__(self):
-        logging.debug(f'[{CONFIG["Names"]["System"]}] [System] Startvorgang ...')
+        self.positions = None
+        self.robot = None
+        self.detector = None
+        self.text_to_speech = None
+        self.voice_control = None
 
+    def ready_positions(self):
         logging.debug("Loading positions from file")
         self.positions = Positions.from_file(CONFIG["Positions"]["file"])
 
+    def ready_robot(self):
         logging.debug("Creating instance of RobotWebServices")
         self.robot = RobotWebServices(
             hostname=CONFIG["Robot Web Services"]["hostname"],
@@ -30,29 +36,42 @@ class System:
             model=CONFIG["Robot Web Services"]["model"],
         )
 
+        logging.debug("Running robot.ready_robot()")
+        self.robot.ready_robot()
+        logging.info(f'[{CONFIG["Names"]["System"]}] [System] Roboter ist bereit')
+
+    def ready_detector(self):
         logging.debug("Creating instace of Dectector")
         self.detector = ObjectDetector()
 
+    def ready_text_to_speech(self):
         logging.debug("Creating instace of TextToSpeech")
         self.text_to_speech = TextToSpeech(
             top_level_domain=CONFIG["TextToSpeech"]["top_level_domain"],
             language=CONFIG["TextToSpeech"]["language"],
         )
 
+    def ready_voice_control(self):
         logging.debug("Creating instace of VoiceControl")
         self.voice_control = VoiceControl(
             porcupine_api_key=CONFIG["PORCUPINE"]["API_KEY"],
             openai_api_key=CONFIG["OPENAI"]["API_KEY"],
         )
 
+    def ready_system(self):
+        logging.debug(f'[{CONFIG["Names"]["System"]}] [System] Startvorgang ...')
+
+        self.ready_positions()
+
+        self.ready_robot()
+        self.ready_detector()
+        self.ready_text_to_speech()
+        self.ready_voice_control()
+
         logging.debug(
             f'[{CONFIG["Names"]["System"]}] [System] Startvorgang abgeschlossen'
         )
         logging.info(f'[{CONFIG["Names"]["System"]}] System ready')
-
-    def ready_robot(self):
-        logging.info(f'[{CONFIG["Names"]["System"]}] [System] Roboter ist bereit')
-        self.robot.ready_robot()
 
     def _calibrate_arm(self, arm: RobotArm, positions: list[str]):
         for position in positions:
@@ -67,6 +86,10 @@ class System:
         self.positions.to_file(CONFIG["Positions"]["file"])
 
     def calibrate(self):
+        self.ready_positions()
+        self.ready_text_to_speech()
+        self.ready_robot()
+
         # TODO: Make calibration interactive, let use choose arm (l/r) and position (1/2/3/...)
 
         self._calibrate_arm(
@@ -217,7 +240,11 @@ class System:
         self.robot.arm_left.move_to_home()
 
     def debug_movement(self):
+        self.ready_positions()
+
         self.ready_robot()
+        self.ready_detector()
+        self.ready_text_to_speech()
 
         self.job_grab_rubber()
         self.job_place_rubber()
@@ -231,13 +258,16 @@ class System:
         self.job_place_finished_product()
 
     def debug_voice_control(self):
+        self.ready_text_to_speech()
+        self.ready_voice_control()
+
         self.voice_control.start()
 
         task = self.voice_control.wait_for_task()
         logging.info(f"Reacting to <{task}>")
 
     def run(self):
-        self.ready_robot()
+        self.ready_system()
 
         self.voice_control.start()
 
