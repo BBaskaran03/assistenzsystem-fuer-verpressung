@@ -7,12 +7,8 @@ import signal
 import sys
 import time
 
+import system
 from config import CONFIG
-from object_detection.object_detection import ObjectDetector
-from robot_web_services.positions import Position, Positions
-from robot_web_services.robot_web_services import RobotArm, RobotWebServices
-from text_to_speech.text_to_speech import TextToSpeech
-from voice_control.voice_control import VoiceControl
 
 
 def configure_logger(logging_file, verbose: bool):
@@ -38,265 +34,6 @@ def configure_logger(logging_file, verbose: bool):
     logging.raiseExceptions = False
 
 
-class System:
-    def __init__(self):
-        logging.debug(f'[{CONFIG["Names"]["System"]}] [System] Startvorgang ...')
-
-        logging.debug("Loading positions from file")
-        self.positions = Positions.from_file(CONFIG["Positions"]["file"])
-
-        logging.debug("Creating instance of RobotWebServices")
-        self.robot = RobotWebServices(
-            hostname=CONFIG["Robot Web Services"]["hostname"],
-            username=CONFIG["Robot Web Services"]["username"],
-            password=CONFIG["Robot Web Services"]["password"],
-            model=CONFIG["Robot Web Services"]["model"],
-        )
-
-        logging.debug("Creating instace of Dectector")
-        self.detector = ObjectDetector()
-
-        logging.debug("Creating instace of TextToSpeech")
-        self.text_to_speech = TextToSpeech(
-            top_level_domain=CONFIG["TextToSpeech"]["top_level_domain"],
-            language=CONFIG["TextToSpeech"]["language"],
-        )
-
-        logging.debug("Creating instace of VoiceControl")
-        self.voice_control = VoiceControl(
-            porcupine_api_key=CONFIG["PORCUPINE"]["API_KEY"],
-            openai_api_key=CONFIG["OPENAI"]["API_KEY"],
-        )
-
-        logging.debug(
-            f'[{CONFIG["Names"]["System"]}] [System] Startvorgang abgeschlossen'
-        )
-        logging.info(f'[{CONFIG["Names"]["System"]}] System ready')
-
-    def ready_robot(self):
-        logging.info(f'[{CONFIG["Names"]["System"]}] [System] Roboter ist bereit')
-        self.robot.ready_robot()
-
-    def _calibrate_arm(self, arm: RobotArm, positions: list[str]):
-        for position in positions:
-            message = f"Please move arm <{arm.name}> to position <{position}> and press <ENTER> ..."
-            input(message)
-
-            robtarget = arm.robtarget
-
-            logging.debug(f"Setting position <{position}> to robtarget <{robtarget}>")
-            self.positions[position] = Position.from_robtarget_class(robtarget)
-
-        self.positions.to_file(CONFIG["Positions"]["file"])
-
-    def calibrate(self):
-        # TODO: Make calibration interactive, let use choose arm (l/r) and position (1/2/3/...)
-
-        self._calibrate_arm(
-            self.robot.arm_right,
-            [
-                "arm_right_box_metal",
-                "arm_right_box_rubber",
-                "arm_right_checkpoint",
-                "arm_right_tool_metal",
-                "arm_right_tool_rubber",
-            ],
-        )
-
-        self._calibrate_arm(
-            self.robot.arm_left,
-            [
-                "arm_left_box_finished",
-                "arm_left_checkpoint",
-                "arm_left_tool_lever_down",
-                "arm_left_tool_lever_rotation_1",
-                "arm_left_tool_lever_rotation_2",
-                "arm_left_tool_lever",
-                "arm_left_tool_metal",
-            ],
-        )
-
-    def job_grab_rubber(self):
-        message = "Ich greife jetzt das Gummiteil"
-        self.text_to_speech.say(message)
-        logging.info(
-            f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}'
-        )
-
-        self.robot.arm_right.move_to_home()
-        self.robot.arm_right.move_to(self.positions["arm_right_checkpoint"])
-        self.robot.arm_right.move_to(self.positions["arm_right_box_rubber"])
-
-        self.robot.arm_right.gripper_open()
-
-        position_rubber = self.detector.get("rubber")
-        # self.robot.arm_right.grab(position_rubber)
-        time.sleep(2)
-
-        self.robot.arm_right.gripper_close()
-
-        self.robot.arm_right.move_to(self.positions["arm_right_checkpoint"])
-        self.robot.arm_right.move_to_home()
-
-    def job_place_rubber(self):
-        message = "Ich lege jetzt das Gummiteil ab"
-        self.text_to_speech.say(message)
-        logging.info(
-            f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}'
-        )
-
-        self.robot.arm_right.move_to_home()
-
-        self.robot.arm_right.move_to(self.positions["arm_right_tool_rubber"])
-        self.robot.arm_right.gripper_open()
-
-        self.robot.arm_right.move_to_home()
-
-    def job_grab_metal(self):
-        message = "Ich greife jetzt das Metallteil"
-        self.text_to_speech.say(message)
-        logging.info(
-            f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}'
-        )
-
-        self.robot.arm_right.move_to_home()
-        self.robot.arm_right.move_to(self.positions["arm_right_checkpoint"])
-
-        self.robot.arm_right.move_to(self.positions["arm_right_box_metal"])
-
-        self.robot.arm_right.gripper_open()
-
-        position_metal = self.detector.get("metal")
-        # self.robot.arm_right.grab(position_metal)
-        time.sleep(2)
-
-        self.robot.arm_right.gripper_close()
-
-        self.robot.arm_right.move_to(self.positions["arm_right_checkpoint"])
-        self.robot.arm_right.move_to_home()
-
-    def job_place_metal(self):
-        message = "Ich lege jetzt das Metallteil ab"
-        self.text_to_speech.say(message)
-        logging.info(
-            f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}'
-        )
-
-        self.robot.arm_right.move_to_home()
-
-        self.robot.arm_right.move_to(self.positions["arm_right_tool_metal"])
-        self.robot.arm_right.gripper_open()
-
-        self.robot.arm_right.move_to_home()
-
-    def job_move_tool_lever(self):
-        message = "Ich lege jetzt den Hebel um"
-        self.text_to_speech.say(message)
-        logging.info(
-            f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}'
-        )
-
-        self.robot.arm_left.move_to_home()
-
-        self.robot.arm_left.move_to(self.positions["arm_left_tool_lever"])
-        self.robot.arm_left.move_to(self.positions["arm_left_tool_lever_down"])
-        self.robot.arm_left.move_to(self.positions["arm_left_tool_lever_rotation_2"])
-
-        self.robot.arm_left.move_to_home()
-
-    def job_grab_finished_product(self):
-        message = "Ich greife jetzt das fertige Bauteil"
-        self.text_to_speech.say(message)
-        logging.info(
-            f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}'
-        )
-
-        self.robot.arm_left.move_to_home()
-
-        # TODO: Remove line: $ self.robot.arm_left.move_to(...)
-        self.robot.arm_left.move_to(self.positions["arm_left_tool_metal"])
-
-        self.robot.arm_left.gripper_open()
-
-        # self.robot.arm_left.grab(self.positions["arm_left_tool_metal"])
-        time.sleep(2)
-
-        self.robot.arm_left.gripper_close()
-
-        self.robot.arm_left.move_to_home()
-
-    def job_place_finished_product(self):
-        message = "Ich lege jetzt das fertige Bauteil in die Box"
-        self.text_to_speech.say(message)
-        logging.info(
-            f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}'
-        )
-
-        self.robot.arm_left.move_to_home()
-
-        self.robot.arm_left.move_to(self.positions["arm_left_box_finished"])
-        self.robot.arm_left.gripper_open()
-
-        self.robot.arm_left.move_to_home()
-
-    def debug_movement(self):
-        self.ready_robot()
-
-        self.job_grab_rubber()
-        self.job_place_rubber()
-
-        self.job_grab_metal()
-        self.job_place_metal()
-
-        self.job_move_tool_lever()
-
-        self.job_grab_finished_product()
-        self.job_place_finished_product()
-
-    def debug_voice_control(self):
-        self.voice_control.start()
-
-        task = self.voice_control.wait_for_task()
-        logging.info(f"Reacting to <{task}>")
-
-    def run(self):
-        self.ready_robot()
-
-        self.voice_control.start()
-
-        while True:
-            task = self.voice_control.wait_for_task()
-
-            if task == "YUMI_STOP":
-                message = "Alles klar, ich stoppe."
-                self.text_to_speech.say(message)
-                logging.info(
-                    f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}'
-                )
-
-            if task == "YUMI_WEITER":
-                message = "Alles klar, ich mache weiter."
-                self.text_to_speech.say(message)
-                logging.info(
-                    f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"]["Robot"]}> {message}'
-                )
-
-            if task == "ROBOT TASK 1":
-                self.job_grab_rubber()
-                self.job_place_rubber()
-
-            if task == "ROBOT TASK 2":
-                self.job_grab_metal()
-                self.job_place_metal()
-
-            if task == "ROBOT TASK 3":
-                self.job_move_tool_lever()
-
-            if task == "ROBOT TASK 4":
-                self.job_grab_finished_product()
-                self.job_place_finished_product()
-
-
 def main(arguments) -> int:
     # print(f'[{CONFIG["Names"]["System"]}] Hello, World!')
 
@@ -305,13 +42,13 @@ def main(arguments) -> int:
     logging_file = pathlib.Path(f"./logs/{timestamp_date}/{timestamp_time}.txt")
     configure_logger(logging_file, arguments.verbose)
 
-    afv = System()
+    system.initialize()
 
     def signal_handler(sig, frame):
         logging.debug(f"Received signal <{sig}> and frame <{frame}>")
         logging.info(f'[{CONFIG["Names"]["System"]}] System wird heruntergefahren')
 
-        afv.robot.rapid_stop()
+        system.SYSTEM.robot.rapid_stop()
 
         sys.exit(0)
 
@@ -319,27 +56,27 @@ def main(arguments) -> int:
 
     if arguments.subparsers is None:
         if arguments.reset:
-            afv.ready_robot()
+            system.SYSTEM.ready_robot()
             return 0
 
-        afv.run()
+        system.SYSTEM.run()
         return 0
 
     if arguments.subparsers == "debug":
         CONFIG["DEBUG"] = True
         if arguments.voice_control:
-            afv.debug_voice_control()
+            system.SYSTEM.debug_voice_control()
             return 0
 
         if arguments.movement:
-            afv.debug_movement()
+            system.SYSTEM.debug_movement()
             return 0
 
         logging.warning("No debug routine selected")
         return 1
 
     if arguments.subparsers == "calibrate":
-        afv.calibrate()
+        system.SYSTEM.calibrate()
         return 0
 
     return 0
