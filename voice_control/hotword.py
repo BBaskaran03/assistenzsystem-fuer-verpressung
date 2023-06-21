@@ -20,6 +20,9 @@ class Hotword:
             model_path=MODEL_PATH,
             sensitivities=[0.75, 0.75, 0.75],
         )
+        self.recorder = PvRecorder(
+            device_index=-1, frame_length=self.porcupine.frame_length
+        )
 
     def play_sound_effect(self):
         file = f'{CONFIG["PORCUPINE"]["SoundEffectFile"]}'
@@ -36,18 +39,17 @@ class Hotword:
         time.sleep(duration)
 
     def wait_for_hotword(self):
-        recorder = PvRecorder(device_index=-1, frame_length=self.porcupine.frame_length)
+        self.recorder.start()
 
-        recorder.start()
         while True:
-            pcm = recorder.read()
+            pcm = self.recorder.read()
             keyword_index = self.porcupine.process(pcm)
 
             if keyword_index < 0:
                 continue
 
-            # Ensure recording is stopped
-            recorder.delete()
+            # Ensure recording is stoppe
+            self.recorder.stop()
 
             keyword = KEY_WORDS[keyword_index]
             logging.debug(f"Keyword recogniced: {keyword}")
