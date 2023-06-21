@@ -259,7 +259,7 @@ class RobotArm:
     def gripper_open(self):
         logging.debug("Gripper will open")
 
-        self._robot.rapid_start()
+        # self._robot.rapid_start()
         self.rapid_variable_set("ready", "TRUE")
         self.rapid_variable_set("job", "2")
 
@@ -267,14 +267,14 @@ class RobotArm:
 
         self.rapid_variable_set("ready", "FALSE")
         self.rapid_variable_set("job", "0")
-        self._robot.rapid_stop()
+        # self._robot.rapid_stop()
 
         logging.debug("Gripper has been opened")
 
     def gripper_close(self):
         logging.debug("Gripper will close")
 
-        self._robot.rapid_start()
+        # self._robot.rapid_start()
         self.rapid_variable_set("ready", "TRUE")
         self.rapid_variable_set("job", "3")
 
@@ -282,7 +282,7 @@ class RobotArm:
 
         self.rapid_variable_set("ready", "FALSE")
         self.rapid_variable_set("job", "0")
-        self._robot.rapid_stop()
+        # self._robot.rapid_stop()
 
         logging.debug("Gripper has been closed")
 
@@ -305,7 +305,7 @@ class RobotArm:
         if compare(self.robtarget, position):
             return
 
-        self._robot.rapid_start()
+        # self._robot.rapid_start()
 
         self.rapid_variable_set("job", "1")
 
@@ -319,7 +319,7 @@ class RobotArm:
         logger.debug("Stopping movement")
         self.rapid_variable_set("ready", "FALSE")
         self.rapid_variable_set("job", "0")
-        self._robot.rapid_stop()
+        # self._robot.rapid_stop()
         time.sleep(1)
 
     def move_to_home(self):
@@ -393,6 +393,7 @@ class RobotWebServices:
 
     def ready_robot(self):
         self.rapid_stop()
+        self.rapid_start()
 
         for arm in self.arms.values():
             arm.move_to_home()
