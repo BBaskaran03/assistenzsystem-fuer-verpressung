@@ -258,30 +258,32 @@ class RobotArm:
 
     def gripper_open(self):
         logging.debug("Gripper will open")
-        self._robot.rapid_start()
 
+        self._robot.rapid_start()
         self.rapid_variable_set("ready", "TRUE")
         self.rapid_variable_set("job", "2")
         time.sleep(2)
+
         self.rapid_variable_set("ready", "FALSE")
         self.rapid_variable_set("job", "0")
-
         self._robot.rapid_stop()
         time.sleep(2)
+
         logging.debug("Gripper has been opened")
 
     def gripper_close(self):
         logging.debug("Gripper will close")
-        self._robot.rapid_start()
 
+        self._robot.rapid_start()
         self.rapid_variable_set("ready", "TRUE")
         self.rapid_variable_set("job", "3")
         time.sleep(2)
+
         self.rapid_variable_set("ready", "FALSE")
         self.rapid_variable_set("job", "0")
-
         self._robot.rapid_stop()
         time.sleep(2)
+
         logging.debug("Gripper has been closed")
 
     def move_to(self, position: Position):
