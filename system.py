@@ -143,9 +143,16 @@ class System:
 
         self.robot.arm_right.gripper_open()
 
-        position_rubber = self.detector.get("rubber")
-        # self.robot.arm_right.grab(position_rubber)
-        time.sleep(2)
+        try:
+            # pylint: disable-next=unused-variable
+            position_rubber = self.detector.get("rubber")
+            # self.robot.arm_right.grab(position_rubber)
+            time.sleep(2)
+
+        # pylint: disable-next=broad-exception-caught,unused-variable
+        except Exception as exception:
+            logging.critical('self.detector.get("rubber")')
+            # logging.debug(exception)
 
         self.robot.arm_right.gripper_close()
 
@@ -175,9 +182,16 @@ class System:
 
         self.robot.arm_right.gripper_open()
 
-        position_metal = self.detector.get("metal")
-        # self.robot.arm_right.grab(position_metal)
-        time.sleep(2)
+        try:
+            # pylint: disable-next=unused-variable
+            position_metal = self.detector.get("metal")
+            # self.robot.arm_right.grab(position_metal)
+            time.sleep(2)
+
+        # pylint: disable-next=broad-exception-caught,unused-variable
+        except Exception as exception:
+            logging.critical('self.detector.get("metal")')
+            # logging.debug(exception)
 
         self.robot.arm_right.gripper_close()
 
