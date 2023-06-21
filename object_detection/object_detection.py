@@ -116,6 +116,7 @@ class ObjectDetector:
             # print("Error:", e)
             sys.exit()
         
+        # TODO: init_x und init_y anpassen
         move_x, move_y = self.move_to_target(1,1, x, y)
 
         return move_x, move_y, angle   
