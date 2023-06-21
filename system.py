@@ -282,18 +282,20 @@ class System:
                 message = "Alles klar, ich mache weiter."
                 self.inform_user("Robot", message)
 
-            if task == "ROBOT TASK 1":
+            # TODO: Fix ChatGPT not responding with <ROBOT TASK X> only
+
+            if task.startswith("ROBOT TASK 1"):
                 self.job_grab_rubber()
                 self.job_place_rubber()
 
-            if task == "ROBOT TASK 2":
+            if task.startswith("ROBOT TASK 2"):
                 self.job_grab_metal()
                 self.job_place_metal()
 
-            if task == "ROBOT TASK 3":
+            if task.startswith("ROBOT TASK 3"):
                 self.job_move_tool_lever()
 
-            if task == "ROBOT TASK 4":
+            if task.startswith("ROBOT TASK 4"):
                 self.job_grab_finished_product()
                 self.job_place_finished_product()
 
