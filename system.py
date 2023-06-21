@@ -1,10 +1,4 @@
-import argparse
-import datetime
 import logging
-import os
-import pathlib
-import signal
-import sys
 import time
 
 from config import CONFIG
