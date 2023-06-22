@@ -47,9 +47,9 @@ class ObjectDetector:
         if target == 'metal':
             # y:y, x:x
             # TODO: Muss noch angepasst werden
-            img = img[100:300, 100:300]
+            img = img [250:900, 2300:3500]
         if target == 'rubber':
-            img = img[100:300, 100:300]
+            img = img[900:1600, 2300:3500]
         # converts any given image to a grayscale image in order to simplify edge recognition
         img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
         img = cv.convertScaleAbs(img, 1, 1.7)
@@ -58,7 +58,7 @@ class ObjectDetector:
         return img
 
     
-    def __getOrientation(self, img):
+    def __getOrientation(self, img, target):
         # find contours
         contours, _= cv.findContours(img, cv.RETR_LIST, cv.CHAIN_APPROX_NONE)
         merged_contours = []
@@ -66,8 +66,12 @@ class ObjectDetector:
         for contour in contours:
             # TODO: Check contour size
             area = cv.contourArea(contour)
-            if area < 100_000 or 150_000 < area:
-                continue
+            if target == 'metal':
+                if area < 100_000 or 150_000 < area:
+                    continue
+            if target == 'rubber':
+                if area < 20_000 or 70_000 < area:
+                    continue
             hull = cv.convexHull(contour)
             merged_contours.append(hull)
 
@@ -96,7 +100,13 @@ class ObjectDetector:
         
         return x, y, deg_angle
     
-    def move_to_target(self, init_x, init_y, x, y):
+    def move_to_target(self, x, y, target):
+        if target == 'metal':
+            init_x = 755
+            init_y = 228
+        if target == 'rubber':
+            init_x = 691
+            init_y = 292
         move_x = (init_x-x)/8
         move_y = (init_y-y)/8
         return move_x, move_y
@@ -115,7 +125,7 @@ class ObjectDetector:
             raise Exception ("Fehler in Bildverarbeitung - es konnten keine Kanten gefunden werden")
         
         # TODO: init_x und init_y anpassen
-        move_x, move_y = self.move_to_target(1,1, x, y)
+        move_x, move_y = self.move_to_target(x, y, target)
 
         return move_x, move_y, angle   
 
