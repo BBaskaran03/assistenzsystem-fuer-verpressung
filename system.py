@@ -154,8 +154,6 @@ class System:
             position_rubber = self.detector.get("rubber")
             # self.robot.arm_right.grab(position_rubber)
 
-            self.robot.arm_right.gripper_close()
-
         # pylint: disable-next=broad-exception-caught,unused-variable
         except Exception as exception:
             logging.critical('self.detector.get("rubber")')
@@ -178,6 +176,7 @@ class System:
         self.robot.arm_right.move_to(self.positions["arm_right_tool_rubber"])
         self.robot.arm_right.gripper_open()
         self.robot.arm_right.move_to(self.positions["arm_right_tool_rubber_above"])
+        self.robot.arm_right.gripper_close()
 
         self.robot.arm_right.move_to_home()
 
@@ -206,8 +205,6 @@ class System:
         finally:
             self.robot.arm_right.gripper_close()
 
-        self.robot.arm_right.gripper_close()
-
         self.robot.arm_right.move_to(self.positions["arm_right_checkpoint"])
         self.robot.arm_right.move_to_home()
 
@@ -221,6 +218,8 @@ class System:
         self.robot.arm_right.move_to(self.positions["arm_right_tool_metal"])
         self.robot.arm_right.gripper_open()
         self.robot.arm_right.move_to(self.positions["arm_right_tool_metal_above"])
+        self.robot.arm_right.gripper_open()
+
         self.robot.arm_right.move_to_home()
 
     def job_move_tool_lever(self):
@@ -251,10 +250,10 @@ class System:
 
         self.robot.arm_left.move_to_home()
 
+        self.robot.arm_left.gripper_open()
+
         # TODO: Remove line: $ self.robot.arm_left.move_to(...)
         self.robot.arm_left.move_to(self.positions["arm_left_tool_metal"])
-
-        self.robot.arm_left.gripper_open()
 
         # self.robot.arm_left.grab(self.positions["arm_left_tool_metal"])
         time.sleep(2)
@@ -273,6 +272,7 @@ class System:
         self.robot.arm_left.gripper_open()
 
         self.robot.arm_left.move_to_home()
+        self.robot.arm_left.gripper_open()
 
     def debug_movement(self):
         self.ready_positions()
