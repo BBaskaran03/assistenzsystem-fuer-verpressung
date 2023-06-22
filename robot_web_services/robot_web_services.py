@@ -398,6 +398,9 @@ class RobotWebServices:
         for arm in self.arms.values():
             arm.move_to_home()
 
+            arm.gripper_open()
+            arm.gripper_close()
+
     def get_controller_state(self) -> ControllerStates:
         """
         Get the controller state.
