@@ -333,6 +333,24 @@ class RobotArm:
         # TODO: Implement this
         pass
 
+    def move_by(self, x: float, y: float, z: float):
+        # Similar to def move_to(self, position: Position)
+
+        self.rapid_variable_set("job", "4")
+
+        self.rapid_variable_set("move_by_x", str(x))
+        self.rapid_variable_set("move_by_y", str(y))
+        self.rapid_variable_set("move_by_z", str(z))
+
+        self.rapid_variable_set("currentPos", self.robtarget)
+
+        self.rapid_variable_set("ready", "TRUE")
+
+        time.sleep(10)
+
+        self.rapid_variable_set("ready", "FALSE")
+        self.rapid_variable_set("job", "0")
+
 
 class RobotWebServices:
     """

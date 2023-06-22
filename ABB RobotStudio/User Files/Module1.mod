@@ -17,6 +17,11 @@ MODULE Module1
 
     VAR robtarget target;
 
+    VAR robtarget currentPos;
+    VAR intnum move_by_x;
+    VAR intnum move_by_y;
+    VAR intnum move_by_z;
+
     !***********************************************************
     !
     ! Procedure main
@@ -36,6 +41,8 @@ MODULE Module1
                 g_GripOut;
             ELSEIF job=3 THEN
                 g_GripIn;
+            ELSEIF job=4 THEN
+                MoveL RelTool (currentPos, move_by_x, move_by_y, move_by_z), v100, fine, tool0;
             ENDIF
         ENDWHILE
     ENDPROC
