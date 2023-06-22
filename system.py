@@ -105,6 +105,8 @@ class System:
         self.ready_text_to_speech()
         self.ready_robot()
 
+        self.robot.rapid_stop()
+
         # TODO: Make calibration interactive, let use choose arm (l/r) and position (1/2/3/...)
 
         self._calibrate_arm(
@@ -141,20 +143,23 @@ class System:
         self.robot.arm_right.move_to(self.positions["arm_right_checkpoint"])
         self.robot.arm_right.move_to(self.positions["arm_right_box_rubber"])
 
-        self.robot.arm_right.gripper_open()
-
         try:
+            self.robot.arm_right.gripper_open()
+
             # pylint: disable-next=unused-variable
             position_rubber = self.detector.get("rubber")
             # self.robot.arm_right.grab(position_rubber)
-            time.sleep(2)
+
+            self.robot.arm_right.gripper_close()
 
         # pylint: disable-next=broad-exception-caught,unused-variable
         except Exception as exception:
             logging.critical('self.detector.get("rubber")')
-            # logging.debug(exception)
+            logging.debug(exception)
+            time.sleep(2)
 
-        self.robot.arm_right.gripper_close()
+        finally:
+            self.robot.arm_right.gripper_close()
 
         self.robot.arm_right.move_to(self.positions["arm_right_checkpoint"])
         self.robot.arm_right.move_to_home()
@@ -180,18 +185,21 @@ class System:
 
         self.robot.arm_right.move_to(self.positions["arm_right_box_metal"])
 
-        self.robot.arm_right.gripper_open()
-
         try:
+            self.robot.arm_right.gripper_open()
+
             # pylint: disable-next=unused-variable
             position_metal = self.detector.get("metal")
             # self.robot.arm_right.grab(position_metal)
-            time.sleep(2)
 
         # pylint: disable-next=broad-exception-caught,unused-variable
         except Exception as exception:
             logging.critical('self.detector.get("metal")')
-            # logging.debug(exception)
+            logging.debug(exception)
+            time.sleep(2)
+
+        finally:
+            self.robot.arm_right.gripper_close()
 
         self.robot.arm_right.gripper_close()
 
