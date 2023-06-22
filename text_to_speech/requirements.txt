@@ -1,2 +1,3 @@
 gTTS==2.3.2
 pygame==2.4.0
+python-vlc==3.0.18122
