@@ -130,6 +130,10 @@ class System:
                 "arm_left_tool_lever_down",
                 "arm_left_tool_lever_rotation_1",
                 "arm_left_tool_lever_rotation_2",
+                "arm_left_tool_lever_rotation_3",
+                "arm_left_tool_lever_rotation_4",
+                "arm_left_tool_lever_rotation_5",
+                "arm_left_tool_lever_rotation_6",
                 "arm_left_tool_lever",
                 "arm_left_tool_metal",
             ],
@@ -173,6 +177,7 @@ class System:
         self.robot.arm_right.move_to(self.positions["arm_right_tool_rubber_above"])
         self.robot.arm_right.move_to(self.positions["arm_right_tool_rubber"])
         self.robot.arm_right.gripper_open()
+        self.robot.arm_right.move_to(self.positions["arm_right_tool_rubber_above"])
 
         self.robot.arm_right.move_to_home()
 
@@ -211,11 +216,11 @@ class System:
         self.inform_user("Robot", message)
 
         self.robot.arm_right.move_to_home()
-
+        
         self.robot.arm_right.move_to(self.positions["arm_right_tool_metal_above"])
         self.robot.arm_right.move_to(self.positions["arm_right_tool_metal"])
         self.robot.arm_right.gripper_open()
-
+        self.robot.arm_right.move_to(self.positions["arm_right_tool_metal_above"])
         self.robot.arm_right.move_to_home()
 
     def job_move_tool_lever(self):
@@ -224,9 +229,19 @@ class System:
 
         self.robot.arm_left.move_to_home()
 
-        self.robot.arm_left.move_to(self.positions["arm_left_tool_lever"])
+        self.robot.arm_left.move_to(self.positions["arm_left_checkpoint"])
+        print("arm_left_checkpoint")
         self.robot.arm_left.move_to(self.positions["arm_left_tool_lever_down"])
+        print("arm_left_tool_lever_down")
+    
+        self.robot.arm_left.move_to(self.positions["arm_left_tool_lever_rotation_1"])
+        print("arm_left_tool_lever_rotation_1")
         self.robot.arm_left.move_to(self.positions["arm_left_tool_lever_rotation_2"])
+        print("arm_left_tool_lever_rotation_2")
+        self.robot.arm_left.move_to(self.positions["arm_left_tool_lever_rotation_3"])
+        print("arm_left_tool_lever_rotation_3")
+    
+        self.robot.arm_left.move_to(self.positions["arm_left_tool_lever"])
 
         self.robot.arm_left.move_to_home()
 
