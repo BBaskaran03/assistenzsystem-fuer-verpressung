@@ -7,7 +7,6 @@ from voice_control.chat_gpt import ChatGPT
 from voice_control.hotword import Hotword
 from voice_control.speech_to_text import SpeechToText
 
-
 class VoiceControl:
     def __init__(self, porcupine_api_key, openai_api_key):
         self.chat_gpt = ChatGPT(openai_api_key, language="de-DE")
@@ -80,9 +79,6 @@ class VoiceControl:
 
             if response is not None:
                 return response
-            
-    def wait_for_task_single(self) -> str:
-        return self.hotword.wait_for_hotword_single()
 
 
 def main() -> int:

@@ -8,6 +8,7 @@ from robot_web_services.positions import Position, Positions
 from robot_web_services.robot_web_services import RobotArm, RobotWebServices
 from text_to_speech.text_to_speech import TextToSpeech
 from voice_control.voice_control import VoiceControl
+from voice_control.models.models import KEY_WORDS
 
 
 class System:
@@ -272,10 +273,22 @@ class System:
         self.job_place_finished_product()
 
     def detect_stop(self):
+        recorder = self.voice_control.hotword.recorder
+        porcupine = self.voice_control.hotword.porcupine
+
         while self.running:
-            if self.voice_control.wait_for_task_single() == "YUMI_STOP":
+            pcm = recorder.read()
+            keyword_index = porcupine.process(pcm)
+
+            if keyword_index < 0:
+                continue
+
+            if KEY_WORDS[keyword_index] == "YUMI_STOP":
                 self.inform_user("Robot", "Alles klar, ich stoppe.")
                 self.shutdown()
+            
+        recorder.stop()
+        
 
     def debug_voice_control(self):
         self.ready_text_to_speech()

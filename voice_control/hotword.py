@@ -63,13 +63,6 @@ class Hotword:
             thread_sound_effect.start()
 
             return keyword
-        
-    def wait_for_hotword_single(self):
-        self.recorder.start()
-        pcm = self.recorder.read()
-        keyword_index = self.porcupine.process(pcm)
-        self.recorder.stop()
-        return KEY_WORDS[keyword_index] if keyword_index >= 0 else None
 
 
 def main() -> int:
