@@ -1,4 +1,5 @@
 import logging
+import threading
 import time
 
 from config import CONFIG
@@ -270,6 +271,12 @@ class System:
         self.job_grab_finished_product()
         self.job_place_finished_product()
 
+    def detect_stop(self):
+        while self.running:
+            if self.voice_control.wait_for_task_single() == "YUMI_STOP":
+                self.inform_user("Robot", "Alles klar, ich stoppe.")
+                self.shutdown()
+
     def debug_voice_control(self):
         self.ready_text_to_speech()
         self.ready_voice_control()
@@ -296,24 +303,40 @@ class System:
                 task = f"ROBOT TASK {next_task+1}"
 
             if task.startswith("ROBOT TASK 1"):
+                self.running = True
+                thread = threading.Thread(target=self.detect_stop)
+                thread.start()
                 self.current_task = 0
                 logging.info("Robot: Task 1")
                 time.sleep(5)
+                self.running = False
 
             if task.startswith("ROBOT TASK 2"):
+                self.running = True
+                thread = threading.Thread(target=self.detect_stop)
+                thread.start()
                 self.current_task = 1
                 logging.info("Robot: Task 2")
                 time.sleep(5)
+                self.running = False
 
             if task.startswith("ROBOT TASK 3"):
+                self.running = True
+                thread = threading.Thread(target=self.detect_stop)
+                thread.start()
                 self.current_task = 2
                 logging.info("Robot: Task 3")
                 time.sleep(5)
+                self.running = False
 
             if task.startswith("ROBOT TASK 4"):
+                self.running = True
+                thread = threading.Thread(target=self.detect_stop)
+                thread.start()
                 self.current_task = 3
                 logging.info("Robot: Task 4")
                 time.sleep(5)
+                self.running = False
 
     def run(self):
         self.ready_system()
