@@ -80,6 +80,9 @@ class VoiceControl:
 
             if response is not None:
                 return response
+            
+    def wait_for_task_single(self) -> str:
+        return self.hotword.wait_for_hotword_single()
 
 
 def main() -> int:
