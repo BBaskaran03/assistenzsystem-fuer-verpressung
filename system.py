@@ -16,6 +16,7 @@ class System:
         self.detector = None
         self.text_to_speech = None
         self.voice_control = None
+        self.current_task = None
 
     def log_debug(self, source: str, message: str):
         # logging.debug(f'[{CONFIG["Names"]["System"]}] <{CONFIG["Names"][source]}> {message}')
@@ -278,7 +279,41 @@ class System:
 
         while True:
             task = self.voice_control.wait_for_task()
-            logging.info(f"Reacting to <{task}>")
+
+            if task == "YUMI_STOP":
+                message = "Alles klar, ich stoppe."
+                self.inform_user("Robot", message)
+
+            if task == "YUMI_WEITER":
+                message = "Alles klar, ich mache weiter."
+                self.inform_user("Robot", message)
+                
+                if self.current_task == None:
+                    next_task = 0
+                else:
+                    number_tasks = 4
+                    next_task = (self.current_task + 1) % number_tasks
+                task = f"ROBOT TASK {next_task+1}"
+
+            if task.startswith("ROBOT TASK 1"):
+                self.current_task = 0
+                logging.info("Robot: Task 1")
+                time.sleep(5)
+
+            if task.startswith("ROBOT TASK 2"):
+                self.current_task = 1
+                logging.info("Robot: Task 2")
+                time.sleep(5)
+
+            if task.startswith("ROBOT TASK 3"):
+                self.current_task = 2
+                logging.info("Robot: Task 3")
+                time.sleep(5)
+
+            if task.startswith("ROBOT TASK 4"):
+                self.current_task = 3
+                logging.info("Robot: Task 4")
+                time.sleep(5)
 
     def run(self):
         self.ready_system()
@@ -295,21 +330,28 @@ class System:
             if task == "YUMI_WEITER":
                 message = "Alles klar, ich mache weiter."
                 self.inform_user("Robot", message)
+                number_tasks = 4
+                next_task = (self.current_task + 1) % number_tasks
+                task = f"ROBOT TASK {next_task+1}"
 
             # TODO: Fix ChatGPT not responding with <ROBOT TASK X> only
 
             if task.startswith("ROBOT TASK 1"):
+                self.current_task = 0
                 self.job_grab_rubber()
                 self.job_place_rubber()
 
             if task.startswith("ROBOT TASK 2"):
+                self.current_task = 1
                 self.job_grab_metal()
                 self.job_place_metal()
 
             if task.startswith("ROBOT TASK 3"):
+                self.current_task = 2
                 self.job_move_tool_lever()
 
             if task.startswith("ROBOT TASK 4"):
+                self.current_task = 3
                 self.job_grab_finished_product()
                 self.job_place_finished_product()
 
