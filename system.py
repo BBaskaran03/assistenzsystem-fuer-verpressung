@@ -113,37 +113,45 @@ class System:
 
         # TODO: Make calibration interactive, let use choose arm (l/r) and position (1/2/3/...)
 
-        self._calibrate_arm(
-            self.robot.arm_right,
-            [
-                "arm_right_box_metal",
-                "arm_right_box_rubber",
-                "arm_right_checkpoint",
-                "arm_right_tool_metal_above",
-                "arm_right_tool_metal",
-                "arm_right_tool_rubber_above",
-                "arm_right_tool_rubber",
-                "arm_right_box_rubber_demo",
-                "arm_right_box_metal_demo"
-            ],
-        )
+        # Roboter Arm zu Position XYZ bewegen, dann kalibrieren
+        self.robot.arm_right.move_to(self.positions["arm_right_tool_metal_above"])
+        self._calibrate_arm(self.robot.arm_right, ["arm_right_tool_metal_above"])
 
-        self._calibrate_arm(
-            self.robot.arm_left,
-            [
-                "arm_left_box_finished",
-                "arm_left_checkpoint",
-                "arm_left_tool_lever_down",
-                "arm_left_tool_lever_rotation_1",
-                "arm_left_tool_lever_rotation_2",
-                "arm_left_tool_lever_rotation_3",
-                "arm_left_tool_lever_rotation_4",
-                "arm_left_tool_lever_rotation_5",
-                "arm_left_tool_lever_rotation_6",
-                "arm_left_tool_lever",
-                "arm_left_tool_metal",
-            ],
-        )
+        # Roboter Arm zu Position XYZ bewegen, dann kalibrieren
+        self.robot.arm_left.move_to(self.positions["arm_left_tool_lever_rotation_3"])
+        self._calibrate_arm(self.robot.arm_left, ["arm_left_tool_lever_rotation_3"])
+
+        # self._calibrate_arm(
+        #     self.robot.arm_right,
+        #     [
+        #         "arm_right_box_metal",
+        #         "arm_right_box_rubber",
+        #         "arm_right_checkpoint",
+        #         "arm_right_tool_metal_above",
+        #         "arm_right_tool_metal",
+        #         "arm_right_tool_rubber_above",
+        #         "arm_right_tool_rubber",
+        #         "arm_right_box_rubber_demo",
+        #         "arm_right_box_metal_demo"
+        #     ],
+        # )
+
+        # self._calibrate_arm(
+        #     self.robot.arm_left,
+        #     [
+        #         "arm_left_box_finished",
+        #         "arm_left_checkpoint",
+        #         "arm_left_tool_lever_down",
+        #         "arm_left_tool_lever_rotation_1",
+        #         "arm_left_tool_lever_rotation_2",
+        #         "arm_left_tool_lever_rotation_3",
+        #         "arm_left_tool_lever_rotation_4",
+        #         "arm_left_tool_lever_rotation_5",
+        #         "arm_left_tool_lever_rotation_6",
+        #         "arm_left_tool_lever",
+        #         "arm_left_tool_metal",
+        #     ],
+        # )
 
     def job_grab_rubber(self):
         message = "Ich greife jetzt das Gummiteil"
