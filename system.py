@@ -1,6 +1,10 @@
 import logging
+import threading
 import time
+import sys
+import multiprocessing
 
+import estop
 from config import CONFIG
 from object_detection.object_detection import ObjectDetector
 from robot_web_services.positions import Position, Positions
@@ -119,6 +123,8 @@ class System:
                 "arm_right_tool_metal",
                 "arm_right_tool_rubber_above",
                 "arm_right_tool_rubber",
+                "arm_right_box_rubber_demo",
+                "arm_right_box_metal_demo"
             ],
         )
 
@@ -150,8 +156,10 @@ class System:
         try:
             self.robot.arm_right.gripper_open()
 
+            self.robot.arm_right.move_to(self.positions["arm_right_box_rubber_demo"])
+
             # pylint: disable-next=unused-variable
-            position_rubber = self.detector.get("rubber")
+            # position_rubber = self.detector.get("rubber")
             # self.robot.arm_right.grab(position_rubber)
 
         # pylint: disable-next=broad-exception-caught,unused-variable
@@ -192,8 +200,10 @@ class System:
         try:
             self.robot.arm_right.gripper_open()
 
+            self.robot.arm_right.move_to(self.positions["arm_right_box_metal_demo"])
+
             # pylint: disable-next=unused-variable
-            position_metal = self.detector.get("metal")
+            # position_metal = self.detector.get("metal")
             # self.robot.arm_right.grab(position_metal)
 
         # pylint: disable-next=broad-exception-caught,unused-variable
@@ -213,12 +223,12 @@ class System:
         self.inform_user("Robot", message)
 
         self.robot.arm_right.move_to_home()
-        
+
         self.robot.arm_right.move_to(self.positions["arm_right_tool_metal_above"])
         self.robot.arm_right.move_to(self.positions["arm_right_tool_metal"])
         self.robot.arm_right.gripper_open()
         self.robot.arm_right.move_to(self.positions["arm_right_tool_metal_above"])
-        self.robot.arm_right.gripper_open()
+        self.robot.arm_right.gripper_close()
 
         self.robot.arm_right.move_to_home()
 
@@ -232,14 +242,14 @@ class System:
         print("arm_left_checkpoint")
         self.robot.arm_left.move_to(self.positions["arm_left_tool_lever_down"])
         print("arm_left_tool_lever_down")
-    
+
         self.robot.arm_left.move_to(self.positions["arm_left_tool_lever_rotation_1"])
         print("arm_left_tool_lever_rotation_1")
         self.robot.arm_left.move_to(self.positions["arm_left_tool_lever_rotation_2"])
         print("arm_left_tool_lever_rotation_2")
         self.robot.arm_left.move_to(self.positions["arm_left_tool_lever_rotation_3"])
         print("arm_left_tool_lever_rotation_3")
-    
+
         self.robot.arm_left.move_to(self.positions["arm_left_tool_lever"])
 
         self.robot.arm_left.move_to_home()
@@ -303,6 +313,24 @@ class System:
             task = self.voice_control.wait_for_task()
             logging.info(f"Reacting to <{task}>")
 
+    def ensure_safty() -> threading.Thread:
+        safty_check = multiprocessing.Process(target=estop.ensure_safty)
+        safty_check.start()
+
+        this_thread = threading.currentThread()
+
+        while getattr(this_thread, "finished", False) == False:
+            if safty_check.is_alive() == False:
+                print("Der ESTOP ist kaputt")
+                # from system import SYSTEM
+                SYSTEM.shutdown()
+                import os
+                os._exit(1)
+    
+            time.sleep(1)
+    
+        print("Stopping as you wish.")
+
     def run(self):
         self.ready_system()
 
@@ -322,19 +350,35 @@ class System:
             # TODO: Fix ChatGPT not responding with <ROBOT TASK X> only
 
             if task.startswith("ROBOT TASK 1"):
+                safty = threading.Thread(target=System.ensure_safty)
+                safty.start()
+
                 self.job_grab_rubber()
                 self.job_place_rubber()
+                safty.finished = True
 
             if task.startswith("ROBOT TASK 2"):
+                safty = threading.Thread(target=System.ensure_safty)
+                safty.start()
+
                 self.job_grab_metal()
                 self.job_place_metal()
+                safty.finished = True
 
             if task.startswith("ROBOT TASK 3"):
+                safty = threading.Thread(target=System.ensure_safty)
+                safty.start()
+
                 self.job_move_tool_lever()
+                safty.finished = True
 
             if task.startswith("ROBOT TASK 4"):
+                safty = threading.Thread(target=System.ensure_safty)
+                safty.start()
+
                 self.job_grab_finished_product()
                 self.job_place_finished_product()
+                safty.finished = True
 
 
 SYSTEM = None

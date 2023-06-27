@@ -22,12 +22,12 @@ def ensure_safty():
             # sys.exit()
             raise Exception("ESTOP Triggered")
 
-        if keyboard.is_pressed("d") == False:
+        if keyboard.is_pressed("k") == False:
             print("Key interrupt detected", "d")
             # sys.exit()
             raise Exception("ESTOP Triggered")
 
-        if keyboard.is_pressed("k"):
+        if keyboard.is_pressed(" "):
             print("Key interrupt detected", "k")
             # sys.exit()
             raise Exception("ESTOP Triggered")
